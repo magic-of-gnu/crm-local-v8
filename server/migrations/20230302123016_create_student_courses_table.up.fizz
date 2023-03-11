@@ -1,0 +1,7 @@
+create_table("student_courses") {
+  t.Column("id", "int", {primary: true})
+  t.Column("student_id", "int", {"null": false})
+  t.Column("course_id", "int", {"null": false})
+  t.Column("payment_amount", "int", {"null": false})
+  t.Column("description", "varchar")
+}

@@ -1,0 +1,7 @@
+create_table("employees") {
+  t.Column("id", "int", {primary: true})
+  t.Column("first_name", "varchar")
+  t.Column("last_name", "varchar")
+  t.Column("username", "varchar", {"null": false})
+  t.Column("info", "varchar")
+}

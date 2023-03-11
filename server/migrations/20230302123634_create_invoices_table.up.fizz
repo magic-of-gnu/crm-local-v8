@@ -1,0 +1,9 @@
+create_table("invoices") {
+  t.Column("id", "int", {primary: true})
+  t.Column("course_id", "int", {"null": false})
+  t.Column("student_id", "int", {"null": false})
+  t.Column("start_date", "datetime", {"null": false})
+  t.Column("end_date", "datetime", {"null": false})
+  t.Column("price", "int", {"null": false})
+  t.Column("payment_status_id", "int", {"null": false})
+}

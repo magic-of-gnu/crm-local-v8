@@ -1,0 +1,3 @@
+drop_foreign_key("attendances", "attendances_attendance_values_id_fk")
+drop_foreign_key("attendances", "attendances_lectures_calendar_id_fk")
+drop_foreign_key("attendances", "attendances_students_id_fk")

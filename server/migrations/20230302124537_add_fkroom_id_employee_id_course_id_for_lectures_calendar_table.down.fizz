@@ -1,0 +1,3 @@
+drop_foreign_key("lectures_calendar", "lectures_calendar_courses_id_fk")
+drop_foreign_key("lectures_calendar", "lectures_calendar_employees_id_fk")
+drop_foreign_key("lectures_calendar", "lectures_calendar_rooms_id_fk")

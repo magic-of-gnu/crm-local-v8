@@ -1,0 +1,10 @@
+create_table("users") {
+  t.Column("id", "int", {primary: true})
+  t.Column("first_name", "varchar")
+  t.Column("last_name", "varchar")
+  t.Column("username", "varchar", {"null": false})
+  t.Column("password", "varchar", {"null": false})
+  t.Column("last_login", "timestamp", {"null": false})
+  t.Column("is_admin", "bool", {"null": false})
+  t.Column("type", "integer", {"null": false})
+}

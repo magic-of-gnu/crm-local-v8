@@ -1,0 +1,14 @@
+add_foreign_key("attendances", "attendance_value_id", {"attendance_values": ["id"]}, {
+    "on_delete": "CASCADE",
+    "on_update": "CASCADE",
+})
+
+add_foreign_key("attendances", "lectures_calendar_id", {"lectures_calendar": ["id"]}, {
+    "on_delete": "CASCADE",
+    "on_update": "CASCADE",
+})
+
+add_foreign_key("attendances", "student_id", {"students": ["id"]}, {
+    "on_delete": "CASCADE",
+    "on_update": "CASCADE",
+})

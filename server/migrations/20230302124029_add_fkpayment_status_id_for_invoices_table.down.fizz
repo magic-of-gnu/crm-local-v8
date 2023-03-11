@@ -1,0 +1,1 @@
+drop_foreign_key("invoices", "invoices_payment_statuses_id_fk")

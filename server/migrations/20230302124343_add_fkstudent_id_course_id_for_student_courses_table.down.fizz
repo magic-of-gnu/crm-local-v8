@@ -1,0 +1,2 @@
+drop_foreign_key("student_courses", "student_courses_courses_id_fk")
+drop_foreign_key("student_courses", "student_courses_students_id_fk")

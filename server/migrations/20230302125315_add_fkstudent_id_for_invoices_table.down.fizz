@@ -1,0 +1,1 @@
+drop_foreign_key("invoices", "invoices_students_id_fk")

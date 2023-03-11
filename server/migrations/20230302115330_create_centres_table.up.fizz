@@ -1,0 +1,5 @@
+create_table("centres") {
+  t.Column("id", "int", {primary: true})
+  t.Column("name", "varchar")
+  t.Column("description", "varchar")
+}

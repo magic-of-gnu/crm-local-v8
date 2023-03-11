@@ -1,0 +1,6 @@
+create_table("attendances") {
+  t.Column("id", "int", {primary: true})
+  t.Column("lectures_calendar_id", "int", {"null": false})
+  t.Column("student_id", "int", {"null": false})
+  t.Column("attendance_value_id", "int", {"null": false})
+}

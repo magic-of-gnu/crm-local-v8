@@ -1,0 +1,4 @@
+add_foreign_key("rooms", "centre_id", {"centres": ["id"]}, {
+    "on_delete": "CASCADE",
+    "on_update": "CASCADE",
+})

@@ -1,0 +1,6 @@
+create_table("attendance_values") {
+  t.Column("id", "int", {primary: true})
+  t.Column("value", "int", {"null": false})
+  t.Column("name", "varchar", {"null": false})
+  t.Column("description", "varchar")
+}
