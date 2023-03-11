@@ -1,4 +1,4 @@
-package repo
+package repos
 
 import "github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 
