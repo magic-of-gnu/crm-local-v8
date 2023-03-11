@@ -34,3 +34,40 @@ func (rr *CentresPostgresRepo) GetAll() ([]models.Centre, error) {
 
 	return centres, nil
 }
+
+func (rr *CentresPostgresRepo) CreateOne(id int, name, description string, created_at, updated_at time.Time) (*models.Centre, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `INSERT INTO centres (id, name, description, created_at, updated_at)
+	VALUES (
+		$1, $2, $3, $4, $5
+	) RETURNING id`
+
+	var centre_id int
+	var centre models.Centre
+
+	res := rr.dbpool.QueryRow(ctx, query,
+		id,
+		name,
+		description,
+		created_at,
+		updated_at,
+	)
+
+	err := res.Scan(&centre_id)
+	if err != nil {
+		return &centre, err
+	}
+
+	centre = models.Centre{
+		ID:          id,
+		Name:        name,
+		Description: description,
+		CreatedAt:   created_at,
+		UpdatedAt:   updated_at,
+	}
+
+	return &centre, nil
+
+}
