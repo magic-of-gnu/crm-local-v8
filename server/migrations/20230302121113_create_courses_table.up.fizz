@@ -1,5 +1,5 @@
 create_table("courses") {
-  t.Column("id", "int", {primary: true})
+  t.Column("id", "uuid", {primary: true})
   t.Column("name", "varchar", {"null": false})
   t.Column("description", "varchar")
 }

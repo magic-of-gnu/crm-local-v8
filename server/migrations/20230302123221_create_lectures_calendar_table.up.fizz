@@ -1,8 +1,8 @@
 create_table("lectures_calendar") {
-  t.Column("id", "int", {primary: true})
-  t.Column("room_id", "int", {"null": false})
-  t.Column("course_id", "int", {"null": false})
-  t.Column("employee_id", "int", {"null": false})
+  t.Column("id", "uuid", {primary: true})
+  t.Column("room_id", "uuid", {"null": false})
+  t.Column("course_id", "uuid", {"null": false})
+  t.Column("employee_id", "uuid", {"null": false})
   t.Column("date", "datetime", {"null": false})
   t.Column("duration", "interval", {"null": false})
 }

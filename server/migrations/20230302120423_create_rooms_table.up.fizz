@@ -1,6 +1,6 @@
 create_table("rooms") {
-  t.Column("id", "int", {primary: true})
-  t.Column("centre_id", "int", {"null": false})
+  t.Column("id", "uuid", {primary: true})
+  t.Column("centre_id", "uuid", {"null": false})
   t.Column("name", "varchar", {"null": false})
   t.Column("num_seats", "varchar", {"null": false})
   t.Column("info", "varchar")
