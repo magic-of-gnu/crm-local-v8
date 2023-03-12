@@ -2,9 +2,11 @@ package repos
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/georgysavva/scany/v2/pgxscan"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 )
@@ -35,7 +37,7 @@ func (rr *CentresPostgresRepo) GetAll() ([]models.Centre, error) {
 	return centres, nil
 }
 
-func (rr *CentresPostgresRepo) CreateOne(id int, name, description string, created_at, updated_at time.Time) (*models.Centre, error) {
+func (rr *CentresPostgresRepo) CreateOne(uid uuid.UUID, name, description string, created_at, updated_at time.Time) (*models.Centre, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 
@@ -44,11 +46,11 @@ func (rr *CentresPostgresRepo) CreateOne(id int, name, description string, creat
 		$1, $2, $3, $4, $5
 	) RETURNING id`
 
-	var centre_id int
+	var centre_id uuid.UUID
 	var centre models.Centre
 
 	res := rr.dbpool.QueryRow(ctx, query,
-		id,
+		uid,
 		name,
 		description,
 		created_at,
@@ -57,11 +59,12 @@ func (rr *CentresPostgresRepo) CreateOne(id int, name, description string, creat
 
 	err := res.Scan(&centre_id)
 	if err != nil {
+		fmt.Println("err: ", err)
 		return &centre, err
 	}
 
 	centre = models.Centre{
-		ID:          id,
+		ID:          uid,
 		Name:        name,
 		Description: description,
 		CreatedAt:   created_at,
