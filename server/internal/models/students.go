@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Student struct {
-	ID        int
+	ID        uuid.UUID
 	FirstName string
 	LastName  string
 	Username  string

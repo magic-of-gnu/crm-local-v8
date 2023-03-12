@@ -1,10 +1,14 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Room struct {
-	ID        int
-	CentreID  int
+	ID        uuid.UUID
+	CentreID  uuid.UUID
 	Name      string
 	NumSeats  int
 	Info      string

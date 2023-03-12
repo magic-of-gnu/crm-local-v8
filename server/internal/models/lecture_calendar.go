@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type LectureCalendar struct {
-	ID         int
+	ID         uuid.UUID
 	RoomID     int
 	CourseID   int
 	EmployeeID int

@@ -1,12 +1,16 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Attendance struct {
-	ID                 int
-	LecturesCalendarID int
-	StudentID          int
-	AttendanceValueID  int
+	ID                 uuid.UUID
+	LecturesCalendarID uuid.UUID
+	StudentID          uuid.UUID
+	AttendanceValueID  uuid.UUID
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
 }

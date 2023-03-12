@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type AttendanceValues struct {
-	ID          int
+	ID          uuid.UUID
 	Value       int
 	Name        string
 	Description string

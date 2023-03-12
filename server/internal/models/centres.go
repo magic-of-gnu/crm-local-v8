@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Centre struct {
-	ID          int
+	ID          uuid.UUID
 	Name        string
 	Description string
 	CreatedAt   time.Time
