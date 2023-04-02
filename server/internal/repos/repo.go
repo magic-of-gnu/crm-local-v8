@@ -56,3 +56,14 @@ type CoursesRepo interface {
 		created_at, updated_at time.Time,
 	) (*models.Course, error)
 }
+
+type AttendanceValues interface {
+	GetAll() ([]models.AttendanceValues, error)
+	CreateOne(
+		uid uuid.UUID,
+		value int,
+		name,
+		description string,
+		created_at, updated_at time.Time,
+	) (*models.AttendanceValues, error)
+}
