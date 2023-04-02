@@ -8,11 +8,31 @@ import (
 var App *app.App
 
 func RouteHandlers(r *gin.Engine, methodNames map[string]string) {
-	r.GET("centres", GetCentres)
-	r.POST("centres", PostCentres)
+	// centres form
+	// r.GET("centres", GetCentres)
+	// r.POST("centres/create_one", PostCentres)
 
-	methodNames["GetCentres"] = "centres"
-	methodNames["PostCentres"] = "centres"
+	// centres handlers
+	r.GET("api/server/centres/list", GetAllCentres)
+	r.POST("api/server/centres/create_one", PostCentres)
+
+	// rooms handlers
+	r.GET("api/server/rooms/list", GetAllRooms)
+	r.POST("api/server/rooms/create_one", PostRooms)
+
+	// employees handlers
+	r.GET("api/server/employees/list", GetAllEmployees)
+	r.POST("api/server/employees/create_one", PostEmployeeCreateOne)
+
+	// students handlers
+	r.GET("api/server/students/list", GetAllStudents)
+	r.POST("api/server/students/create_one", PostStudentsCreateOne)
+
+	// courses handlers
+	r.GET("api/server/courses/list", GetAllCourses)
+	r.POST("api/server/courses/create_one", PostCoursesCreateOne)
+
+	methodNames["GetCentresList"] = "centres/list"
 
 }
 
