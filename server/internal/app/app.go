@@ -32,6 +32,10 @@ type App struct {
 	CoursesRepo    repos.CoursesRepo
 	CoursesService services.CoursesService
 
+	// attendance_values
+	AttendanceValuesRepo    repos.AttendanceValues
+	AttendanceValuesService services.AttendanceValuesService
+
 	MethodNames map[string]string
 
 	Validator *validator.Validate
@@ -50,6 +54,8 @@ func NewApp(
 	studentsService services.StudentsService,
 	coursesRepo repos.CoursesRepo,
 	coursesService services.CoursesService,
+	attendanceValuesRepo repos.AttendanceValues,
+	attendanceValuesServices services.AttendanceValuesService,
 ) *App {
 	return &App{
 		MethodNames: methodNames,
@@ -69,6 +75,9 @@ func NewApp(
 
 		CoursesRepo:    coursesRepo,
 		CoursesService: coursesService,
+
+		AttendanceValuesRepo:    attendanceValuesRepo,
+		AttendanceValuesService: attendanceValuesServices,
 	}
 }
 
