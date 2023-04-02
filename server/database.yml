@@ -1,9 +1,9 @@
 development:
   dialect: postgres
-  database: local_v8
+  database: postgres
   user: postgres
-  password: postgres
-  host: 127.0.0.1
+  password: password
+  host: postgres-server
   pool: 5
 
 test:
