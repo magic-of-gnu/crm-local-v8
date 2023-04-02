@@ -47,7 +47,7 @@ func (rr *coursesPostgresRepo) CreateOne(
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 
-	query := `INSERT INTO students (id, name, description, created_at, updated_at)
+	query := `INSERT INTO courses (id, name, description, created_at, updated_at)
 	VALUES (
 		$1, $2, $3, $4, $5
 	)`
