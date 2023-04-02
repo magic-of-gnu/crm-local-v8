@@ -46,3 +46,12 @@ type CoursesService interface {
 		description string,
 	) (*models.Course, error)
 }
+
+type AttendanceValuesService interface {
+	GetAll() ([]models.AttendanceValues, error)
+	CreateOne(
+		value int,
+		name,
+		description string,
+	) (*models.AttendanceValues, error)
+}
