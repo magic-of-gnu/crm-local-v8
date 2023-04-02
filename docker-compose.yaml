@@ -1,0 +1,84 @@
+version: "3.8"
+
+services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.2
+    # Enables the web UI and tells Traefik to listen to docker
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+      - "--providers.docker.exposedByDefault=false"
+      # - "--log.level=DEBUG"
+
+    expose:
+      - "5433"
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8081:8081"
+
+      # - "5173:5173"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+  server:
+    build:
+      context: ./server
+      target: builder
+    image: server
+    expose:
+      - "8081"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.server.rule=Host(`malcorp.test`) && PathPrefix(`/api/server`)"
+      # - "traefik.http.routers.account.rule=Host(`malcorp.test`) && PathPrefix(`/api/account`)"
+    environment:
+      - ENV=dev
+    env_file: ./server/.env.dev
+    volumes:
+      - ./server:/go/src/app
+    # have to use $$ (double-dollar) so docker doesn't try to substitute a variable
+    command: reflex -r "\.go$$|\.env\.dev" -s -- sh -c "go run ./main.go"
+    depends_on:
+      - reverse-proxy
+      - postgres-server
+
+  web:
+    build:
+      context: ./web
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=Host(`malcorp.test`) && PathPrefix(`/`)"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    depends_on:
+      - reverse-proxy
+
+  postgres-server:
+    image: "postgres:13"
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5433:5433"
+    #   Set a volume for data and initial sql script
+    #   May configure initial db for future demo
+    volumes:
+      - "pgdata-server:/var/lib/postgresql/data"
+      # - ./init:/docker-entrypoint-initdb.d/
+    command: ["postgres", "-c", "log_statement=all", "-p", "5433"]
+
+  # redis-account:
+  #   image: "redis:alpine"
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - "redisdata:/data"
+volumes:
+  pgdata-server:
