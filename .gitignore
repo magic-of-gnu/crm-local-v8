@@ -1,1 +1,11 @@
 *.code-workspace
+**/*.jpg
+**/*.png
+**/*.svg
+**/*.eot
+**/*.ttf
+**/*.woff
+**/*.woff2
+**/*.scss
+**/node_modules
+**/.vscode
