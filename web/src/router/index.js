@@ -10,6 +10,8 @@ import centres_routes from '@/router/custom/centres.js'
 import employees_routes from '@/router/custom/employees.js'
 import students_routes from '@/router/custom/students.js'
 import courses_routes from '@/router/custom/courses.js'
+import attendance_values from '@/router/custom/attendanceValues.js'
+
 
 
 const routes = [
@@ -272,7 +274,8 @@ const routes = [
       rooms_routes,
       employees_routes,
       students_routes,
-      courses_routes
+      courses_routes,
+      attendance_values
     ],
   },
   {
