@@ -60,6 +60,10 @@ func main() {
 	attendanceValuesRepo := repos.NewAttendanceValuesPostgresRepo(dbpool)
 	attendanceValuesService := services.NewAttendanceValuesService(attendanceValuesRepo)
 
+	// studentCourses
+	studentCoursesRepo := repos.NewStudentCoursesPostgresRepo(dbpool)
+	studentCoursesService := services.NewStudentCoursesService(studentCoursesRepo)
+
 	App := app.NewApp(
 		methodNames,
 		_Validator,
@@ -75,6 +79,8 @@ func main() {
 		coursesServices,
 		attendanceValuesRepo,
 		attendanceValuesService,
+		studentCoursesRepo,
+		studentCoursesService,
 	)
 	handlers.NewApp(App)
 
