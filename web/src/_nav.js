@@ -313,8 +313,14 @@ export default [
   },
   {
     component: 'CNavItem',
-    name: 'AttendanceValues',
+    name: 'Attendance Values',
     to: '/attendance_values',
+    icon: 'cil-user',
+  },
+  {
+    component: 'CNavItem',
+    name: 'Student Courses',
+    to: '/student_courses',
     icon: 'cil-user',
   },
   // {
