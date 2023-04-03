@@ -11,6 +11,7 @@ import employees_routes from '@/router/custom/employees.js'
 import students_routes from '@/router/custom/students.js'
 import courses_routes from '@/router/custom/courses.js'
 import attendance_values from '@/router/custom/attendanceValues.js'
+import student_courses from '@/router/custom/student_courses.js'
 
 
 
@@ -275,7 +276,8 @@ const routes = [
       employees_routes,
       students_routes,
       courses_routes,
-      attendance_values
+      attendance_values,
+      student_courses
     ],
   },
   {
