@@ -55,3 +55,13 @@ type AttendanceValuesService interface {
 		description string,
 	) (*models.AttendanceValues, error)
 }
+
+type StudentCoursesService interface {
+	GetAll() ([]models.StudentCoursesListResponse, error)
+	CreateOne(
+		student_uid,
+		course_uid uuid.UUID,
+		payment_amount int,
+		description string,
+	) (*models.StudentCourses, error)
+}
