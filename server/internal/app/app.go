@@ -36,6 +36,10 @@ type App struct {
 	AttendanceValuesRepo    repos.AttendanceValues
 	AttendanceValuesService services.AttendanceValuesService
 
+	// student_courses
+	StudentCoursesRepo    repos.StudentCoursesRepo
+	StudentCoursesService services.StudentCoursesService
+
 	MethodNames map[string]string
 
 	Validator *validator.Validate
@@ -56,28 +60,26 @@ func NewApp(
 	coursesService services.CoursesService,
 	attendanceValuesRepo repos.AttendanceValues,
 	attendanceValuesServices services.AttendanceValuesService,
+	studentCoursesRepo repos.StudentCoursesRepo,
+	studentCoursesService services.StudentCoursesService,
 ) *App {
 	return &App{
-		MethodNames: methodNames,
-		Validator:   validator,
-
-		CentresRepo:    centresRepo,
-		CentresService: centresService,
-
-		RoomsRepo:    roomsRepo,
-		RoomsService: roomsService,
-
-		EmployeesRepo:    employeesRepo,
-		EmployeesService: employeesService,
-
-		StudentsRepo:    studentsRepo,
-		StudentsService: studentsService,
-
-		CoursesRepo:    coursesRepo,
-		CoursesService: coursesService,
-
+		CentresRepo:             centresRepo,
+		CentresService:          centresService,
+		RoomsRepo:               roomsRepo,
+		RoomsService:            roomsService,
+		EmployeesRepo:           employeesRepo,
+		EmployeesService:        employeesService,
+		StudentsRepo:            studentsRepo,
+		StudentsService:         studentsService,
+		CoursesRepo:             coursesRepo,
+		CoursesService:          coursesService,
 		AttendanceValuesRepo:    attendanceValuesRepo,
 		AttendanceValuesService: attendanceValuesServices,
+		StudentCoursesRepo:      studentCoursesRepo,
+		StudentCoursesService:   studentCoursesService,
+		MethodNames:             methodNames,
+		Validator:               validator,
 	}
 }
 
