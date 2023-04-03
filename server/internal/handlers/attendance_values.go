@@ -23,9 +23,12 @@ func GetAllAttendanceValues(c *gin.Context) {
 		return
 	}
 
+	data := make(map[string]interface{})
+	data["data"] = items
+
 	c.JSON(http.StatusOK, gin.H{
 		"title": "Attendance Values List",
-		"data":  items,
+		"data":  data,
 	})
 }
 
