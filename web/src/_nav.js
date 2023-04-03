@@ -311,6 +311,12 @@ export default [
     to: '/courses',
     icon: 'cil-user',
   },
+  {
+    component: 'CNavItem',
+    name: 'AttendanceValues',
+    to: '/attendance_values',
+    icon: 'cil-user',
+  },
   // {
   //   component: 'CNavItem',
   //   name: 'Download CoreUI',
