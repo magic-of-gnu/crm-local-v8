@@ -36,6 +36,10 @@ func RouteHandlers(r *gin.Engine, methodNames map[string]string) {
 	r.GET("api/server/attendance_values/list", GetAllAttendanceValues)
 	r.POST("api/server/attendance_values/create_one", PostAttendanceValuesCreateOne)
 
+	// studentCourses handlers
+	r.GET("api/server/student_courses/list", GetAllStudentCourses)
+	r.POST("api/server/student_courses/create_one", PostStudentCoursesCreateOne)
+
 	methodNames["GetCentresList"] = "centres/list"
 
 }
