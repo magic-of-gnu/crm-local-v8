@@ -12,6 +12,7 @@ import students_routes from '@/router/custom/students.js'
 import courses_routes from '@/router/custom/courses.js'
 import attendance_values from '@/router/custom/attendanceValues.js'
 import student_courses from '@/router/custom/student_courses.js'
+import lectures_calendar from '@/router/custom/lectures_calendar.js'
 
 
 
@@ -277,7 +278,8 @@ const routes = [
       students_routes,
       courses_routes,
       attendance_values,
-      student_courses
+      student_courses,
+      lectures_calendar,
     ],
   },
   {
