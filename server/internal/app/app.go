@@ -3,13 +3,32 @@ package app
 import (
 	"path/filepath"
 
+	"github.com/gin-contrib/multitemplate"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/repos"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/services"
 
-	"github.com/gin-contrib/multitemplate"
-
 	"github.com/go-playground/validator/v10"
 )
+
+type Repos struct {
+	LectureCalendarRepo repos.LectureCalendarRepo
+}
+
+type Services struct {
+	LectureCalendarService services.LectureCalendarService
+}
+
+func NewRepos(lectureCalendarRepo repos.LectureCalendarRepo) *Repos {
+	return &Repos{
+		LectureCalendarRepo: lectureCalendarRepo,
+	}
+}
+
+func NewServices(lectureCalendarService services.LectureCalendarService) *Services {
+	return &Services{
+		LectureCalendarService: lectureCalendarService,
+	}
+}
 
 type App struct {
 	// centres
@@ -40,6 +59,10 @@ type App struct {
 	StudentCoursesRepo    repos.StudentCoursesRepo
 	StudentCoursesService services.StudentCoursesService
 
+	// lecture_calendar
+	LectureCalendarRepo    repos.LectureCalendarRepo
+	LectureCalendarService services.LectureCalendarService
+
 	MethodNames map[string]string
 
 	Validator *validator.Validate
@@ -62,6 +85,8 @@ func NewApp(
 	attendanceValuesServices services.AttendanceValuesService,
 	studentCoursesRepo repos.StudentCoursesRepo,
 	studentCoursesService services.StudentCoursesService,
+	lectureCalendarRepo repos.LectureCalendarRepo,
+	lectureCalendarServicei services.LectureCalendarService,
 ) *App {
 	return &App{
 		CentresRepo:             centresRepo,
@@ -78,6 +103,8 @@ func NewApp(
 		AttendanceValuesService: attendanceValuesServices,
 		StudentCoursesRepo:      studentCoursesRepo,
 		StudentCoursesService:   studentCoursesService,
+		LectureCalendarRepo:     lectureCalendarRepo,
+		LectureCalendarService:  lectureCalendarServicei,
 		MethodNames:             methodNames,
 		Validator:               validator,
 	}
