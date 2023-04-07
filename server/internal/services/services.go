@@ -1,9 +1,13 @@
 package services
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 )
+
+var WeekDays []string = []string{"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satyrday", "Sunday"}
 
 type CentresService interface {
 	GetAll() ([]models.Centre, error)
@@ -64,4 +68,25 @@ type StudentCoursesService interface {
 		payment_amount int,
 		description string,
 	) (*models.StudentCourses, error)
+}
+
+type LectureCalendarService interface {
+	GetAll() ([]models.LectureCalendarResponse, error)
+	CreateOne(
+		room_uid,
+		course_uid,
+		employee_uid uuid.UUID,
+		date time.Time,
+		duration time.Duration,
+	) (*models.LectureCalendar, error)
+	CreateMany(
+		room_uid,
+		course_uid,
+		employee_uid uuid.UUID,
+		start_date time.Time,
+		end_date time.Time,
+		days_and_times []models.DayAndTimeRequest,
+	) ([]models.LectureCalendar, error)
+	DeleteOneByID(uid uuid.UUID) error
+	DeleteManyByID(lectures_calendar []models.LectureCalendar) error
 }
