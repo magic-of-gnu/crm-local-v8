@@ -323,6 +323,12 @@ export default [
     to: '/student_courses',
     icon: 'cil-user',
   },
+  {
+    component: 'CNavItem',
+    name: 'Lecture Calendars',
+    to: '/lectures_calendar',
+    icon: 'cil-user',
+  },
   // {
   //   component: 'CNavItem',
   //   name: 'Download CoreUI',
