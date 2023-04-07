@@ -79,3 +79,17 @@ type StudentCoursesRepo interface {
 		created_at, updated_at time.Time,
 	) (*models.StudentCourses, error)
 }
+
+type LectureCalendarRepo interface {
+	GetAll() ([]models.LectureCalendar, error)
+	CreateOne(
+		uid,
+		roomd_uid,
+		course_uid,
+		employee_uid uuid.UUID,
+		date time.Time,
+		duration time.Duration,
+		created_at, updated_at time.Time,
+	) (*models.LectureCalendar, error)
+	DeleteOneByID(uid uuid.UUID) error
+}
