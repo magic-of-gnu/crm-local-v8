@@ -1,0 +1,292 @@
+<template>
+  <CRow>
+    <CForm action="some-post-function" method="POST">
+
+      <div class="mb-3">
+        <CFormLabel for="centre_id">Room Name</CFormLabel>
+        <CFormSelect
+          v-model="selected_room_id"
+          aria-label="Default select example"
+          :options="roomsOptions"
+          name="room_id"
+          aria-placeholder="Select"
+          required
+        >
+        </CFormSelect>
+      </div>
+      <div class="mb-3">
+        <CFormLabel for="course_id">Course Name</CFormLabel>
+        <CFormSelect
+          v-model="selected_course_id"
+          aria-label="Default select example"
+          :options="coursesOptions"
+          name="course_id"
+          aria-placeholder="Select"
+          required
+        >
+        </CFormSelect>
+      </div>
+      <div class="mb-3">
+        <CFormLabel for="employee_id">Employee Name</CFormLabel>
+        <CFormSelect
+          v-model="selected_employee_id"
+          aria-label="Default select example"
+          :options="employeesOptions"
+          name="employee_id"
+          aria-placeholder="Select"
+          required
+        >
+        </CFormSelect>
+      </div>
+
+      <div class="mb-3">
+        <CFormLabel for="start_date">Start Date</CFormLabel>
+        <VueDatePicker
+          name="start_date"
+          v-model="start_date"
+          auto-apply
+          placeholder="Select Start Date"
+          close-on-scroll
+          :highlight-week-days="[0, 7]"
+          required
+          model-type="timestamp"
+          week-start="1"
+          :enable-time-picker="false"
+        ></VueDatePicker>
+      </div>
+      <div class="mb-3">
+        <CFormLabel for="end_date">End Date</CFormLabel>
+        <VueDatePicker
+          name="end_date"
+          v-model="end_date"
+          auto-apply
+          placeholder="Select End Date"
+          close-on-scroll
+          :highlight-week-days="[0, 7]"
+          required
+          model-type="timestamp"
+          week-start="1"
+          :enable-time-picker="false"
+        ></VueDatePicker>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col">
+
+          <CButton
+            @click.prevent="($event) => addNewDateAndTime($event)"
+            component="input"
+            type="button"
+            color="primary"
+            value="Add New Time"
+          />
+        </div>
+
+        <div class="col">
+
+          <CButton
+            @click.prevent="($event) => deleteLastDateAndTime(ii)"
+            component="input"
+            type="button"
+            color="primary"
+            value="Delete Last Option"
+          />
+        </div>
+        
+      </div>
+
+      <div
+        class="mb-3"
+        v-for="(item, ii) in dates_and_times"
+        :key="ii"
+      >
+
+        <CInputGroup class="row mb-3">
+
+          <div class="col mb-3">
+
+            <CFormLabel for="day">Select Day</CFormLabel>
+            <CFormSelect
+              v-model="item.day"
+              :options="daysOptions"
+              name="day"
+              required
+            >
+            </CFormSelect>
+          </div>
+
+          <div class="col mb-3">
+            <CFormLabel for="start_time">Start Time</CFormLabel>
+            <VueDatePicker
+              v-model="item.start_time"
+              :is-24="true"
+              auto-apply
+              time-picker
+              placeholder="Select Start Time"
+              close-on-scroll
+              required
+            ></VueDatePicker>
+          </div>
+
+          <div class="col mb-3">
+            <CFormLabel for="duration">Duration</CFormLabel>
+            <VueDatePicker
+              v-model="item.duration"
+              auto-apply
+              time-picker
+              placeholder="Select Duration"
+              close-on-scroll
+              required
+            ></VueDatePicker>
+          </div>
+
+          <CButton
+            class="col mb-3"
+            @click.prevent="($event) => deleteThisDateAndTime($event)"
+            component="input"
+            type="button"
+            color="primary"
+            value="x"
+            size="sm"
+            variant="ghost"
+          />
+
+        </CInputGroup>
+      </div>
+      <CButton
+        @click.prevent="($event) => run_this_method($event)"
+        component="input"
+        type="submit"
+        color="primary"
+        value="Submit"
+      />
+    </CForm>
+  </CRow>
+</template>
+
+<script setup>
+/* eslint-disable */
+
+import m from '@/views/custom/hooks/lecturesCalendar/methods.js'
+import employeesMethods from '@/views/custom/hooks/employees/methods.js'
+import roomsMethods from '@/views/custom/hooks/rooms/methods.js'
+import coursesMethods from '@/views/custom/hooks/courses/methods.js'
+import { ref, onMounted } from 'vue'
+
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
+const daysOptions = [
+  {
+    label: "Select Day",
+    value: "",
+    disabled: true,
+    hidden: true,
+    selected: true
+  },
+  {
+    label: "Monday",
+    value: 1
+  },
+  {
+    label: "Tuesday",
+    value: 2
+  },
+  {
+    label: "Wednesday",
+    value: 3
+  },
+  {
+    label: "Thursday",
+    value: 4
+  },
+  {
+    label: "Friday",
+    value: 5
+  },
+  {
+    label: "Satyrday",
+    value: 6
+  },
+  {
+    label: "Sunday",
+    value: 7
+  },
+]
+
+const dates_and_times = ref([])
+
+const start_date = ref(new Date())
+const end_date = ref(new Date())
+
+const selected_course_id = ref(null)
+const selected_room_id = ref(null)
+const selected_employee_id = ref(null)
+
+const employeesOptions = ref([{}])
+const roomsOptions = ref([{}])
+const coursesOptions = ref([{}])
+
+function run_this_method(event) {
+  console.log("start_date: ", start_date)
+  console.log("dates_and_times: ", dates_and_times.value)
+  m.postCreateOne({
+    room_id: selected_course_id.value,
+    course_id: selected_course_id.value,
+    employee_id: selected_employee_id.value,
+    start_date: start_date.value,
+    end_date: end_date.value,
+    dates_and_times: dates_and_times,
+  })
+}
+
+function addNewDateAndTime(event) {
+  dates_and_times.value.push({
+    day: null,
+    start_time: null,
+    duration: null
+  })
+}
+
+function deleteLastDateAndTime() {
+  dates_and_times.value.pop()
+}
+
+function deleteThisDateAndTime(ii) {
+  dates_and_times.value.splice(ii, 1)
+}
+
+onMounted(() => {
+  roomsMethods.getRoomsList()
+    .then( (d) => {
+      for (const item of d.data.data) {
+        roomsOptions.value.push({
+          label: item.name,
+          value: item.id
+      })
+    }
+  })
+
+  employeesMethods.getEmployeesList()
+    .then( (d) => {
+      for (const item of d.data.data) {
+        employeesOptions.value.push({
+          label: item.first_name + " " + item.last_name,
+          value: item.id
+      })
+    }
+  })
+
+  coursesMethods.getCoursesList()
+    .then( (d) => {
+      for (const item of d.data.data) {
+        coursesOptions.value.push({
+          label: item.name,
+          value: item.id
+      })
+    }
+  })
+
+})
+
+</script>
