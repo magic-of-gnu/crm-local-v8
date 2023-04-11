@@ -45,6 +45,15 @@ func RouteHandlers(r *gin.Engine, methodNames map[string]string) {
 	r.POST("api/server/lectures_calendar/create_one", PostLecturesCalendarCreateOne)
 	r.DELETE("api/server/lectures_calendar", DeleteLecturesCalendarByID)
 
+	// lectureCalendar handlers
+	r.GET("api/server/attendances/list", GetAttendancesAll)
+	r.POST("api/server/attendances/create_one", PostAttendancesCreateOne)
+	r.DELETE("api/server/attendances", DeleteAttendancesByID)
+
+	r.GET("api/server/users/list", GetUsersAll)
+	r.POST("api/server/users/create_one", PostUsersCreateOne)
+	r.DELETE("api/server/users", DeleteUsersByID)
+
 	methodNames["GetCentresList"] = "centres/list"
 
 }
