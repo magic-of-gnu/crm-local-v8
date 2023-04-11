@@ -20,7 +20,10 @@ import (
 
 func main() {
 
-	appConfig := app.NewAppConfig()
+	appConfig, err := app.NewAppConfig()
+	if err != nil {
+		return
+	}
 
 	methodNames := make(map[string]string)
 
@@ -68,6 +71,14 @@ func main() {
 	lectureCalendarRepo := repos.NewLectureCalendarPostgresRepo(dbpool)
 	lectureCalendarService := services.NewLectureCalendarService(lectureCalendarRepo)
 
+	// attendances
+	attendancesRepo := repos.NewAttendancesPostgresRepo(dbpool)
+	attendancesService := services.NewAttendancesServiceService(attendancesRepo)
+
+	// users
+	usersRepo := repos.NewUsersPostgresRepo(dbpool)
+	usersService := services.NewUsersService(usersRepo)
+
 	// repos
 	// repos := app.NewRepos(lectureCalendarRepo)
 	// services := app.NewServices(lectureCalendarService)
@@ -91,6 +102,11 @@ func main() {
 		studentCoursesService,
 		lectureCalendarRepo,
 		lectureCalendarService,
+		attendancesRepo,
+		attendancesService,
+		usersRepo,
+		usersService,
+		appConfig.HashCost,
 	)
 	handlers.NewApp(App)
 
@@ -109,8 +125,6 @@ func main() {
 	fmt.Println("app: ", App)
 
 	r := gin.Default()
-	// r.LoadHTMLGlob("templates/*")
-	r.HTMLRender = app.LoadTemplates("./templates")
 	r.Static("/static", "./static")
 
 	fmt.Println("before methodNames: ", methodNames)
