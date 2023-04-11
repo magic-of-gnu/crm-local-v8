@@ -3,4 +3,5 @@ create_table("attendances") {
   t.Column("lectures_calendar_id", "uuid", {"null": false})
   t.Column("student_id", "uuid", {"null": false})
   t.Column("attendance_value_id", "uuid", {"null": false})
+  t.Column("description", "varchar", {"null": false})
 }

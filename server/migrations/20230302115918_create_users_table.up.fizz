@@ -6,5 +6,5 @@ create_table("users") {
   t.Column("password", "varchar", {"null": false})
   t.Column("last_login", "timestamp", {"null": false})
   t.Column("is_admin", "bool", {"null": false})
-  t.Column("type", "integer", {"null": false})
+  t.Column("user_type", "integer", {"null": false})
 }
