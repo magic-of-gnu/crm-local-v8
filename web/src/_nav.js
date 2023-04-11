@@ -329,6 +329,18 @@ export default [
     to: '/lectures_calendar',
     icon: 'cil-user',
   },
+  {
+    component: 'CNavItem',
+    name: 'Attendances',
+    to: '/attendances',
+    icon: 'cil-user',
+  },
+  {
+    component: 'CNavItem',
+    name: 'Users',
+    to: '/users',
+    icon: 'cil-user',
+  },
   // {
   //   component: 'CNavItem',
   //   name: 'Download CoreUI',
