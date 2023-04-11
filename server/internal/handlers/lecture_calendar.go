@@ -64,7 +64,7 @@ func PostLecturesCalendarCreateOne(c *gin.Context) {
 	req.StartDate = time.Date(start_date.Year(), start_date.Month(), start_date.Day(), 0, 0, 0, 0, time.UTC)
 	req.EndDate = time.Date(end_date.Year(), end_date.Month(), end_date.Day(), 0, 0, 0, 0, time.UTC)
 
-	items, err := App.LectureCalendarService.CreateMany(
+	items, _ := App.LectureCalendarService.CreateMany(
 		req.RoomID,
 		req.CourseID,
 		req.EmployeeID,
