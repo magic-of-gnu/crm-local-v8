@@ -60,9 +60,19 @@ type App struct {
 	LectureCalendarRepo    repos.LectureCalendarRepo
 	LectureCalendarService services.LectureCalendarService
 
+	// attendances
+	AttendancesRepo     repos.AttendancesRepo
+	AttendancesServices services.AttendancesService
+
+	// users
+	UsersRepo    repos.UsersRepo
+	UsersService services.UsersService
+
 	MethodNames map[string]string
 
 	Validator *validator.Validate
+
+	HashCost int
 }
 
 func NewApp(
@@ -84,6 +94,11 @@ func NewApp(
 	studentCoursesService services.StudentCoursesService,
 	lectureCalendarRepo repos.LectureCalendarRepo,
 	lectureCalendarServicei services.LectureCalendarService,
+	attendancesRepo repos.AttendancesRepo,
+	attendancesServices services.AttendancesService,
+	usersRepo repos.UsersRepo,
+	usersService services.UsersService,
+	hashCost int,
 ) *App {
 	return &App{
 		CentresRepo:             centresRepo,
@@ -102,8 +117,12 @@ func NewApp(
 		StudentCoursesService:   studentCoursesService,
 		LectureCalendarRepo:     lectureCalendarRepo,
 		LectureCalendarService:  lectureCalendarServicei,
+		AttendancesRepo:         attendancesRepo,
+		AttendancesServices:     attendancesServices,
+		UsersRepo:               usersRepo,
+		UsersService:            usersService,
 		MethodNames:             methodNames,
 		Validator:               validator,
+		HashCost:                hashCost,
 	}
-}
 }
