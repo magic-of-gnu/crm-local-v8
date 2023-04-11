@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
 // var DATABASE_URL string = "dbname=local_v8 user=postgres password=postgres host=127.0.0.1 port=5432"
@@ -14,11 +15,16 @@ type AppConfig struct {
 	PG_DBName   string
 	PG_User     string
 	PG_Password string
+	HashCost    int
 }
 
-func NewAppConfig() *AppConfig {
+func NewAppConfig() (*AppConfig, error) {
 
 	port := os.Getenv("PORT")
+	hash_cost, err := strconv.Atoi(os.Getenv("HASH_COST"))
+	if err != nil {
+		return &AppConfig{}, fmt.Errorf("error during creating AppConfig, could not read HASH_COST, either empty or non int; err: %w", err)
+	}
 
 	return &AppConfig{
 		Port:        port,
@@ -27,7 +33,8 @@ func NewAppConfig() *AppConfig {
 		PG_DBName:   os.Getenv("PG_DBNAME"),
 		PG_User:     os.Getenv("PG_USER"),
 		PG_Password: os.Getenv("PG_PASSWORD"),
-	}
+		HashCost:    hash_cost,
+	}, nil
 }
 
 func CreateDabaseURL(cfg *AppConfig) string {
