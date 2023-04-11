@@ -93,3 +93,32 @@ type LectureCalendarRepo interface {
 	) (*models.LectureCalendar, error)
 	DeleteOneByID(uid uuid.UUID) error
 }
+
+type AttendancesRepo interface {
+	GetAll() ([]models.Attendance, error)
+	CreateOne(
+		uid,
+		lecture_calendar_id,
+		student_id,
+		attendance_value_id uuid.UUID,
+		description string,
+		created_at, updated_at time.Time,
+	) (*models.Attendance, error)
+	DeleteOneByID(uid uuid.UUID) error
+}
+
+type UsersRepo interface {
+	GetAll() ([]models.User, error)
+	CreateOne(
+		uid uuid.UUID,
+		first_name,
+		last_name,
+		username,
+		password string,
+		last_login time.Time,
+		is_admin bool,
+		user_type int,
+		created_at, updated_at time.Time,
+	) (*models.User, error)
+	DeleteOneByID(uid uuid.UUID) error
+}
