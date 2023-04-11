@@ -90,3 +90,28 @@ type LectureCalendarService interface {
 	DeleteOneByID(uid uuid.UUID) error
 	DeleteManyByID(lectures_calendar []models.LectureCalendar) error
 }
+
+type AttendancesService interface {
+	GetAll() ([]models.AttendanceResponse, error)
+	CreateOne(
+		lecture_calendar_id,
+		student_id,
+		attendance_value_id uuid.UUID,
+		description string,
+	) (*models.Attendance, error)
+	DeleteOneByID(uid uuid.UUID) error
+}
+
+type UsersService interface {
+	GetAll() ([]models.UserGetAllResponse, error)
+	CreateOne(
+		first_name,
+		last_name,
+		username,
+		password string,
+		is_admin bool,
+		user_type int,
+		hash_cost int,
+	) (*models.User, error)
+	DeleteOneByID(uid uuid.UUID) error
+}
