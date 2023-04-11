@@ -10,9 +10,11 @@ import centres_routes from '@/router/custom/centres.js'
 import employees_routes from '@/router/custom/employees.js'
 import students_routes from '@/router/custom/students.js'
 import courses_routes from '@/router/custom/courses.js'
-import attendance_values from '@/router/custom/attendanceValues.js'
-import student_courses from '@/router/custom/student_courses.js'
-import lectures_calendar from '@/router/custom/lectures_calendar.js'
+import attendance_values_routes from '@/router/custom/attendanceValues.js'
+import student_courses_routes from '@/router/custom/student_courses.js'
+import lectures_calendar_routes from '@/router/custom/lectures_calendar.js'
+import attendances_routes from '@/router/custom/attendances.js'
+import users_routes from '@/router/custom/users.js'
 
 
 
@@ -277,9 +279,11 @@ const routes = [
       employees_routes,
       students_routes,
       courses_routes,
-      attendance_values,
-      student_courses,
-      lectures_calendar,
+      attendance_values_routes,
+      student_courses_routes,
+      lectures_calendar_routes,
+      attendances_routes,
+      users_routes,
     ],
   },
   {
