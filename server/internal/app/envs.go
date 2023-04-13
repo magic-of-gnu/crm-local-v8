@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 // var DATABASE_URL string = "dbname=local_v8 user=postgres password=postgres host=127.0.0.1 port=5432"
@@ -18,6 +20,7 @@ type AppConfig struct {
 	HashCost           int
 	PublicKeyPath      string
 	PrivateKeyPath     string
+	TokenSigningMethod jwt.SigningMethod
 }
 
 func NewAppConfig() (*AppConfig, error) {
@@ -31,9 +34,21 @@ func NewAppConfig() (*AppConfig, error) {
 	// public/private keys
 	private_key_path := os.Getenv("PRIVATE_KEY_PATH")
 	public_key_path := os.Getenv("PUBLIC_KEY_PATH")
+
+	// token signing method
+	tokenSigningMethod := jwt.SigningMethodEd25519{}
+
 	return &AppConfig{
+		Port:               port,
+		PG_Host:            os.Getenv("PG_HOST"),
+		PG_Port:            os.Getenv("PG_PORT"),
+		PG_DBName:          os.Getenv("PG_DBNAME"),
+		PG_User:            os.Getenv("PG_USER"),
+		PG_Password:        os.Getenv("PG_PASSWORD"),
+		HashCost:           hash_cost,
 		PublicKeyPath:      public_key_path,
 		PrivateKeyPath:     private_key_path,
+		TokenSigningMethod: &tokenSigningMethod,
 	}, nil
 }
 
