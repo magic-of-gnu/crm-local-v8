@@ -68,6 +68,8 @@ type App struct {
 	UsersRepo    repos.UsersRepo
 	UsersService services.UsersService
 
+	// token
+	TokensService services.TokensService
 	MethodNames map[string]string
 
 	Validator *validator.Validate
@@ -98,6 +100,7 @@ func NewApp(
 	attendancesServices services.AttendancesService,
 	usersRepo repos.UsersRepo,
 	usersService services.UsersService,
+	tokensService services.TokensService,
 	hashCost int,
 ) *App {
 	return &App{
@@ -121,6 +124,7 @@ func NewApp(
 		AttendancesServices:     attendancesServices,
 		UsersRepo:               usersRepo,
 		UsersService:            usersService,
+		TokensService:           tokensService,
 		MethodNames:             methodNames,
 		Validator:               validator,
 		HashCost:                hashCost,
