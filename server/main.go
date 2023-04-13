@@ -23,6 +23,11 @@ func main() {
 		return
 	}
 
+	privateKey, publicKey, err := initEd25119Keys(appConfig.PrivateKeyPath, appConfig.PublicKeyPath)
+	if err != nil {
+		return
+	}
+
 	methodNames := make(map[string]string)
 
 	database_url := app.CreateDabaseURL(appConfig)
@@ -144,4 +149,34 @@ func main() {
 
 	fmt.Println("routes: ", r.Routes())
 	r.Run(url_string)
+}
+
+func initEd25119Keys(privateKeyPath, publicKeyPath string) (crypto.PrivateKey, crypto.PublicKey, error) {
+
+	key, err := os.ReadFile(publicKeyPath)
+	if err != nil {
+		fmt.Println("error occurred during reading public key from disk; keypath: ", publicKeyPath)
+		return nil, nil, err
+	}
+
+	public_key, err := jwt.ParseEdPublicKeyFromPEM(key)
+	if err != nil {
+		fmt.Println("error occurred during parsing public key, err: ", err, " keypath: ", publicKeyPath)
+		return nil, nil, err
+	}
+
+	key, err = os.ReadFile(privateKeyPath)
+	if err != nil {
+		fmt.Println("error occurred during reading private key from diskl keypath: ", privateKeyPath)
+		return nil, nil, err
+	}
+
+	private_key, err := jwt.ParseEdPrivateKeyFromPEM(key)
+	if err != nil {
+		fmt.Println("error occurred during parsing private key, err: ", err, " keypath: ", privateKeyPath)
+		return nil, nil, err
+	}
+
+	return private_key, public_key, nil
+
 }
