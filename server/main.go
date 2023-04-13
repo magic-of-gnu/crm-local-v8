@@ -82,6 +82,14 @@ func main() {
 	usersRepo := repos.NewUsersPostgresRepo(dbpool)
 	usersService := services.NewUsersService(usersRepo)
 
+	// tokens
+	tokensService := services.NewTokensService(models.TokenKeys{
+		PrivateKey: privateKey,
+		PublicKey:  publicKey,
+	},
+		appConfig.TokenSigningMethod,
+	)
+
 	// repos
 	// repos := app.NewRepos(lectureCalendarRepo)
 	// services := app.NewServices(lectureCalendarService)
@@ -109,6 +117,7 @@ func main() {
 		attendancesService,
 		usersRepo,
 		usersService,
+		tokensService,
 		appConfig.HashCost,
 	)
 	handlers.NewApp(App)
