@@ -90,6 +90,14 @@ func main() {
 		appConfig.TokenSigningMethod,
 	)
 
+	loginService := services.NewLoginService(
+		usersRepo,
+		usersService,
+		tokensService,
+		appConfig.TokenSigningMethod,
+		appConfig.HashCost,
+	)
+
 	// repos
 	// repos := app.NewRepos(lectureCalendarRepo)
 	// services := app.NewServices(lectureCalendarService)
@@ -118,6 +126,7 @@ func main() {
 		usersRepo,
 		usersService,
 		tokensService,
+		loginService,
 		appConfig.HashCost,
 	)
 	handlers.NewApp(App)
