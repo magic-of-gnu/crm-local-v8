@@ -3,6 +3,7 @@ package services
 import (
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 )
@@ -115,5 +116,10 @@ type UsersService interface {
 	) (*models.User, error)
 	DeleteOneByID(uid uuid.UUID) error
 	GetOneByUsername(username string) (*models.User, error)
+}
+
+type TokensService interface {
+	SignTokenWithCustomClaims(token *jwt.Token) (string, error)
+	ParseSignedToken(signedToken string) (*jwt.Token, error)
 }
 }
