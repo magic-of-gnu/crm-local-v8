@@ -2,14 +2,18 @@ package main
 
 import (
 	"context"
+	"crypto"
 	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/app"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/handlers"
+	"github.com/magic-of-gnu/crm-local-v8/server/internal/handlers/middlewares"
+	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/repos"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/services"
 
@@ -98,6 +102,8 @@ func main() {
 		appConfig.HashCost,
 	)
 
+	authMiddleware := middlewares.NewAuthMiddleware(tokensService)
+
 	// repos
 	// repos := app.NewRepos(lectureCalendarRepo)
 	// services := app.NewServices(lectureCalendarService)
@@ -127,6 +133,7 @@ func main() {
 		usersService,
 		tokensService,
 		loginService,
+		authMiddleware,
 		appConfig.HashCost,
 	)
 	handlers.NewApp(App)
