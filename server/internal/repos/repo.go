@@ -121,4 +121,5 @@ type UsersRepo interface {
 		created_at, updated_at time.Time,
 	) (*models.User, error)
 	DeleteOneByID(uid uuid.UUID) error
+	GetOneByUsername(username string) (*models.User, error)
 }
