@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/magic-of-gnu/crm-local-v8/server/internal/handlers/middlewares"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/repos"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/services"
 
@@ -73,6 +74,10 @@ type App struct {
 
 	// login
 	LoginService services.LoginService
+
+	// authMiddleware
+	AuthMiddleware middlewares.AuthMiddleware
+
 	MethodNames map[string]string
 
 	Validator *validator.Validate
@@ -105,6 +110,7 @@ func NewApp(
 	usersService services.UsersService,
 	tokensService services.TokensService,
 	loginService services.LoginService,
+	authMiddleware middlewares.AuthMiddleware,
 	hashCost int,
 ) *App {
 	return &App{
@@ -130,6 +136,7 @@ func NewApp(
 		UsersService:            usersService,
 		TokensService:           tokensService,
 		LoginService:            loginService,
+		AuthMiddleware:          authMiddleware,
 		MethodNames:             methodNames,
 		Validator:               validator,
 		HashCost:                hashCost,
