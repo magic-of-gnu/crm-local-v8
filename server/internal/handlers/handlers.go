@@ -54,6 +54,9 @@ func RouteHandlers(r *gin.Engine, methodNames map[string]string) {
 	r.POST("api/server/users/create_one", PostUsersCreateOne)
 	r.DELETE("api/server/users", DeleteUsersByID)
 
+	// login handlers
+	r.POST("api/server/login", PostLogin)
+
 	methodNames["GetCentresList"] = "centres/list"
 
 }
