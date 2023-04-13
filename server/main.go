@@ -16,8 +16,6 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// var DATABASE_URL string = "dbname=local_v8 user=postgres password=postgres host=127.0.0.1 port=5432"
-
 func main() {
 
 	appConfig, err := app.NewAppConfig()
