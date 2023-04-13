@@ -122,4 +122,7 @@ type TokensService interface {
 	SignTokenWithCustomClaims(token *jwt.Token) (string, error)
 	ParseSignedToken(signedToken string) (*jwt.Token, error)
 }
+
+type LoginService interface {
+	Login(username string, password string) (*models.LoginResponse, bool, error)
 }
