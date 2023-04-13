@@ -129,3 +129,35 @@ func (rr *usersPostgresRepo) DeleteOneByID(uid uuid.UUID) error {
 	return nil
 
 }
+
+func (rr *usersPostgresRepo) GetOneByUsername(username string) (*models.User, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `SELECT id, first_name, last_name, username, password, last_login, is_admin, user_type, created_at, updated_at FROM users
+	WHERE username = $1`
+
+	var item models.User
+
+	row := rr.dbpool.QueryRow(ctx, query, username)
+
+	err := row.Scan(
+		&item.ID,
+		&item.FirstName,
+		&item.LastName,
+		&item.Username,
+		&item.Password,
+		&item.LastLogin,
+		&item.IsAdmin,
+		&item.UserType,
+		&item.CreatedAt,
+		&item.UpdatedAt,
+	)
+
+	if err != nil {
+		return &item, err
+	}
+
+	return &item, nil
+}
