@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/app"
 )
@@ -50,6 +52,7 @@ func RouteHandlers(r *gin.Engine, methodNames map[string]string) {
 	r.POST("api/server/attendances/create_one", PostAttendancesCreateOne)
 	r.DELETE("api/server/attendances", DeleteAttendancesByID)
 
+	// users handlers
 	r.GET("api/server/users/list", GetUsersAll)
 	r.POST("api/server/users/create_one", PostUsersCreateOne)
 	r.DELETE("api/server/users", DeleteUsersByID)
@@ -59,8 +62,20 @@ func RouteHandlers(r *gin.Engine, methodNames map[string]string) {
 
 	methodNames["GetCentresList"] = "centres/list"
 
+	// middleware check
+	r.Use(App.AuthMiddleware.IsAuthorized()).GET("api/server/middleware-check")
+
 }
 
 func NewApp(app *app.App) {
 	App = app
+}
+
+type S struct {
+	Username string `json:"username" binding:"required"`
+	Age      int    `json:"age" binding:"required"`
+}
+
+func MiddlewareCheck(c *gin.Context) {
+	fmt.Println("in middleware check")
 }
