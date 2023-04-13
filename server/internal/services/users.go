@@ -93,3 +93,13 @@ func (ss *usersService) DeleteOneByID(uid uuid.UUID) error {
 
 	return nil
 }
+
+func (ss *usersService) GetOneByUsername(username string) (*models.User, error) {
+
+	item, err := ss.UsersRepo.GetOneByUsername(username)
+	if err != nil {
+		return item, err
+	}
+
+	return item, nil
+}

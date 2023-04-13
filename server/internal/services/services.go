@@ -114,4 +114,6 @@ type UsersService interface {
 		hash_cost int,
 	) (*models.User, error)
 	DeleteOneByID(uid uuid.UUID) error
+	GetOneByUsername(username string) (*models.User, error)
+}
 }
