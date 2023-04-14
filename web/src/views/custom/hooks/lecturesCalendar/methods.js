@@ -1,12 +1,18 @@
 import axios from 'axios'
+import store from '@/store/index.js'
 
 async function getAllList() {
+  const token = store.getters.token
+
   return await axios({
     method: 'get',
     url: '/lectures_calendar/list',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
+    headers: {
+      "Authorization": "Bearer " + token
+    }
   })
     .then((response) => {
       if (response.status === 200) {
@@ -23,6 +29,8 @@ async function getAllList() {
 }
 
 async function postCreateOne(data) {
+  const token = store.getters.token
+
   return await axios({
     method: 'post',
     url: '/lectures_calendar/create_one',
@@ -30,6 +38,9 @@ async function postCreateOne(data) {
     crossOrigin: true,
     responseType: 'json',
     data: data,
+    headers: {
+      "Authorization": "Bearer " + token
+    }
   })
     .then((response) => {
       if (response.status === 200) {
@@ -45,6 +56,8 @@ async function postCreateOne(data) {
 }
 
 async function postDeleteByID(data) {
+  const token = store.getters.token
+
   return await axios({
     method: 'delete',
     url: '/lectures_calendar/',
@@ -52,6 +65,9 @@ async function postDeleteByID(data) {
     crossOrigin: true,
     responseType: 'json',
     data: data,
+    headers: {
+      "Authorization": "Bearer " + token
+    }
   })
     .then((response) => {
       if (response.status === 200) {

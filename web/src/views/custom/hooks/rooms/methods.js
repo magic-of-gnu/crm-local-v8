@@ -1,14 +1,18 @@
-// import axios from 'axios'
-// const axios = require('axios')
 import axios from 'axios'
+import store from '@/store/index.js'
 
 async function getRoomsList() {
+  const token = store.getters.token
+
   return await axios({
     method: 'get',
     url: '/rooms/list',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
+    headers: {
+      "Authorization": "Bearer " + token
+    }
   })
     .then((response) => {
       if (response.status === 200) {
@@ -26,6 +30,8 @@ async function getRoomsList() {
 }
 
 async function postRoomsCreateOne(data) {
+  const token = store.getters.token
+
   return await axios({
     method: 'post',
     url: '/rooms/create_one',
@@ -33,6 +39,9 @@ async function postRoomsCreateOne(data) {
     crossOrigin: true,
     responseType: 'json',
     data: data,
+    headers: {
+      "Authorization": "Bearer " + token
+    }
   })
     .then((response) => {
       if (response.status === 200) {

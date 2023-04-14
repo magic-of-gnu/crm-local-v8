@@ -1,12 +1,18 @@
 import axios from 'axios'
+import store from '@/store/index.js'
 
 async function getStudentsList() {
+  const token = store.getters.token
+
   return await axios({
     method: 'get',
     url: '/students/list',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
+    headers: {
+      "Authorization": "Bearer " + token
+    }
   })
     .then((response) => {
       if (response.status === 200) {
@@ -24,6 +30,8 @@ async function getStudentsList() {
 }
 
 async function postStudentsCreateOne(data) {
+  const token = store.getters.token
+
   return await axios({
     method: 'post',
     url: '/students/create_one',
@@ -31,6 +39,9 @@ async function postStudentsCreateOne(data) {
     crossOrigin: true,
     responseType: 'json',
     data: data,
+    headers: {
+      "Authorization": "Bearer " + token
+    }
   })
     .then((response) => {
       if (response.status === 200) {
