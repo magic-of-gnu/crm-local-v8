@@ -55,6 +55,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=Host(`malcorp.test`) && PathPrefix(`/`)"
+    environment:
+      - ENV=dev
+    env_file: ./server/.env.dev
     volumes:
       - ./web:/app
       - /app/node_modules
