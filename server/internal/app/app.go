@@ -83,6 +83,7 @@ type App struct {
 	Validator *validator.Validate
 
 	HashCost int
+	Debug    bool
 }
 
 func NewApp(
@@ -112,6 +113,7 @@ func NewApp(
 	loginService services.LoginService,
 	authMiddleware middlewares.AuthMiddleware,
 	hashCost int,
+	debug bool,
 ) *App {
 	return &App{
 		CentresRepo:             centresRepo,
@@ -140,5 +142,6 @@ func NewApp(
 		MethodNames:             methodNames,
 		Validator:               validator,
 		HashCost:                hashCost,
+		Debug:                   debug,
 	}
 }
