@@ -21,6 +21,7 @@ type AppConfig struct {
 	PublicKeyPath      string
 	PrivateKeyPath     string
 	TokenSigningMethod jwt.SigningMethod
+	Debug              bool
 }
 
 func NewAppConfig() (*AppConfig, error) {
@@ -38,6 +39,10 @@ func NewAppConfig() (*AppConfig, error) {
 	// token signing method
 	tokenSigningMethod := jwt.SigningMethodEd25519{}
 
+	// debug mode
+	debug_str := os.Getenv("DEBUG")
+	debug := debug_str == "true"
+
 	return &AppConfig{
 		Port:               port,
 		PG_Host:            os.Getenv("PG_HOST"),
@@ -49,6 +54,7 @@ func NewAppConfig() (*AppConfig, error) {
 		PublicKeyPath:      public_key_path,
 		PrivateKeyPath:     private_key_path,
 		TokenSigningMethod: &tokenSigningMethod,
+		Debug:              debug,
 	}, nil
 }
 
