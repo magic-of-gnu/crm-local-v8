@@ -1,5 +1,5 @@
 create_table("permissions") {
   t.Column("id", "uuid", {primary: true})
   t.Column("name", "varchar", {"null": false})
-  t.Column("description", "uuid", {"null": false})
+  t.Column("description", "varchar", {"null": false})
 }
