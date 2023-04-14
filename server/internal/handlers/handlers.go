@@ -9,10 +9,22 @@ import (
 
 var App *app.App
 
-func RouteHandlers(r *gin.Engine, methodNames map[string]string) {
+func RouteHandlers(router *gin.Engine, methodNames map[string]string) {
 	// centres form
 	// r.GET("centres", GetCentres)
 	// r.POST("centres/create_one", PostCentres)
+
+	// login handlers
+	router.POST("api/server/login", PostLogin)
+	// var r router.Group("")*gin.RouterGroup
+	var r *gin.RouterGroup
+
+	if !App.Debug {
+		r = router.Group("", App.AuthMiddleware.IsAuthorized())
+		// r = r.Use(App.AuthMiddleware.IsAuthorized())
+	} else {
+		r = router.Group("")
+	}
 
 	// centres handlers
 	r.GET("api/server/centres/list", GetAllCentres)
@@ -57,13 +69,7 @@ func RouteHandlers(r *gin.Engine, methodNames map[string]string) {
 	r.POST("api/server/users/create_one", PostUsersCreateOne)
 	r.DELETE("api/server/users", DeleteUsersByID)
 
-	// login handlers
-	r.POST("api/server/login", PostLogin)
-
 	methodNames["GetCentresList"] = "centres/list"
-
-	// middleware check
-	r.Use(App.AuthMiddleware.IsAuthorized()).GET("api/server/middleware-check")
 
 }
 
