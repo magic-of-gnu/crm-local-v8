@@ -1,6 +1,7 @@
 import { h, resolveComponent } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { createWebHistory } from 'vue-router'
+import store from '@/store/index.js'
 
 
 import DefaultLayout from '@/layouts/DefaultLayout'
@@ -327,6 +328,14 @@ const router = createRouter({
     // always scroll to top
     return { top: 0 }
   },
+})
+
+router.beforeEach((to, _, next) => {
+  if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
+    next({ name: 'Login' })
+  } else {
+    next()
+  }
 })
 
 export default router
