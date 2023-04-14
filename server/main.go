@@ -135,6 +135,7 @@ func main() {
 		loginService,
 		authMiddleware,
 		appConfig.HashCost,
+		appConfig.Debug,
 	)
 	handlers.NewApp(App)
 
