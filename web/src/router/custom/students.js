@@ -8,12 +8,18 @@ const routes = {
       name: 'students_create_one',
       component: () =>
         import('@/views/custom/views/students/StudentsCreateOneView.vue'),
+      meta: {
+        requiresAuth: true
+      },
     },
     {
       path: '/students/list',
       name: 'students_list',
       component: () => 
         import('@/views/custom/views/students/StudentsListView.vue'),
+      meta: {
+        requiresAuth: true
+      },
     },
   ],
 }

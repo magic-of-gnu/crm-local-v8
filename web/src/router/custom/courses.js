@@ -8,12 +8,18 @@ const routes = {
       name: 'courses_create_one',
       component: () =>
         import('@/views/custom/views/courses/CoursesCreateOneView.vue'),
+      meta: {
+        requiresAuth: true
+      },
     },
     {
       path: '/courses/list',
       name: 'courses_list',
       component: () => 
         import('@/views/custom/views/courses/CoursesListView.vue'),
+      meta: {
+        requiresAuth: true
+      },
     },
   ],
 }

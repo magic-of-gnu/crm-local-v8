@@ -8,12 +8,18 @@ const routes = {
       name: 'lectures_calendar_create_one',
       component: () =>
         import('@/views/custom/views/lectures_calendar/LecturesCalendarCreateOneView.vue'),
+      meta: {
+        requiresAuth: true
+      },
     },
     {
       path: '/lectures_calendar/list',
       name: 'lectures_calendar_list',
       component: () => 
         import('@/views/custom/views/lectures_calendar/LecturesCalendarListView.vue'),
+      meta: {
+        requiresAuth: true
+      },
     },
   ],
 }

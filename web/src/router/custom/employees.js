@@ -8,12 +8,18 @@ const routes = {
       name: 'employees_create_one',
       component: () =>
         import('@/views/custom/views/employees/EmployeesCreateOneView.vue'),
+      meta: {
+        requiresAuth: true
+      },
     },
     {
       path: '/employee/list',
       name: 'employees_list',
       component: () => 
         import('@/views/custom/views/employees/EmployeesListView.vue'),
+      meta: {
+        requiresAuth: true
+      },
     },
   ],
 }

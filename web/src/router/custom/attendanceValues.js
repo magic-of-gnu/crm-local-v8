@@ -8,12 +8,18 @@ const routes = {
       name: 'attendance_values_create_one',
       component: () =>
         import('@/views/custom/views/attendance_values/AttendanceValuesCreateOneView.vue'),
+      meta: {
+        requiresAuth: true
+      },
     },
     {
       path: '/attendance_values/list',
       name: 'attendance_values_list',
       component: () => 
         import('@/views/custom/views/attendance_values/AttendanceValuesListView.vue'),
+      meta: {
+        requiresAuth: true
+      },
     },
   ],
 }
