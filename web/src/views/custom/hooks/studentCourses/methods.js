@@ -55,7 +55,29 @@ async function postCreateOne(data) {
     })
 }
 
+async function getManyByCustomID(params) {
+  const token = store.getters.token
+
+  return await axios({
+    method: 'get',
+    url: '/student_courses',
+    baseURL: 'http://malcorp.test/api/server',
+    crossOrigin: true,
+    responseType: 'json',
+    headers: {
+      "Authorization": "Bearer " + token
+    },
+    params: params,
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data
+      }
+    })
+}
+
 export default {
   getAllList,
   postCreateOne,
+  getManyByCustomID
 }
