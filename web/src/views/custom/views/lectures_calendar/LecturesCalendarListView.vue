@@ -56,13 +56,9 @@
 import m from '@/views/custom/hooks/lecturesCalendar/methods.js'
 // import moment from 'moment'
 import { ref, onMounted, computed } from 'vue'
+import { epochToDatetime } from '@/utils/utils.js'
 
 const itemsList = ref('')
-
-function epochToDatetime(epochTime) {
-  const date = new Date(epochTime * 1000);
-  return new Intl.DateTimeFormat('default', {dateStyle: 'long'}).format(date)
-}
 
 onMounted(() => {
   m.getAllList().then((d) => {
