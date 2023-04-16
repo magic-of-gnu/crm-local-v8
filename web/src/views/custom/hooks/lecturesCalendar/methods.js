@@ -82,8 +82,51 @@ async function postDeleteByID(data) {
     })
 }
 
+async function getManyByCourseID(params) {
+  const token = store.getters.token
+
+  return await axios({
+    method: 'get',
+    url: '/lectures_calendar/getByCourseID',
+    baseURL: 'http://malcorp.test/api/server',
+    crossOrigin: true,
+    responseType: 'json',
+    headers: {
+      "Authorization": "Bearer " + token
+    },
+    params: params,
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data
+      }
+    })
+}
+
+async function getOneByID(id) {
+  const token = store.getters.token
+
+  return await axios({
+    method: 'get',
+    url: `/lectures_calendar/${id}`,
+    baseURL: 'http://malcorp.test/api/server',
+    crossOrigin: true,
+    responseType: 'json',
+    headers: {
+      "Authorization": "Bearer " + token
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data
+      }
+    })
+}
+
 export default {
   getAllList,
   postCreateOne,
   postDeleteByID,
+  getManyByCourseID,
+  getOneByID
 }
