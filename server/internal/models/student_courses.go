@@ -14,9 +14,8 @@ type StudentCourses struct {
 	Description   string    `json:"description" validate:"omitempty"`
 	CreatedAt     time.Time `json:"created_at" validate:"omitempty,datetime"`
 	UpdatedAt     time.Time `json:"updated_at" validate:"omitempty,datetime"`
-	// StudentName   string    `json:"student_name" validate:"ignore"`
-	Student Student
-	Course  Course
+	Student       Student   `json:"student" validate:"omitempty"`
+	Course        Course    `json:"course"  validate:"omitempty"`
 }
 
 type StudentCoursesListResponse struct {
@@ -40,4 +39,18 @@ type StudentCoursesRequest struct {
 	Description   string    `json:"description" validate:"omitempty"`
 	CreatedAt     time.Time `json:"created_at" validate:"omitempty,datetime"`
 	UpdatedAt     time.Time `json:"updated_at" validate:"omitempty,datetime"`
+}
+
+type StudentCoursesCustomRequest struct {
+	ID            uuid.UUID `json:"id" validate:"omitempty"`
+	StudentID     uuid.UUID `json:"student_id" validate:"omitempty"`
+	CourseID      uuid.UUID `json:"course_id" validate:"omitempty"`
+	PaymentAmount int       `json:"payment_amount" validate:"omitempty,number"`
+	Description   string    `json:"description" validate:"omitempty"`
+	CreatedAt     time.Time `json:"created_at" validate:"omitempty,datetime"`
+	UpdatedAt     time.Time `json:"updated_at" validate:"omitempty,datetime"`
+}
+
+type StudentCourseDeleteByIDRequest struct {
+	ID uuid.UUID `json:"id" validate:"required"`
 }
