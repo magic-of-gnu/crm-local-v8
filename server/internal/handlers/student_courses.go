@@ -84,3 +84,33 @@ func PostStudentCoursesCreateOne(c *gin.Context) {
 		"item":  item,
 	})
 }
+
+func DeleteStudentCoursesByID(c *gin.Context) {
+	title := "Student Courses Delete"
+
+	var req *models.StudentCourseDeleteByIDRequest
+
+	if err := c.Bind(&req); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"error":   err.Error(),
+			"message": "error during bidning data",
+		})
+		return
+	}
+
+	err := App.StudentCoursesService.DeleteOneByID(req.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"message": "error delete in db",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"title":   title,
+		"message": "success",
+	})
+}
