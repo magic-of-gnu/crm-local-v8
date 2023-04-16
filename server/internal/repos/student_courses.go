@@ -119,3 +119,26 @@ func (rr *studentCoursesPostgresRepo) CreateOne(
 	return &item, nil
 
 }
+
+func (rr *studentCoursesPostgresRepo) DeleteOneByID(uid uuid.UUID) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := "DELETE FROM student_courses WHERE id = $1"
+
+	row, err := rr.dbpool.Exec(ctx, query, uid)
+
+	if err != nil {
+		fmt.Println("err: ", err)
+		return err
+	}
+
+	if row.RowsAffected() == 0 {
+		fmt.Println("err: data was not deleted")
+		return fmt.Errorf("data was not deleted")
+	}
+
+	return nil
+
+}
