@@ -25,17 +25,9 @@ func (rr *studentCoursesPostgresRepo) GetAll() ([]models.StudentCourses, error) 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 
-	// query := `SELECT id, student_id, course_id, payment_amount, description, created_at, updated_at FROM student_courses`
 	query := `select a.id, a.student_id, a.course_id, a.payment_amount, a.description, a.created_at, a.updated_at, b.first_name, b.last_name, b.username, b.created_at, b.updated_at, c.name, c.description, c.created_at, c.updated_at from student_courses a
 	left join students b on a.student_id  = b.id
 	left join courses c on a.course_id = c.id`
-
-	// var item []models.StudentCourses
-
-	// err := pgxscan.Select(ctx, rr.dbpool, &item, query)
-	// if err != nil {
-	// 	return item, err
-	// }
 
 	var items []models.StudentCourses
 
