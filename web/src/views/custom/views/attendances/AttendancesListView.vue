@@ -10,11 +10,11 @@
             </CCol>
             <CCol class="align-self-end">
               <router-link
-                :to="{ name: 'attendances_create_one' }"
+                :to="{ name: 'attendances_create_by_course_name' }"
                 component="CButton"
                 color="primary"
                 disabled
-                >Create One
+                >Create By Course Name
               </router-link>
             </CCol>
           </CRow>
@@ -24,8 +24,13 @@
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Value</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Room Name</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Course Name</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Employee Name</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Employee Username</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Student Name</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Student Username</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Attendance Name</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Description</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Created At</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Updated At</CTableHeaderCell>
@@ -35,8 +40,13 @@
             <CTableBody>
               <CTableRow v-for="item in itemsList" :key="item.id">
                 <CTableDataCell>{ item.id }</CTableDataCell>
-                <CTableDataCell>{ item.values }</CTableDataCell>
-                <CTableDataCell>{ item.name }</CTableDataCell>
+                <CTableDataCell>{ item.room_name }</CTableDataCell>
+                <CTableDataCell>{ item.course_name }</CTableDataCell>
+                <CTableDataCell>{ item.employee_first_name } { item.employee_last_name}</CTableDataCell>
+                <CTableDataCell>{ item.employee_username }</CTableDataCell>
+                <CTableDataCell>{ item.student_first_name } { item.student_last_name }</CTableDataCell>
+                <CTableDataCell>{ item.student_username }</CTableDataCell>
+                <CTableDataCell>{ item.attendance_name }</CTableDataCell>
                 <CTableDataCell>{ item.description }</CTableDataCell>
                 <CTableDataCell>{ item.created_at }</CTableDataCell>
                 <CTableDataCell>{ item.updated_at }</CTableDataCell>
