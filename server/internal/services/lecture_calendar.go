@@ -172,3 +172,25 @@ func (ss *lectureCalendarService) DeleteManyByID(lectures_calendar []models.Lect
 	return nil
 
 }
+
+func (ss *lectureCalendarService) GetManyByCourseID(course_id uuid.UUID) ([]models.LectureCalendar, error) {
+
+	response, err := ss.LectureCalendarRepo.GetManyByCourseID(course_id)
+	if err != nil {
+		return make([]models.LectureCalendar, 0), err
+	}
+
+	return response, nil
+}
+
+func (ss *lectureCalendarService) GetOneByID(uid uuid.UUID) (*models.LectureCalendar, error) {
+
+	item, err := ss.LectureCalendarRepo.GetOneByID(uid)
+
+	if err == nil {
+		return item, nil
+	}
+
+	return item, nil
+
+}
