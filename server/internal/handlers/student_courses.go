@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 )
 
@@ -112,5 +113,53 @@ func DeleteStudentCoursesByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"title":   title,
 		"message": "success",
+	})
+}
+
+func GetManyStudentCoursesByCustomID(c *gin.Context) {
+	title := "Student Courses Get By Username"
+
+	queryValues := c.Request.URL.Query()
+
+	if len(queryValues) != 1 {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"error":   "incorrect request",
+			"message": "error during bidning data",
+		})
+		return
+	}
+
+	var column_name string
+	var custom_id uuid.UUID
+	var err error
+
+	for key, val := range queryValues {
+		column_name = key
+		custom_id, err = uuid.Parse(val[0])
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"title":   title,
+				"error":   err.Error(),
+				"message": "error during bidning data",
+			})
+			return
+		}
+	}
+
+	items, err := App.StudentCoursesService.GetManyByCustomID(custom_id, column_name)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"message": "error during db",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"title":   title,
+		"message": "success",
+		"data":    items,
 	})
 }
