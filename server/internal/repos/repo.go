@@ -94,6 +94,8 @@ type LectureCalendarRepo interface {
 		created_at, updated_at time.Time,
 	) (*models.LectureCalendar, error)
 	DeleteOneByID(uid uuid.UUID) error
+	GetManyByCourseID(course_id uuid.UUID) ([]models.LectureCalendar, error)
+	GetOneByID(uid uuid.UUID) (*models.LectureCalendar, error)
 }
 
 type AttendancesRepo interface {
