@@ -228,16 +228,26 @@ const roomsOptions = ref([{}])
 const coursesOptions = ref([{}])
 
 function run_this_method(event) {
-  console.log("start_date: ", start_date)
-  console.log("dates_and_times: ", dates_and_times.value)
-  m.postCreateOne({
-    room_id: selected_course_id.value,
+  const start_date_epoch = Math.round(start_date.value / 1000) // milliseconds -> seconds
+  const end_date_epoch = Math.round(end_date.value / 1000) // milliseconds -> seconds
+  const times = []
+  dates_and_times.value.forEach((item, ii) => {
+    times.push({
+      day: parseInt(item.day, 10),
+      start_time: item.start_time.hours.toString().padStart(2, 0)+ item.start_time.minutes.toString().padStart(2, 0),
+      duration: item.duration.hours * 60 + item.duration.minutes,
+    })
+  })
+  const data = {
+    room_id: selected_room_id.value,
     course_id: selected_course_id.value,
     employee_id: selected_employee_id.value,
-    start_date: start_date.value,
-    end_date: end_date.value,
-    dates_and_times: dates_and_times,
-  })
+    start_date: start_date_epoch,
+    end_date: end_date_epoch,
+    dates_and_times: times,
+  }
+  console.log("data: ", data)
+  m.postCreateOne(data)
 }
 
 function addNewDateAndTime(event) {
