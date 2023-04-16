@@ -89,6 +89,53 @@ func (ss *attendancesService) CreateOne(
 	return item, nil
 }
 
+func (ss *attendancesService) CreateMany(
+	attendances []models.AttendanceCreateOneRequest,
+) ([]models.Attendance, error) {
+
+	uids := make([]uuid.UUID, len(attendances))
+	items := make([]models.Attendance, len(attendances))
+
+	for ii, item := range attendances {
+
+		time_now := time.Now()
+
+		uid, err := uuid.NewRandom()
+		if err != nil {
+			return items, err
+		}
+
+		tmp, err := ss.AttendancesRepo.CreateOne(
+			uid,
+			item.LecturesCalendarID,
+			item.StudentID,
+			item.AttendanceValueID,
+			item.Description,
+			time_now, time_now,
+		)
+		if err != nil {
+			ss.deleteManyFromList(uids)
+			return items, err
+		}
+
+		items[ii] = *tmp
+		uids[ii] = uid
+
+	}
+
+	return items, nil
+}
+
+func (ss *attendancesService) deleteManyFromList(uids []uuid.UUID) error {
+	for _, uid := range uids {
+		err := ss.AttendancesRepo.DeleteOneByID(uid)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (ss *attendancesService) DeleteOneByID(uid uuid.UUID) error {
 
 	err := ss.AttendancesRepo.DeleteOneByID(uid)
