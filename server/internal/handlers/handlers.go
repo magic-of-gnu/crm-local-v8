@@ -62,9 +62,10 @@ func RouteHandlers(router *gin.Engine, methodNames map[string]string) {
 	r.GET("api/server/lectures_calendar/getByCourseID", GetManyLecturesCalendarByCourseID)
 	r.GET("api/server/lectures_calendar/:id", GetOneLecturesCalendarByID)
 
-	// lectureCalendar handlers
+	// attendances handlers
 	r.GET("api/server/attendances/list", GetAttendancesAll)
 	r.POST("api/server/attendances/create_one", PostAttendancesCreateOne)
+	r.POST("api/server/attendances/create_many", PostAttendancesCreateMany)
 	r.DELETE("api/server/attendances", DeleteAttendancesByID)
 
 	// users handlers
