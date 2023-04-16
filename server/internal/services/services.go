@@ -105,6 +105,9 @@ type AttendancesService interface {
 		description string,
 	) (*models.Attendance, error)
 	DeleteOneByID(uid uuid.UUID) error
+	CreateMany(
+		attendances []models.AttendanceCreateOneRequest,
+	) ([]models.Attendance, error)
 }
 
 type UsersService interface {
