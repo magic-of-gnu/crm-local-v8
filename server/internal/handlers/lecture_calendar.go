@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 )
 
@@ -38,24 +39,15 @@ func PostLecturesCalendarCreateOne(c *gin.Context) {
 	title := "Lecture Calendar CreateOne"
 
 	var req *models.LectureCalendarRequest
+	err := c.BindJSON(&req)
 
-	if err := c.ShouldBind(&req); err != nil {
+	if err != nil {
+		fmt.Println("error: ", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
 		})
-		return
-	}
-
-	err := App.Validator.Struct(req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"title":   title,
-			"message": "error during validation",
-			"error":   err.Error(),
-		})
-		fmt.Println("error during validation; err: ", err)
 		return
 	}
 
@@ -117,4 +109,68 @@ func DeleteLecturesCalendarByID(c *gin.Context) {
 		"title":   title,
 		"message": "success",
 	})
+}
+
+func GetManyLecturesCalendarByCourseID(c *gin.Context) {
+	title := "Lecture Calendar By CourseID"
+
+	course_id_query := c.Query("course_id")
+	course_id, err := uuid.Parse(course_id_query)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"error":   err.Error(),
+			"message": "error during bidning data",
+		})
+		return
+	}
+
+	items, err := App.LectureCalendarService.GetManyByCourseID(course_id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"message": "error delete in db",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"title":   title,
+		"message": "success",
+		"data":    items,
+	})
+
+}
+
+func GetOneLecturesCalendarByID(c *gin.Context) {
+	title := "Lecture Calendar By ID"
+
+	uid_query := c.Param("id")
+	uid, err := uuid.Parse(uid_query)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"error":   err.Error(),
+			"message": "error during bidning data",
+		})
+		return
+	}
+
+	item, err := App.LectureCalendarService.GetOneByID(uid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"message": "error get from db",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"title":   title,
+		"message": "success",
+		"data":    item,
+	})
+
 }
