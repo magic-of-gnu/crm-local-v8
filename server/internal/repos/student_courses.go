@@ -142,3 +142,63 @@ func (rr *studentCoursesPostgresRepo) DeleteOneByID(uid uuid.UUID) error {
 	return nil
 
 }
+
+func (rr *studentCoursesPostgresRepo) GetManyByCustomID(custom_id uuid.UUID, column_name string) ([]models.StudentCourses, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := fmt.Sprintf(`SELECT a.id, a.student_id, a.course_id, a.payment_amount, a.description, a.created_at, a.updated_at,
+	b.first_name, b.last_name, b.username, b.created_at, b.updated_at,
+	c.name, c.description, c.created_at, c.updated_at
+	FROM student_courses a
+	LEFT JOIN students b on a.student_id  = b.id
+	LEFT JOIN courses c on a.course_id = c.id
+	WHERE %s = $1`, column_name)
+
+	var items []models.StudentCourses
+
+	rows, err := rr.dbpool.Query(ctx, query,
+		custom_id,
+	)
+	if err != nil {
+		return items, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var item models.StudentCourses = models.StudentCourses{}
+		err = rows.Scan(
+			&item.ID,
+			&item.StudentID,
+			&item.CourseID,
+			&item.PaymentAmount,
+			&item.Description,
+			&item.CreatedAt,
+			&item.UpdatedAt,
+			&item.Student.FirstName,
+			&item.Student.LastName,
+			&item.Student.Username,
+			&item.Student.UpdatedAt,
+			&item.Student.CreatedAt,
+			&item.Course.Name,
+			&item.Course.Description,
+			&item.Course.CreatedAt,
+			&item.Course.UpdatedAt,
+		)
+		if err != nil {
+			return items, err
+		}
+
+		item.Student.ID = item.StudentID
+		item.Course.ID = item.CourseID
+
+		items = append(items, item)
+	}
+
+	if err = rows.Err(); err != nil {
+		return items, err
+	}
+
+	return items, nil
+}
