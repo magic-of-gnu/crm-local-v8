@@ -92,6 +92,8 @@ type LectureCalendarService interface {
 	) ([]models.LectureCalendar, error)
 	DeleteOneByID(uid uuid.UUID) error
 	DeleteManyByID(lectures_calendar []models.LectureCalendar) error
+	GetManyByCourseID(course_id uuid.UUID) ([]models.LectureCalendar, error)
+	GetOneByID(uid uuid.UUID) (*models.LectureCalendar, error)
 }
 
 type AttendancesService interface {
