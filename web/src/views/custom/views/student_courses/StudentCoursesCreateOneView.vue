@@ -56,8 +56,6 @@
 </template>
 
 <script setup>
-/* eslint-disable */
-
 import m from '@/views/custom/hooks/studentCourses/methods.js'
 import studentsMethods from '@/views/custom/hooks/students/methods.js'
 import coursesMethods from '@/views/custom/hooks/courses/methods.js'
@@ -82,7 +80,7 @@ function run_this_method(event) {
 }
 
 onMounted(() => {
-  studentsMethods.getStudentsList()
+  studentsMethods.getAllList()
     .then( (d) => {
       for (const item of d.data.data) {
         studentsOptions.value.push({
@@ -92,7 +90,7 @@ onMounted(() => {
     }
   })
 
-  coursesMethods.getCoursesList()
+  coursesMethods.getAllList()
     .then( (d) => {
       for (const item of d.data.data) {
         coursesOptions.value.push({

@@ -277,7 +277,7 @@ onMounted(() => {
     }
   })
 
-  coursesMethods.getCoursesList()
+  coursesMethods.getAllList()
     .then( (d) => {
       for (const item of d.data.data) {
         coursesOptions.value.push({

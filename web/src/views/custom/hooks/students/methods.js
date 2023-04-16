@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store/index.js'
 
-async function getStudentsList() {
+async function getAllList() {
   const token = store.getters.token
 
   return await axios({
@@ -58,6 +58,6 @@ async function postStudentsCreateOne(data) {
 }
 
 export default {
-  getStudentsList,
+  getAllList,
   postStudentsCreateOne,
 }

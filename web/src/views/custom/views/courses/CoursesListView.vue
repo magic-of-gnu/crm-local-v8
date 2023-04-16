@@ -52,7 +52,7 @@ import { ref } from 'vue'
 
 const itemsList = ref('')
 
-m.getCoursesList().then((d) => {
+m.getAllList().then((d) => {
   itemsList.value = d.data.data
 })
 </script>
