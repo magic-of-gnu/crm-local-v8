@@ -7,17 +7,17 @@ import (
 )
 
 type LectureCalendar struct {
-	ID         uuid.UUID
-	RoomID     uuid.UUID
-	CourseID   uuid.UUID
-	EmployeeID uuid.UUID
-	Date       time.Time
-	Duration   time.Duration
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	Room       Room
-	Course     Course
-	Employee   Employee
+	ID         uuid.UUID     `json:"id"`
+	RoomID     uuid.UUID     `json:"room_id"`
+	CourseID   uuid.UUID     `json:"course_id"`
+	EmployeeID uuid.UUID     `json:"employee_id"`
+	Date       time.Time     `json:"date"`
+	Duration   time.Duration `json:"duration"`
+	CreatedAt  time.Time     `json:"created_at"`
+	UpdatedAt  time.Time     `json:"updated_at"`
+	Room       Room          `json:"room"`
+	Course     Course        `json:"course"`
+	Employee   Employee      `json:"employee"`
 }
 
 type LectureCalendarDeleteByIDRequest struct {
@@ -38,7 +38,7 @@ type LectureCalendarRequest struct {
 	StartDateRequest int64               `json:"start_date" binding:"required"`
 	EndDate          time.Time           `json:"-"`
 	EndDateRequest   int64               `json:"end_date" binding:"required"`
-	DayAndTimeList   []DayAndTimeRequest `json:"days_and_times" binding:"required,dive,required"`
+	DayAndTimeList   []DayAndTimeRequest `json:"dates_and_times" binding:"required,dive,required"`
 	CreatedAt        time.Time           `json:"created_at" binding:"omitempty,datetime"`
 	UpdatedAt        time.Time           `json:"updated_at" binding:"omitempty,datetime"`
 }
