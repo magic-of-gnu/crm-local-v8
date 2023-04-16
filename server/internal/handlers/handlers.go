@@ -53,6 +53,7 @@ func RouteHandlers(router *gin.Engine, methodNames map[string]string) {
 	// studentCourses handlers
 	r.GET("api/server/student_courses/list", GetAllStudentCourses)
 	r.POST("api/server/student_courses/create_one", PostStudentCoursesCreateOne)
+	r.GET("api/server/student_courses", GetManyStudentCoursesByCustomID)
 
 	// lectureCalendar handlers
 	r.GET("api/server/lectures_calendar/list", GetLecturesCalendarAll)
