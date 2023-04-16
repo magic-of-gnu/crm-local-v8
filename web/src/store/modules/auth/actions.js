@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { ErrorCodes } from 'vue'
 
 export default {
   async login (context, payload) {
@@ -40,7 +39,17 @@ export default {
         token: token,
       })
     }
+  },
+  logout(context) {
+    localStorage.removeItem('token')
+    localStorage.removeItem('userID')
 
+    context.commit('setUser', {
+      token: null,
+      userId: null,
+      tokenExpiration: null,
+    })
   }
+
 
 }
