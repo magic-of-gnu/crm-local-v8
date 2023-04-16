@@ -40,20 +40,40 @@
       <CDropdownItem>
         <CIcon icon="cil-shield-alt" /> Lock Account
       </CDropdownItem>
-      <CDropdownItem> <CIcon icon="cil-lock-locked" /> Logout </CDropdownItem>
+      <CDropdownItem>
+        <CIcon icon="cil-lock-locked" />
+        <CButton
+          variant="ghost"
+          @click.prevent="logout"
+        >Logout
+        </CButton>
+      </CDropdownItem>
     </CDropdownMenu>
   </CDropdown>
 </template>
 
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
+import store from '@/store/index.js'
+import { CButton } from '@coreui/vue'
+import { useRoute } from 'vue-router'
+import router from '@/router/index.js'
+
 export default {
-  name: 'AppHeaderDropdownAccnt',
-  setup() {
-    return {
-      avatar: avatar,
-      itemsCount: 42,
-    }
-  },
+    name: "AppHeaderDropdownAccnt",
+    setup() {
+        function logout() {
+          const route = useRoute()
+          console.log("logout")
+          store.dispatch("logout");
+          router.replace("/")
+        }
+        return {
+            avatar: avatar,
+            itemsCount: 42,
+            logout: logout,
+        };
+    },
+    components: { CButton }
 }
 </script>
