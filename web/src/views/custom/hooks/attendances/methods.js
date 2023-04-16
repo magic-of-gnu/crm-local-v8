@@ -52,6 +52,31 @@ async function postCreateOne(data) {
       // always executed
     })
 }
+async function postCreateMany(data) {
+  const token = store.getters.token
+
+  return await axios({
+    method: 'post',
+    url: '/attendances/create_many',
+    baseURL: 'http://malcorp.test/api/server',
+    crossOrigin: true,
+    responseType: 'json',
+    data: data,
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data
+      }
+    })
+    .catch(function (error) {
+    })
+    .finally(function () {
+      // always executed
+    })
+}
 
 async function postDeleteByID(data) {
   const token = store.getters.token
@@ -84,5 +109,6 @@ async function postDeleteByID(data) {
 export default {
   getAllList,
   postCreateOne,
+  postCreateMany,
   postDeleteByID,
 }
