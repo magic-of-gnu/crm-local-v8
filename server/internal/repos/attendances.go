@@ -107,7 +107,7 @@ func (rr *attendancesPostgresRepo) CreateOne(
 	created_at, updated_at
 	) VALUES (
 		$1, $2, $3, $4, $5, $6, $7
-	)`
+	) ON conflict (lectures_calendar_id, student_id) do update set attendance_value_id = excluded.attendance_value_id, description = excluded.description, updated_at = excluded.updated_at;`
 
 	var item models.Attendance
 
