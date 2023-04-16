@@ -80,6 +80,38 @@ func PostAttendancesCreateOne(c *gin.Context) {
 	})
 }
 
+func PostAttendancesCreateMany(c *gin.Context) {
+	title := "Attendances CreateOne"
+
+	var req []models.AttendanceCreateOneRequest
+
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"error":   err.Error(),
+			"message": "error during bidning data",
+		})
+		return
+	}
+
+	fmt.Println("req: ", req)
+
+	items, err := App.AttendancesServices.CreateMany(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"error":   err.Error(),
+			"message": "error during db",
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{
+		"title": title,
+		"data":  items,
+	})
+}
+
 func DeleteAttendancesByID(c *gin.Context) {
 	title := "Lectures Calendar Delete"
 
