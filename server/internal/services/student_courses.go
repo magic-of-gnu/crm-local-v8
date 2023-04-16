@@ -73,3 +73,13 @@ func (ss *studentCoursesService) CreateOne(
 
 	return item, nil
 }
+
+func (ss *studentCoursesService) DeleteOneByID(uid uuid.UUID) error {
+
+	err := ss.StudentCoursesRepo.DeleteOneByID(uid)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
