@@ -1,12 +1,19 @@
 package services
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/repos"
 )
+
+var validCustomColumn map[string]bool = map[string]bool{
+	"student_id": true,
+	"course_id":  true,
+	"id":         true,
+}
 
 type studentCoursesService struct {
 	StudentCoursesRepo repos.StudentCoursesRepo
@@ -82,4 +89,21 @@ func (ss *studentCoursesService) DeleteOneByID(uid uuid.UUID) error {
 	}
 
 	return nil
+}
+
+func (ss *studentCoursesService) GetManyByCustomID(uid uuid.UUID, column_name string) ([]models.StudentCourses, error) {
+
+	var items []models.StudentCourses
+
+	_, ok := validCustomColumn[column_name]
+	if !ok {
+		return items, fmt.Errorf("invalid column name")
+	}
+
+	items, err := ss.StudentCoursesRepo.GetManyByCustomID(uid, column_name)
+	if err != nil {
+		return items, err
+	}
+
+	return items, nil
 }
