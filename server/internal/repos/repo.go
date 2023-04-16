@@ -78,6 +78,8 @@ type StudentCoursesRepo interface {
 		description string,
 		created_at, updated_at time.Time,
 	) (*models.StudentCourses, error)
+	DeleteOneByID(uid uuid.UUID) error
+	GetManyByCustomID(custom_id uuid.UUID, column_name string) ([]models.StudentCourses, error)
 }
 
 type LectureCalendarRepo interface {
