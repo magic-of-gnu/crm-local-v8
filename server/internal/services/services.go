@@ -69,6 +69,8 @@ type StudentCoursesService interface {
 		payment_amount int,
 		description string,
 	) (*models.StudentCourses, error)
+	DeleteOneByID(uid uuid.UUID) error
+	GetManyByCustomID(uid uuid.UUID, column_name string) ([]models.StudentCourses, error)
 }
 
 type LectureCalendarService interface {
