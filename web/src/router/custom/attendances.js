@@ -13,8 +13,17 @@ const routes = {
       },
     },
     {
-      path: '/attendances/create_one',
-      name: 'attendances_create_one',
+      path: '/attendances/create_by_course_name',
+      name: 'attendances_create_by_course_name',
+      component: () =>
+        import('@/views/custom/views/attendances/AttendancesCreateByCourseName.vue'),
+      meta: {
+        requiresAuth: true
+      },
+    },
+    {
+      path: '/attendances/create_one/:id',
+      name: 'attendances_create_one_id',
       component: () =>
         import('@/views/custom/views/attendances/AttendancesCreateOneView.vue'),
       meta: {
