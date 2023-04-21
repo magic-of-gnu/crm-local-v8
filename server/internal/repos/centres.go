@@ -74,3 +74,25 @@ func (rr *CentresPostgresRepo) CreateOne(uid uuid.UUID, name, description string
 	return &centre, nil
 
 }
+
+func (rr *CentresPostgresRepo) DeleteOneByID(uid uuid.UUID) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := "DELETE FROM centres WHERE id = $1"
+
+	row, err := rr.dbpool.Exec(ctx, query, uid)
+
+	if err != nil {
+		return err
+	}
+
+	if row.RowsAffected() == 0 {
+		fmt.Println("err: data was not deleted")
+		return fmt.Errorf("data was not deleted")
+	}
+
+	return nil
+
+}
