@@ -7,16 +7,20 @@ import (
 )
 
 type Attendance struct {
-	ID                 uuid.UUID
-	LecturesCalendarID uuid.UUID
-	StudentID          uuid.UUID
-	AttendanceValueID  uuid.UUID
-	Description        string
-	CreatedAt          time.Time
-	UpdatedAt          time.Time
-	LectureCalendar    LectureCalendar
-	Student            Student
-	AttendanceValues   AttendanceValues
+	ID                 uuid.UUID        `json:"id"`
+	LecturesCalendarID uuid.UUID        `json:"lectures_calendar_id"`
+	StudentID          uuid.UUID        `json:"student_id"`
+	AttendanceValueID  uuid.UUID        `json:"attendnace_value_id"`
+	PaymentStatusID    uuid.UUID        `json:"payment_status_id"`
+	InvoiceID          uuid.UUID        `json:"invoice_id"`
+	Description        string           `json:"description"`
+	CreatedAt          time.Time        `json:"created_at"`
+	UpdatedAt          time.Time        `json:"updated_at"`
+	LectureCalendar    LectureCalendar  `json:"lecture_calendar"`
+	Student            Student          `json:"student"`
+	AttendanceValues   AttendanceValues `json:"attendance_values"`
+	PaymentStatus      PaymentStatus    `json:"payment_status"`
+	Invoice            Invoice          `json:"invoice"`
 }
 
 type AttendanceResponse struct {
@@ -43,6 +47,8 @@ type AttendanceResponse struct {
 	EmployeeFirstName     string    `json:"employee_first_name"`
 	EmployeeLastName      string    `json:"employee_last_name"`
 	EmployeeUsername      string    `json:"employee_username"`
+	PaymentStatusID       uuid.UUID `json:"payment_status_id"`
+	PaymentStatusName     string    `json:"payment_status_name"`
 }
 
 type AttendanceCreateOneRequest struct {
