@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,28 +13,19 @@ func PostLogin(c *gin.Context) {
 	var req *models.LoginRequest
 
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
-
-	fmt.Println("post students courses2")
-
-	err := App.Validator.Struct(req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"title":   title,
-			"message": "error during validation",
-			"error":   err.Error(),
-		})
-		fmt.Println("error during validation; err: ", err)
-		return
-	}
-
-	fmt.Println("post students courses4")
 
 	item, isLoggedIn, err := App.LoginService.Login(
 		req.Username,
@@ -47,6 +37,12 @@ func PostLogin(c *gin.Context) {
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during writing data to db",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
