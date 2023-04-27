@@ -1,0 +1,14 @@
+{
+  "baseURL": "http://malcorp.test/api/server/",
+  "login_route": "login",
+  "centres_routes": {
+    "base": "centres",
+    "baseID": "centres/{id}"
+  },
+  "payment_statuses_routes": {
+    "base": "payment_statuses",
+    "baseID": "payment_statuses/{id}",
+    "getAll": "payment_statuses",
+    "deleteOneByID": "payment_statuses/{id}"
+  }
+}
