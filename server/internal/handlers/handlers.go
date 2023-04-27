@@ -9,7 +9,7 @@ import (
 
 var App *app.App
 
-func RouteHandlers(router *gin.Engine, methodNames map[string]string) {
+func RouteHandlers(router *gin.Engine) {
 	// centres form
 	// r.GET("centres", GetCentres)
 	// r.POST("centres/create_one", PostCentres)
