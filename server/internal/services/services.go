@@ -138,6 +138,13 @@ type LoginService interface {
 	Login(username string, password string) (*models.LoginResponse, bool, error)
 }
 
+type InvoicesService interface {
+	GetAll() ([]models.Invoice, error)
+	CreateOne(createItem *models.Invoice) (*models.Invoice, error)
+	DeleteOneByID(uid uuid.UUID) error
+	UpdateOneByID(updateItem *models.Invoice) error
+}
+
 type PaymentStatusesService interface {
 	CreateOne(createItem *models.PaymentStatus) (*models.PaymentStatus, error)
 	DeleteOneByID(uid uuid.UUID) error
