@@ -92,6 +92,7 @@ type LectureCalendarService interface {
 		start_date time.Time,
 		end_date time.Time,
 		days_and_times []models.DayAndTimeRequest,
+		default_attendance_value_id uuid.UUID,
 	) ([]models.LectureCalendar, error)
 	DeleteOneByID(uid uuid.UUID) error
 	DeleteManyByID(lectures_calendar []models.LectureCalendar) error
