@@ -3,7 +3,7 @@ create_table("invoices") {
   t.Column("course_id", "uuid", {"null": false})
   t.Column("student_id", "uuid", {"null": false})
   t.Column("start_date", "datetime", {"null": false})
-  t.Column("end_date", "datetime", {"null": false})
+  t.Column("lectures_numer", "int", {"null": false})
   t.Column("price", "int", {"null": false})
   t.Column("payment_status_id", "uuid", {"null": false})
 }
