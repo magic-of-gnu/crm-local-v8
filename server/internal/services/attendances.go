@@ -12,7 +12,7 @@ type attendancesService struct {
 	AttendancesRepo repos.AttendancesRepo
 }
 
-func NewAttendancesServiceService(repo repos.AttendancesRepo) *attendancesService {
+func NewAttendancesService(repo repos.AttendancesRepo) *attendancesService {
 	return &attendancesService{
 		AttendancesRepo: repo,
 	}
@@ -33,6 +33,7 @@ func (ss *attendancesService) GetAll() ([]models.AttendanceResponse, error) {
 			LecturesCalendarID:    item.LecturesCalendarID,
 			StudentID:             item.StudentID,
 			AttendanceValueID:     item.AttendanceValueID,
+			PaymentStatusID:       item.PaymentStatusID,
 			Description:           item.Description,
 			CreatedAt:             item.CreatedAt,
 			UpdatedAt:             item.UpdatedAt,
@@ -52,6 +53,7 @@ func (ss *attendancesService) GetAll() ([]models.AttendanceResponse, error) {
 			EmployeeFirstName:     item.LectureCalendar.Employee.FirstName,
 			EmployeeLastName:      item.LectureCalendar.Employee.LastName,
 			EmployeeUsername:      item.LectureCalendar.Employee.Username,
+			PaymentStatusName:     item.PaymentStatus.Name,
 		})
 	}
 
