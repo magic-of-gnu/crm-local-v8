@@ -76,6 +76,12 @@ func RouteHandlers(router *gin.Engine, methodNames map[string]string) {
 	r.POST("api/server/users/create_one", PostUsersCreateOne)
 	r.DELETE("api/server/users", DeleteUsersByID)
 
+	// invoices handlers
+	r.GET("api/server/invoices", GetInvoicesAll)
+	r.POST("api/server/invoices/create_one", PostInvoicesCreateOne)
+	r.DELETE("api/server/invoices/:id", DeleteInvoicesByID)
+	// r.PATCH("api/server/invoices/:id", DeleteInvoicesByID)
+
 	// r.GET("api/server/invoices/filtered", GetInvoicesFilteredAll)
 	// payment statuses
 	r.GET("api/server/payment_statuses", GetPaymentStatusesAll)
