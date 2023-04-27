@@ -102,6 +102,14 @@ func main() {
 		appConfig.HashCost,
 	)
 
+	// invoices
+	invoicesRepo := repos.NewInvoicesPostgresRepo(dbpool)
+	invoicesService := services.NewInvoiceService(
+		invoicesRepo,
+		lectureCalendarRepo,
+		attendancesRepo,
+	)
+
 	authMiddleware := middlewares.NewAuthMiddleware(tokensService)
 
 	// payment statuses
