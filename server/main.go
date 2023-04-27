@@ -141,6 +141,8 @@ func main() {
 		tokensService,
 		loginService,
 		authMiddleware,
+		invoicesRepo,
+		invoicesService,
 		paymentStatusesRepo,
 		paymentStatusesService,
 		appConfig.HashCost,
