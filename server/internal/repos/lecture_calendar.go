@@ -287,3 +287,76 @@ WHERE a.id = $1`
 	return &item, nil
 
 }
+
+func (rr *lectureCalendarPostgresRepo) GetManyFilteredByCourseIDAndDate(course_id uuid.UUID, start_date time.Time) ([]models.LectureCalendar, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	var items []models.LectureCalendar
+
+	query := `SELECT a.id, a.room_id, a.course_id, a.employee_id, a.date, a.duration, a.created_at, a.updated_at, 
+	   b.centre_id, b.name, b.num_seats, b.info, b.created_at, b.updated_at, 
+	   c.name, c.description, c.created_at, c.updated_at,
+	   d.first_name, d.last_name, d.username, d.info, d.created_at, d.updated_at
+	   FROM lectures_calendar a
+LEFT JOIN rooms b on a.room_id  = b.id
+LEFT JOIN courses c on a.course_id = c.id
+LEFT JOIN employees d on a.employee_id = d.id
+WHERE a.course_id = $1 AND a."date" > $2
+ORDER BY a."date" ASC`
+
+	rows, err := rr.dbpool.Query(ctx, query, course_id, start_date)
+	if err != nil {
+		return items, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var item models.LectureCalendar
+		err = rows.Scan(
+			&item.ID,
+			&item.RoomID,
+			&item.CourseID,
+			&item.EmployeeID,
+			&item.Date,
+			&item.Duration,
+			&item.CreatedAt,
+			&item.UpdatedAt,
+			&item.Room.CentreID,
+			&item.Room.Name,
+			&item.Room.NumSeats,
+			&item.Room.Info,
+			&item.Room.CreatedAt,
+			&item.Room.UpdatedAt,
+			&item.Course.Name,
+			&item.Course.Description,
+			&item.Course.CreatedAt,
+			&item.Course.UpdatedAt,
+			&item.Employee.FirstName,
+			&item.Employee.LastName,
+			&item.Employee.Username,
+			&item.Employee.Info,
+			&item.Employee.CreatedAt,
+			&item.Employee.UpdatedAt,
+		)
+
+		if err != nil {
+			return items, err
+		}
+
+		item.Room.ID = item.RoomID
+		item.Course.ID = item.CourseID
+		item.Employee.ID = item.EmployeeID
+
+		items = append(items, item)
+	}
+
+	if err = rows.Err(); err != nil {
+		return items, err
+	}
+
+	return items, nil
+
+}
