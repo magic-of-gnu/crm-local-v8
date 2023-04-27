@@ -11,11 +11,19 @@ import (
 
 type lectureCalendarService struct {
 	LectureCalendarRepo repos.LectureCalendarRepo
+	StudentCoursesRepo  repos.StudentCoursesRepo
+	AttendancesService  AttendancesService
 }
 
-func NewLectureCalendarService(repo repos.LectureCalendarRepo) *lectureCalendarService {
+func NewLectureCalendarService(
+	repo repos.LectureCalendarRepo,
+	studentCoursesRepo repos.StudentCoursesRepo,
+	attendanceService AttendancesService,
+) *lectureCalendarService {
 	return &lectureCalendarService{
 		LectureCalendarRepo: repo,
+		StudentCoursesRepo:  studentCoursesRepo,
+		AttendancesService:  attendanceService,
 	}
 }
 
@@ -86,6 +94,7 @@ func (ss *lectureCalendarService) CreateMany(
 	start_date time.Time,
 	end_date time.Time,
 	days_and_times []models.DayAndTimeRequest,
+	default_attendance_value_id uuid.UUID,
 ) ([]models.LectureCalendar, error) {
 
 	week_days := make(map[string]models.DayAndTimeRequest)
@@ -138,6 +147,25 @@ func (ss *lectureCalendarService) CreateMany(
 			// revert changes
 			ss.DeleteManyByID(items)
 			return items, err
+		}
+
+		// get course_students
+		studentCourses, err := ss.StudentCoursesRepo.GetManyByCustomID(course_uid, "course_id")
+		if err != nil {
+			return items, err
+		}
+
+		for _, student := range studentCourses {
+			_, err := ss.AttendancesService.CreateOne(
+				_item.ID,
+				student.StudentID,
+				default_attendance_value_id,
+				"",
+			)
+
+			if err != nil {
+				return items, err
+			}
 		}
 
 		items = append(items, *_item)
