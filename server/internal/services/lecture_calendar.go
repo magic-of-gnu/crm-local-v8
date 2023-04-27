@@ -105,7 +105,7 @@ func (ss *lectureCalendarService) CreateMany(
 			continue
 		}
 
-		duration_ns := time.Duration(val.Duration) * time.Nanosecond
+		duration_minutes := time.Duration(val.Duration) * time.Minute
 		start_time_request := val.StartTimeRequest
 
 		hours_string := start_time_request[:2]
@@ -122,7 +122,7 @@ func (ss *lectureCalendarService) CreateMany(
 			return items, err
 		}
 
-		sd := start_date
+		sd := d
 		sd = sd.Add(time.Duration(hours) * time.Hour)
 		sd = sd.Add(time.Duration(minutes) * time.Minute)
 
@@ -131,7 +131,7 @@ func (ss *lectureCalendarService) CreateMany(
 			course_uid,
 			employee_uid,
 			sd,
-			duration_ns,
+			duration_minutes,
 		)
 
 		if err != nil {
