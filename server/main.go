@@ -74,13 +74,14 @@ func main() {
 	studentCoursesRepo := repos.NewStudentCoursesPostgresRepo(dbpool)
 	studentCoursesService := services.NewStudentCoursesService(studentCoursesRepo)
 
-	// lectureCalendar
-	lectureCalendarRepo := repos.NewLectureCalendarPostgresRepo(dbpool)
-	lectureCalendarService := services.NewLectureCalendarService(lectureCalendarRepo)
-
 	// attendances
 	attendancesRepo := repos.NewAttendancesPostgresRepo(dbpool)
-	attendancesService := services.NewAttendancesServiceService(attendancesRepo)
+	attendancesService := services.NewAttendancesService(attendancesRepo)
+
+	// lectureCalendar
+	lectureCalendarRepo := repos.NewLectureCalendarPostgresRepo(dbpool)
+	lectureCalendarService := services.NewLectureCalendarService(lectureCalendarRepo,
+		studentCoursesRepo, attendancesService)
 
 	// users
 	usersRepo := repos.NewUsersPostgresRepo(dbpool)
@@ -94,6 +95,7 @@ func main() {
 		appConfig.TokenSigningMethod,
 	)
 
+	// login service
 	loginService := services.NewLoginService(
 		usersRepo,
 		usersService,
@@ -150,25 +152,13 @@ func main() {
 	)
 	handlers.NewApp(App)
 
-	// get all centres
-	// centres, _ := centresService.GetAll()
-	// fmt.Println(centres)
-
-	// create one new centre
-	// uid, _ := uuid.NewRandom()
-	// centre, _ := centresRepo.CreateOne(uid, "eassy academy", "no description here", time.Now(), time.Now())
-
-	// centre, _ := app.CentresService.CreateOne("aqwe2", "description")
-	// fmt.Println("created centre: ", centre)
-
-	// fmt.Println("service: ", centresService)
 	fmt.Println("app: ", App)
 
 	r := gin.Default()
 	r.Static("/static", "./static")
 
 	fmt.Println("before methodNames: ", methodNames)
-	handlers.RouteHandlers(r, methodNames)
+	handlers.RouteHandlers(r)
 	fmt.Println("after methodNames: ", methodNames)
 	// r.GET("/centres", handlers.GetCentres)
 
