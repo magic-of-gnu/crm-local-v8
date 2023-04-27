@@ -78,6 +78,10 @@ type App struct {
 	// authMiddleware
 	AuthMiddleware middlewares.AuthMiddleware
 
+	// paymentStatuses
+	PaymentStatusesRepo    repos.PaymentStatusRepo
+	PaymentStatusesService services.PaymentStatusesService
+
 	MethodNames map[string]string
 
 	Validator *validator.Validate
@@ -112,6 +116,8 @@ func NewApp(
 	tokensService services.TokensService,
 	loginService services.LoginService,
 	authMiddleware middlewares.AuthMiddleware,
+	paymentStatusesRepo repos.PaymentStatusRepo,
+	paymentStatusesService services.PaymentStatusesService,
 	hashCost int,
 	debug bool,
 ) *App {
@@ -139,7 +145,8 @@ func NewApp(
 		TokensService:           tokensService,
 		LoginService:            loginService,
 		AuthMiddleware:          authMiddleware,
-		MethodNames:             methodNames,
+		PaymentStatusesRepo:     paymentStatusesRepo,
+		PaymentStatusesService:  paymentStatusesService,
 		Validator:               validator,
 		HashCost:                hashCost,
 		Debug:                   debug,
