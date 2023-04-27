@@ -27,8 +27,11 @@ func RouteHandlers(router *gin.Engine, methodNames map[string]string) {
 	}
 
 	// centres handlers
-	r.GET("api/server/centres/list", GetAllCentres)
-	r.POST("api/server/centres/create_one", PostCentres)
+	r.GET("api/server/centres", GetAllCentres)
+	r.GET("api/server/centres/:id", GetOneCentresByID)
+	r.POST("api/server/centres", PostCentres)
+	r.DELETE("api/server/centres/:id", DeleteCentresByID)
+	r.PATCH("api/server/centres/:id", PatchCentresByID)
 
 	// rooms handlers
 	r.GET("api/server/rooms/list", GetAllRooms)
