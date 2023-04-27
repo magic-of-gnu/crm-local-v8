@@ -1,10 +1,10 @@
 import axios from 'axios'
 import store from '@/store/index.js'
 
-async function getAllList() {
+function getAllList() {
   const token = store.getters.token
 
-  return await axios({
+  return axios({
     method: 'get',
     url: '/lectures_calendar/list',
     baseURL: 'http://malcorp.test/api/server',
@@ -14,24 +14,12 @@ async function getAllList() {
       "Authorization": "Bearer " + token
     }
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      }
-    })
-    .catch(function (error) {
-      console.log('error: ', error)
-    })
-    .finally(function () {
-      console.log('finally')
-      // always executed
-    })
 }
 
-async function postCreateOne(data) {
+function postCreateOne(data) {
   const token = store.getters.token
 
-  return await axios({
+  return axios({
     method: 'post',
     url: '/lectures_calendar/create_one',
     baseURL: 'http://malcorp.test/api/server',
@@ -42,23 +30,12 @@ async function postCreateOne(data) {
       "Authorization": "Bearer " + token
     }
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      }
-    })
-    .catch(function (error) {
-      console.log('error: ', error)
-    })
-    .finally(function () {
-      // always executed
-    })
 }
 
-async function postDeleteByID(data) {
+function postDeleteByID(data) {
   const token = store.getters.token
 
-  return await axios({
+  return axios({
     method: 'delete',
     url: '/lectures_calendar/',
     baseURL: 'http://malcorp.test/api/server',
@@ -69,17 +46,6 @@ async function postDeleteByID(data) {
       "Authorization": "Bearer " + token
     }
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      }
-    })
-    .catch(function (error) {
-      console.log('error: ', error)
-    })
-    .finally(function () {
-      // always executed
-    })
 }
 
 async function getManyByCourseID(params) {
@@ -96,17 +62,12 @@ async function getManyByCourseID(params) {
     },
     params: params,
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      }
-    })
 }
 
-async function getOneByID(id) {
+function getOneByID(id) {
   const token = store.getters.token
 
-  return await axios({
+  return axios({
     method: 'get',
     url: `/lectures_calendar/${id}`,
     baseURL: 'http://malcorp.test/api/server',
@@ -116,11 +77,6 @@ async function getOneByID(id) {
       "Authorization": "Bearer " + token
     },
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      }
-    })
 }
 
 export default {

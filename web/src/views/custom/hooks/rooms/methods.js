@@ -1,10 +1,10 @@
 import axios from 'axios'
 import store from '@/store/index.js'
 
-async function getRoomsList() {
+function getRoomsList() {
   const token = store.getters.token
 
-  return await axios({
+  return axios({
     method: 'get',
     url: '/rooms/list',
     baseURL: 'http://malcorp.test/api/server',
@@ -14,25 +14,12 @@ async function getRoomsList() {
       "Authorization": "Bearer " + token
     }
   })
-    .then((response) => {
-      if (response.status === 200) {
-        console.log('rooms then; ', response)
-        return response.data
-      }
-    })
-    .catch(function (error) {
-      console.log('error: ', error)
-    })
-    .finally(function () {
-      console.log('finally')
-      // always executed
-    })
 }
 
-async function postRoomsCreateOne(data) {
+function postRoomsCreateOne(data) {
   const token = store.getters.token
 
-  return await axios({
+  return axios({
     method: 'post',
     url: '/rooms/create_one',
     baseURL: 'http://malcorp.test/api/server',
@@ -43,18 +30,6 @@ async function postRoomsCreateOne(data) {
       "Authorization": "Bearer " + token
     }
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      }
-    })
-    .catch(function (error) {
-      console.log('error: ', error)
-    })
-    .finally(function () {
-      console.log('create one finally')
-      // always executed
-    })
 }
 
 export default {

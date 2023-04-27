@@ -27,10 +27,10 @@ async function getAllList() {
     })
 }
 
-async function postCreateOne(data) {
+function postCreateOne(data) {
   const token = store.getters.token
 
-  return await axios({
+  return axios({
     method: 'post',
     url: '/attendances/create_one',
     baseURL: 'http://malcorp.test/api/server',
@@ -41,21 +41,12 @@ async function postCreateOne(data) {
       "Authorization": "Bearer " + token
     }
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      }
-    })
-    .catch(function (error) {
-    })
-    .finally(function () {
-      // always executed
-    })
 }
-async function postCreateMany(data) {
+
+function postCreateMany(data) {
   const token = store.getters.token
 
-  return await axios({
+  return axios({
     method: 'post',
     url: '/attendances/create_many',
     baseURL: 'http://malcorp.test/api/server',
@@ -66,16 +57,6 @@ async function postCreateMany(data) {
       "Authorization": "Bearer " + token
     }
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      }
-    })
-    .catch(function (error) {
-    })
-    .finally(function () {
-      // always executed
-    })
 }
 
 async function postDeleteByID(data) {

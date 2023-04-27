@@ -28,10 +28,10 @@ async function getAllList() {
     })
 }
 
-async function postCreateOne(data) {
+function postCreateOne(data) {
   const token = store.getters.token
 
-  return await axios({
+  return axios({
     method: 'post',
     url: '/attendance_values/create_one',
     baseURL: 'http://malcorp.test/api/server',
@@ -42,17 +42,6 @@ async function postCreateOne(data) {
       "Authorization": "Bearer " + token
     }
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      }
-    })
-    .catch(function (error) {
-      console.log('error: ', error)
-    })
-    .finally(function () {
-      // always executed
-    })
 }
 
 export default {
