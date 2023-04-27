@@ -8,9 +8,11 @@ import (
 )
 
 type CentresRepo interface {
-	GetAll() ([]models.Centre, error)
 	CreateOne(id uuid.UUID, name, description string, created_at, updated_at time.Time) (*models.Centre, error)
+	GetAll() ([]models.Centre, error)
+	GetOneByID(uid uuid.UUID) (*models.Centre, error)
 	DeleteOneByID(uid uuid.UUID) error
+	UpdateOneByID(createItem *models.Centre) error
 }
 
 type RoomsRepo interface {

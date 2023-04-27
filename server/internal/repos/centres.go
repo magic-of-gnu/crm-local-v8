@@ -37,6 +37,31 @@ func (rr *CentresPostgresRepo) GetAll() ([]models.Centre, error) {
 	return centres, nil
 }
 
+func (rr *CentresPostgresRepo) GetOneByID(uid uuid.UUID) (*models.Centre, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `SELECT id, name, description, created_at, updated_at FROM centres
+	where id = $1`
+
+	var result models.Centre
+
+	row := rr.dbpool.QueryRow(ctx, query, uid)
+	err := row.Scan(
+		&result.ID,
+		&result.Name,
+		&result.Description,
+		&result.CreatedAt,
+		&result.UpdatedAt,
+	)
+
+	if err != nil {
+		return &result, err
+	}
+
+	return &result, nil
+}
+
 func (rr *CentresPostgresRepo) CreateOne(uid uuid.UUID, name, description string, created_at, updated_at time.Time) (*models.Centre, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
@@ -91,6 +116,39 @@ func (rr *CentresPostgresRepo) DeleteOneByID(uid uuid.UUID) error {
 	if row.RowsAffected() == 0 {
 		fmt.Println("err: data was not deleted")
 		return fmt.Errorf("data was not deleted")
+	}
+
+	return nil
+
+}
+
+func (rr *CentresPostgresRepo) UpdateOneByID(createItem *models.Centre) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	fmt.Println("name: ", createItem.Name)
+
+	query := `UPDATE centres SET
+	name = $2,
+	description = $3,
+	updated_at = $4
+	WHERE id = $1
+	`
+
+	row, err := rr.dbpool.Exec(ctx, query,
+		&createItem.ID,
+		&createItem.Name,
+		&createItem.Description,
+		&createItem.UpdatedAt,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	if row.RowsAffected() == 0 {
+		return fmt.Errorf("data was not updated")
 	}
 
 	return nil
