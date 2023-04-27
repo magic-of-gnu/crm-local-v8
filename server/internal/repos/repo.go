@@ -112,6 +112,10 @@ type AttendancesRepo interface {
 		created_at, updated_at time.Time,
 	) (*models.Attendance, error)
 	DeleteOneByID(uid uuid.UUID) error
+	GetOneFilteredByStudentIDAndLectureCalendarID(lectureCalendarID, studentID uuid.UUID) (*models.Attendance, error)
+	UpdateOnePaymentStatuses(attendanceNew *models.Attendance) (*models.Attendance, error)
+	DeleteManyByID(uids []uuid.UUID) (int, error)
+	RevertPaymentStatusesAndNullifyInvoiceID(attendanceNew *models.Attendance) error
 }
 
 type UsersRepo interface {
