@@ -135,3 +135,11 @@ type UsersRepo interface {
 	DeleteOneByID(uid uuid.UUID) error
 	GetOneByUsername(username string) (*models.User, error)
 }
+
+type PaymentStatusRepo interface {
+	CreateOne(item *models.PaymentStatus) (*models.PaymentStatus, error)
+	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.PaymentStatus, error)
+	GetOneByID(uid uuid.UUID) (*models.PaymentStatus, error)
+	UpdateOneByID(createItem *models.PaymentStatus) error
+}
