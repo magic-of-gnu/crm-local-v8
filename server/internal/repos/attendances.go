@@ -204,3 +204,98 @@ func (rr *attendancesPostgresRepo) DeleteManyByID(uids []uuid.UUID) (int, error)
 
 	return deleted_count, nil
 }
+
+func (rr *attendancesPostgresRepo) RevertPaymentStatusesAndNullifyInvoiceID(attendanceNew *models.Attendance) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `UPDATE attendances SET
+attendance_value_id = coalesce ($2, attendance_value_id),
+description = coalesce ($3, description),
+payment_status_id = coalesce ($4, payment_status_id),
+invoice_id = $5,
+updated_at = $6
+WHERE id = $1
+AND  ($2 IS NOT NULL AND $2 IS DISTINCT FROM attendance_value_id OR
+      $3 IS NOT NULL AND $3 IS DISTINCT FROM description OR
+      $4 IS NOT NULL AND $4 IS DISTINCT FROM payment_status_id);`
+
+	res, err := rr.dbpool.Exec(ctx, query,
+		&attendanceNew.ID,
+		&attendanceNew.AttendanceValueID,
+		&attendanceNew.Description,
+		nil,
+		&attendanceNew.UpdatedAt,
+	)
+
+	if err != nil {
+		fmt.Println("err: ", err)
+		return err
+	}
+
+	if res.RowsAffected() == 0 {
+		t := "error: db write was not completed"
+		fmt.Println("err: ", t)
+		return fmt.Errorf("err: %s", t)
+	}
+
+	return nil
+}
+
+func (rr *attendancesPostgresRepo) UpdatePaymentStatusMany(
+	uid,
+	lecture_calendar_id,
+	student_id,
+	attendance_value_id uuid.UUID,
+	description string,
+	created_at, updated_at time.Time,
+) (*models.Attendance, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `INSERT INTO attendances (
+		id, lectures_calendar_id, student_id, attendance_value_id, description,
+	created_at, updated_at
+	) VALUES (
+		$1, $2, $3, $4, $5, $6, $7
+	) ON conflict (lectures_calendar_id, student_id) do update set attendance_value_id = excluded.attendance_value_id, description = excluded.description, updated_at = excluded.updated_at;`
+
+	var item models.Attendance
+
+	res, err := rr.dbpool.Exec(ctx, query,
+		uid,
+		lecture_calendar_id,
+		student_id,
+		attendance_value_id,
+		description,
+		created_at, updated_at,
+	)
+
+	if err != nil {
+		fmt.Println("err: ", err)
+		return &item, err
+	}
+
+	if res.RowsAffected() == 0 {
+		t := "error: db write was not completed"
+		fmt.Println("err: ", t)
+		return &item, fmt.Errorf("err: %s", t)
+	}
+
+	item = models.Attendance{
+		ID:                 uid,
+		LecturesCalendarID: lecture_calendar_id,
+		StudentID:          student_id,
+		AttendanceValueID:  attendance_value_id,
+		Description:        description,
+		CreatedAt:          created_at,
+		UpdatedAt:          updated_at,
+		LectureCalendar:    models.LectureCalendar{},
+		Student:            models.Student{},
+		AttendanceValues:   models.AttendanceValues{},
+	}
+
+	return &item, nil
+
+}
+
