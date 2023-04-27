@@ -17,6 +17,7 @@
                       v-model="username"
                       placeholder="Username"
                       autocomplete="username"
+                      name="username"
                     />
                   </CInputGroup>
                   <CInputGroup class="mb-4">
@@ -28,6 +29,8 @@
                       type="password"
                       placeholder="Password"
                       autocomplete="current-password"
+                      name="password"
+                      @keyup.enter.prevent="($event) => login($event)"
                     />
                   </CInputGroup>
                   <CRow>
