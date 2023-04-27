@@ -11,8 +11,11 @@ import (
 var WeekDays []string = []string{"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satyrday", "Sunday"}
 
 type CentresService interface {
-	GetAll() ([]models.Centre, error)
 	CreateOne(name, description string) (*models.Centre, error)
+	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.Centre, error)
+	GetOneByID(uid uuid.UUID) (*models.Centre, error)
+	UpdateOneByID(updateItem *models.Centre) error
 }
 
 type RoomsService interface {

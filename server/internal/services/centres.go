@@ -18,10 +18,6 @@ func NewCentresService(centresRepo repos.CentresRepo) *centresService {
 	}
 }
 
-func (ss *centresService) GetAll() ([]models.Centre, error) {
-	return ss.CentresRepo.GetAll()
-}
-
 func (ss *centresService) CreateOne(name, description string) (*models.Centre, error) {
 	var centre *models.Centre
 
@@ -38,4 +34,26 @@ func (ss *centresService) CreateOne(name, description string) (*models.Centre, e
 	}
 
 	return centre, nil
+}
+
+func (ss *centresService) DeleteOneByID(uid uuid.UUID) error {
+
+	err := ss.CentresRepo.DeleteOneByID(uid)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (ss *centresService) GetAll() ([]models.Centre, error) {
+	return ss.CentresRepo.GetAll()
+}
+
+func (ss *centresService) GetOneByID(uid uuid.UUID) (*models.Centre, error) {
+	return ss.CentresRepo.GetOneByID(uid)
+}
+
+func (ss *centresService) UpdateOneByID(updateItem *models.Centre) error {
+	return ss.CentresRepo.UpdateOneByID(updateItem)
 }
