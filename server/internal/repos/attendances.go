@@ -364,3 +364,41 @@ func (rr *attendancesPostgresRepo) GetOneFilteredByStudentIDAndLectureCalendarID
 
 	return item, nil
 }
+
+func (rr *attendancesPostgresRepo) UpdateOnePaymentStatuses(
+	attendanceNew *models.Attendance,
+) (*models.Attendance, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `UPDATE attendances
+	SET invoice_id = $2, payment_status_id = $3, updated_at = $4
+	WHERE id = $1`
+
+	var item models.Attendance
+
+	res, err := rr.dbpool.Exec(ctx, query,
+		&attendanceNew.ID,
+		&attendanceNew.Invoice.ID,
+		&attendanceNew.PaymentStatusID,
+		&attendanceNew.UpdatedAt,
+	)
+
+	if err != nil {
+		fmt.Println("err: ", err)
+		return &item, err
+	}
+
+	if res.RowsAffected() == 0 {
+		t := "error: db write was not completed"
+		fmt.Println("err: ", t)
+		return &item, fmt.Errorf("err: %s", t)
+	}
+
+	item = models.Attendance{
+		ID: attendanceNew.ID,
+	}
+
+	return &item, nil
+
+}
