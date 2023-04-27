@@ -104,12 +104,11 @@ func main() {
 
 	authMiddleware := middlewares.NewAuthMiddleware(tokensService)
 
-	// repos
-	// repos := app.NewRepos(lectureCalendarRepo)
-	// services := app.NewServices(lectureCalendarService)
+	// payment statuses
+	paymentStatusesRepo := repos.NewPaymentStatusesPostgresRepo(dbpool)
+	paymentStatusesService := services.NewPaymentStatusesService(paymentStatusesRepo)
 
 	App := app.NewApp(
-		methodNames,
 		_Validator,
 		centresRepo,
 		centresService,
@@ -134,6 +133,8 @@ func main() {
 		tokensService,
 		loginService,
 		authMiddleware,
+		paymentStatusesRepo,
+		paymentStatusesService,
 		appConfig.HashCost,
 		appConfig.Debug,
 	)
