@@ -31,16 +31,17 @@ type DayAndTimeRequest struct {
 }
 
 type LectureCalendarRequest struct {
-	RoomID           uuid.UUID           `json:"room_id" binding:"required"`
-	CourseID         uuid.UUID           `json:"course_id" binding:"required"`
-	EmployeeID       uuid.UUID           `json:"employee_id" binding:"required"`
-	StartDate        time.Time           `json:"-"`
-	StartDateRequest int64               `json:"start_date" binding:"required"`
-	EndDate          time.Time           `json:"-"`
-	EndDateRequest   int64               `json:"end_date" binding:"required"`
-	DayAndTimeList   []DayAndTimeRequest `json:"dates_and_times" binding:"required,dive,required"`
-	CreatedAt        time.Time           `json:"created_at" binding:"omitempty,datetime"`
-	UpdatedAt        time.Time           `json:"updated_at" binding:"omitempty,datetime"`
+	RoomID                   uuid.UUID           `json:"room_id" binding:"required"`
+	CourseID                 uuid.UUID           `json:"course_id" binding:"required"`
+	EmployeeID               uuid.UUID           `json:"employee_id" binding:"required"`
+	StartDate                time.Time           `json:"-"`
+	StartDateRequest         int64               `json:"start_date" binding:"required"`
+	EndDate                  time.Time           `json:"-"`
+	EndDateRequest           int64               `json:"end_date" binding:"required"`
+	DayAndTimeList           []DayAndTimeRequest `json:"dates_and_times" binding:"required,dive,required"`
+	CreatedAt                time.Time           `json:"created_at" binding:"omitempty,datetime"`
+	UpdatedAt                time.Time           `json:"updated_at" binding:"omitempty,datetime"`
+	DefaultAttendanceValueID uuid.UUID           `json:"default_attendance_value_id" binding:"required"`
 }
 
 type LectureCalendarResponse struct {
