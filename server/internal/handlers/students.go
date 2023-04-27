@@ -49,32 +49,23 @@ func GetAllStudents(c *gin.Context) {
 
 func PostStudentsCreateOne(c *gin.Context) {
 
-	fmt.Println("post students")
 	var student *models.Student
 
 	if err := c.ShouldBind(&student); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"title": "Student",
 			"error": err.Error(),
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
 
-	fmt.Println("after bind, student: ", student)
-
-	err := App.Validator.Struct(student)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"title":   "Student",
-			"message": "error during validation",
-			"error":   err.Error(),
-		})
-		return
-	}
-
-	fmt.Println("after validate, student: ", student)
-
-	student, err = App.StudentsService.CreateOne(
+	student, err := App.StudentsService.CreateOne(
 		student.FirstName,
 		student.LastName,
 		student.Username,
@@ -83,11 +74,23 @@ func PostStudentsCreateOne(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title": "Students",
 			"error": err.Error(),
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"title": "Students",
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }

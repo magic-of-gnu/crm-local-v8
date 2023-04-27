@@ -39,28 +39,19 @@ func PostStudentCoursesCreateOne(c *gin.Context) {
 	fmt.Println("post students courses")
 
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"title":   "StudentCourses",
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
-
-	fmt.Println("post students courses2")
-
-	err := App.Validator.Struct(req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"title":   "StudentCourses",
-			"message": "error during validation",
-			"error":   err.Error(),
-		})
-		fmt.Println("error during validation; err: ", err)
-		return
-	}
-
-	fmt.Println("post students courses4")
 
 	item, err := App.StudentCoursesService.CreateOne(
 		req.StudentID,
@@ -69,13 +60,17 @@ func PostStudentCoursesCreateOne(c *gin.Context) {
 		req.Description,
 	)
 
-	fmt.Println("post students courses5")
-
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title":   "StudentCourses",
 			"error":   err.Error(),
 			"message": "error during writing data to db",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -83,6 +78,12 @@ func PostStudentCoursesCreateOne(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"title": "StudentCourses",
 		"item":  item,
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }
 
@@ -92,10 +93,16 @@ func DeleteStudentCoursesByID(c *gin.Context) {
 	var req *models.StudentCourseDeleteByIDRequest
 
 	if err := c.Bind(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -106,6 +113,12 @@ func DeleteStudentCoursesByID(c *gin.Context) {
 			"title":   title,
 			"message": "error delete in db",
 			"error":   err.Error(),
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -113,6 +126,12 @@ func DeleteStudentCoursesByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"title":   title,
 		"message": "success",
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }
 

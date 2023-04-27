@@ -50,8 +50,14 @@ func PostRooms(c *gin.Context) {
 	var room *models.Room
 
 	if err := c.ShouldBind(&room); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"title": "Rooms",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -65,11 +71,23 @@ func PostRooms(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title": "Rooms",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"title": "Rooms",
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }

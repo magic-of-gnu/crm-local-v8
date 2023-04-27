@@ -40,10 +40,11 @@ func PostLecturesCalendarCreateOne(c *gin.Context) {
 
 	var req *models.LectureCalendarRequest
 	err := c.BindJSON(&req)
+	fmt.Println("req: ", req)
 
 	if err != nil {
 		fmt.Println("error: ", err)
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
@@ -63,11 +64,18 @@ func PostLecturesCalendarCreateOne(c *gin.Context) {
 		req.StartDate,
 		req.EndDate,
 		req.DayAndTimeList,
+		req.DefaultAttendanceValueID,
 	)
 
 	c.JSON(http.StatusCreated, gin.H{
 		"title": title,
 		"data":  items,
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }
 
@@ -77,30 +85,32 @@ func DeleteLecturesCalendarByID(c *gin.Context) {
 	var req *models.LectureCalendarDeleteByIDRequest
 
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
 
-	err := App.Validator.Struct(req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"title":   title,
-			"message": "error during validation",
-			"error":   err.Error(),
-		})
-		return
-	}
-
-	err = App.LectureCalendarService.DeleteOneByID(req.ID)
+	err := App.LectureCalendarService.DeleteOneByID(req.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title":   title,
 			"message": "error delete in db",
 			"error":   err.Error(),
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -108,6 +118,12 @@ func DeleteLecturesCalendarByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"title":   title,
 		"message": "success",
+		"toasts": []map[string]string{
+			{
+				"content": "Deleted",
+				"color":   "success",
+			},
+		},
 	})
 }
 

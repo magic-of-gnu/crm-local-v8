@@ -53,6 +53,12 @@ func PostEmployeeCreateOne(c *gin.Context) {
 		fmt.Println("error on binding")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title": "Employees",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -64,15 +70,25 @@ func PostEmployeeCreateOne(c *gin.Context) {
 		empl.Info,
 	)
 	if err != nil {
-		fmt.Println("service on binding")
-
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title": "Employees",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"title": "Employees",
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }

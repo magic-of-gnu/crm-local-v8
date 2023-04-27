@@ -54,25 +54,17 @@ func PostCoursesCreateOne(c *gin.Context) {
 			"title":   "Student",
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
 
-	fmt.Println("after bind, course: ", item)
-
-	err := App.Validator.Struct(item)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"title":   "Course",
-			"message": "error during validation",
-			"error":   err.Error(),
-		})
-		return
-	}
-
-	fmt.Println("after validate, course: ", item)
-
-	item, err = App.CoursesService.CreateOne(
+	item, err := App.CoursesService.CreateOne(
 		item.Name,
 		item.Description,
 	)
@@ -82,12 +74,24 @@ func PostCoursesCreateOne(c *gin.Context) {
 			"title":   "Courses",
 			"error":   err.Error(),
 			"message": "error during writing data to db",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusCreated, gin.H{
 		"title": "Courses",
 		"item":  item,
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }

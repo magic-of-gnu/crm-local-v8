@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -41,25 +40,17 @@ func PostAttendanceValuesCreateOne(c *gin.Context) {
 			"title":   "AttendanceValues",
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
 
-	fmt.Println("after bind, course: ", item)
-
-	err := App.Validator.Struct(item)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"title":   "AttendanceValues",
-			"message": "error during validation",
-			"error":   err.Error(),
-		})
-		return
-	}
-
-	fmt.Println("after validate, course: ", item)
-
-	item, err = App.AttendanceValuesService.CreateOne(
+	item, err := App.AttendanceValuesService.CreateOne(
 		item.Value,
 		item.Name,
 		item.Description,
@@ -70,6 +61,12 @@ func PostAttendanceValuesCreateOne(c *gin.Context) {
 			"title":   "AttendanceValues",
 			"error":   err.Error(),
 			"message": "error during writing data to db",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -77,5 +74,11 @@ func PostAttendanceValuesCreateOne(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"title": "AttendanceValues",
 		"item":  item,
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }

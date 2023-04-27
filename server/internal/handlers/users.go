@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -39,12 +38,16 @@ func PostUsersCreateOne(c *gin.Context) {
 	var req *models.UsersCreateOneRequest
 
 	if err := c.ShouldBind(&req); err != nil {
-		fmt.Println("body: ", c.Request.Body)
-		fmt.Println("error during binding, err: ", err)
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -64,19 +67,29 @@ func PostUsersCreateOne(c *gin.Context) {
 		App.HashCost,
 	)
 	if err != nil {
-		fmt.Println("error during write")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title":   title,
 			"message": "error during write",
 			"error":   err.Error(),
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
-		fmt.Println("error during validation; err: ", err)
 		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
 		"title": title,
 		"data":  item,
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }
 
@@ -86,30 +99,32 @@ func DeleteUsersByID(c *gin.Context) {
 	var req *models.UsersDeleteByIDRequest
 
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
 
-	err := App.Validator.Struct(req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"title":   title,
-			"message": "error during validation",
-			"error":   err.Error(),
-		})
-		return
-	}
-
-	err = App.UsersService.DeleteOneByID(req.ID)
+	err := App.UsersService.DeleteOneByID(req.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title":   title,
 			"message": "error delete in db",
 			"error":   err.Error(),
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}

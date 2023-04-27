@@ -43,18 +43,13 @@ func PostAttendancesCreateOne(c *gin.Context) {
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
-		return
-	}
-
-	err := App.Validator.Struct(req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"title":   title,
-			"message": "error during validation",
-			"error":   err.Error(),
-		})
-		fmt.Println("error during validation; err: ", err)
 		return
 	}
 
@@ -69,14 +64,25 @@ func PostAttendancesCreateOne(c *gin.Context) {
 			"title":   title,
 			"message": "error during validation",
 			"error":   err.Error(),
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
-		fmt.Println("error during validation; err: ", err)
 		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
 		"title": title,
 		"data":  item,
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }
 
@@ -90,6 +96,12 @@ func PostAttendancesCreateMany(c *gin.Context) {
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -102,6 +114,12 @@ func PostAttendancesCreateMany(c *gin.Context) {
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during db",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -122,26 +140,28 @@ func DeleteAttendancesByID(c *gin.Context) {
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
 
-	err := App.Validator.Struct(req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"title":   title,
-			"message": "error during validation",
-			"error":   err.Error(),
-		})
-		return
-	}
-
-	err = App.AttendancesServices.DeleteOneByID(req.ID)
+	err := App.AttendancesServices.DeleteOneByID(req.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title":   title,
 			"message": "error delete in db",
 			"error":   err.Error(),
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
 		})
 		return
 	}
@@ -149,5 +169,11 @@ func DeleteAttendancesByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"title":   title,
 		"message": "success",
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
 	})
 }
