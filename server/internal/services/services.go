@@ -137,3 +137,11 @@ type TokensService interface {
 type LoginService interface {
 	Login(username string, password string) (*models.LoginResponse, bool, error)
 }
+
+type PaymentStatusesService interface {
+	CreateOne(createItem *models.PaymentStatus) (*models.PaymentStatus, error)
+	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.PaymentStatus, error)
+	GetOneByID(uid uuid.UUID) (*models.PaymentStatus, error)
+	UpdateOneByID(updateItem *models.PaymentStatus) error
+}
