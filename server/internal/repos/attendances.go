@@ -174,3 +174,33 @@ func (rr *attendancesPostgresRepo) DeleteOneByID(uid uuid.UUID) error {
 	return nil
 
 }
+
+func (rr *attendancesPostgresRepo) DeleteManyByID(uids []uuid.UUID) (int, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := "DELETE FROM attendances WHERE id = $1"
+
+	deleted_count := 0
+
+	for _, uid := range uids {
+
+		row, err := rr.dbpool.Exec(ctx, query, uid)
+
+		if err != nil {
+			fmt.Println("err: ", err)
+			return deleted_count, err
+		}
+
+		if row.RowsAffected() == 0 {
+			fmt.Println("err: data was not deleted")
+			return deleted_count, fmt.Errorf("data was not deleted")
+		}
+
+		deleted_count += 1
+
+	}
+
+	return deleted_count, nil
+}
