@@ -299,3 +299,68 @@ func (rr *attendancesPostgresRepo) UpdatePaymentStatusMany(
 
 }
 
+func (rr *attendancesPostgresRepo) GetOneFilteredByStudentIDAndLectureCalendarID(lectureCalendarID, studentID uuid.UUID) (*models.Attendance, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `SELECT
+	a.id, a.lectures_calendar_id, a.student_id, a.attendance_value_id, a.payment_status_id, a.description, a.created_at, a.updated_at,
+	b.value, b."name", b.description,
+	c.first_name, c.last_name, c.username,
+	d.room_id, d.course_id, d.employee_id, d.date, d.duration,
+	e.name,
+	f.name,
+	g.first_name, g.last_name, g.username,
+	i.name
+	FROM attendances a
+	LEFT JOIN attendance_values b on a.attendance_value_id = b.id
+	LEFT JOIN students c on a.student_id = c.id
+	LEFT JOIN lectures_calendar d on a.lectures_calendar_id = d.id
+	LEFT JOIN rooms e on d.room_id = e.id
+	LEFT JOIN courses f on d.course_id = f.id
+	LEFT JOIN employees g on d.employee_id = g.id
+	LEFT JOIN payment_statuses i on a.payment_status_id = i.id
+	WHERE a.lectures_calendar_id = $1 AND a.student_id = $2;`
+
+	var item *models.Attendance
+
+	row := rr.dbpool.QueryRow(ctx, query, lectureCalendarID, studentID)
+
+	err := row.Scan(
+		&item.ID,
+		&item.LecturesCalendarID,
+		&item.StudentID,
+		&item.AttendanceValueID,
+		&item.PaymentStatusID,
+		&item.Description,
+		&item.CreatedAt,
+		&item.UpdatedAt,
+		&item.AttendanceValues.Value,
+		&item.AttendanceValues.Name,
+		&item.AttendanceValues.Description,
+		&item.Student.FirstName,
+		&item.Student.LastName,
+		&item.Student.Username,
+		&item.LectureCalendar.RoomID,
+		&item.LectureCalendar.CourseID,
+		&item.LectureCalendar.EmployeeID,
+		&item.LectureCalendar.Date,
+		&item.LectureCalendar.Duration,
+		&item.LectureCalendar.Room.Name,
+		&item.LectureCalendar.Course.Name,
+		&item.LectureCalendar.Employee.FirstName,
+		&item.LectureCalendar.Employee.LastName,
+		&item.LectureCalendar.Employee.Username,
+		&item.PaymentStatus.Name,
+	)
+
+	if err != nil {
+		return item, err
+	}
+
+	item.Student.ID = studentID
+	item.LectureCalendar.ID = lectureCalendarID
+
+	return item, nil
+}
