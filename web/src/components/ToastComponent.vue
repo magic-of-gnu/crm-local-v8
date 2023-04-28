@@ -4,7 +4,7 @@
     v-for="(toast, index) in props.toasts"
     :key="index"
     :color="toast.color"
-    visible="true"
+    :visible="true"
   >
     <div class="d-flex">
       <CToastBody>
