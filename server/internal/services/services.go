@@ -26,6 +26,7 @@ type RoomsService interface {
 		num_seats int,
 		info string,
 	) (*models.Room, error)
+	DeleteOneByID(uid uuid.UUID) error
 }
 
 type EmployeesService interface {
