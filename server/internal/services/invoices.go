@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -47,7 +48,7 @@ func (ss *invoicesService) CreateOneWithUnpaidAttendances(createItem *models.Inv
 	var item *models.Invoice
 
 	lecturesCalendar, err := ss.LectureCalendarRepo.GetManyFilteredByCourseIDAndDate(
-		createItem.CourseID, createItem.StartDate,
+		createItem.CourseID, createItem.StartDate, 1000,
 	)
 	if err != nil {
 		return item, err
@@ -102,39 +103,38 @@ func (ss *invoicesService) CreateOneWithUnpaidAttendances(createItem *models.Inv
 
 func (ss *invoicesService) CreateOne(createItem *models.Invoice) (*models.Invoice, error) {
 
-	// course_id, student_id, start_date, price, payment_status_id, lectures_number, course_id, payment_status_id, start_date
+	// Get LectureCalendars from start_date
+	var itemInvoice *models.Invoice
 
-	// 	with course_students as (
-	// 	select id from student_courses
-	// 	where course_id = '8d287eea-038b-4610-a7db-7b00f7b03fea'
-	// )
-	// , created_invoices as (
-	// 	insert into invoices (id, course_id, student_id, start_date, price, payment_status_id, created_at, updated_at, lectures_number)
-	// 	values ('f0e72348-bf37-4c46-bf03-167881020423', '8d287eea-038b-4610-a7db-7b00f7b03fea', 'd9a657d3-7da7-4fbe-88af-6bdcd5d2cb95', '2023-02-01 00:00:00.000 +0600', 40000, 'bc8c944e-bcd7-4f7c-88fc-ee41733470e3',  now(), now(), 2)
-	// 	returning id
-	// )
-	// , lectures_calendar_ids as (
-	// 	select id, date
-	// 	from lectures_calendar
-	// 	where course_id = '8d287eea-038b-4610-a7db-7b00f7b03fea' and lectures_calendar."date"  > '2023-02-01 00:00:00.000 +0600'
-	// 	order by lectures_calendar.date asc
-	// )
-	// , attendance_ids_to_update as (
-	// select a.id from attendances a, lectures_calendar_ids lci, course_students cs
-	// where a.lectures_calendar_id = lci.id and a.student_id = 'd9a657d3-7da7-4fbe-88af-6bdcd5d2cb95'
-	// order by lci.date asc
-	// limit 2
-	// )
-	// update attendances as a
-	// set invoice_id = ci.id
-	// from attendance_ids_to_update as ai, created_invoices as ci
-	// where a.id = ai.id
+	lectures_calendars, err := ss.LectureCalendarRepo.
+		GetManyFilteredByCourseIDAndDate(createItem.CourseID, createItem.StartDate, createItem.LecturesNumber)
+	if err != nil {
+		return itemInvoice, err
+	}
 
-	var item *models.Invoice
+	if len(lectures_calendars) == 0 || len(lectures_calendars) > createItem.LecturesNumber {
+		return itemInvoice, fmt.Errorf("error: incorrect query")
+	}
 
+	// Get respective attendances for LecturesCalendars and StudentID
+	var attendances []models.Attendance
+
+	for _, lectures_calendar_item := range lectures_calendars {
+
+		attendance, err := ss.AttendanceRepo.
+			GetOneAtendanceWithLecturesCalendarIDAndStudentID(lectures_calendar_item.ID, createItem.StudentID)
+
+		if err != nil {
+			return itemInvoice, err
+		}
+
+		attendances = append(attendances, *attendance)
+	}
+
+	// Insert Invoice
 	uid, err := uuid.NewRandom()
 	if err != nil {
-		return item, err
+		return itemInvoice, err
 	}
 
 	time_now := time.Now()
@@ -143,12 +143,44 @@ func (ss *invoicesService) CreateOne(createItem *models.Invoice) (*models.Invoic
 	createItem.CreatedAt = time_now
 	createItem.UpdatedAt = time_now
 
-	item, err = ss.InvoiceRepo.CreateOne(createItem)
+	itemInvoice, err = ss.InvoiceRepo.CreateOne(createItem)
 	if err != nil {
-		return item, err
+		return itemInvoice, err
 	}
 
-	return item, nil
+	// Update attendances with InvoiceID
+	var updatedAttendances []models.Attendance
+	var updateErr error = nil
+
+	for _, attendance := range attendances {
+		err := ss.AttendanceRepo.UpdateInvoiceIDOnOneAttendance(
+			attendance.ID,
+			createItem.ID,
+			time.Now(),
+		)
+		if err != nil {
+			updateErr = err
+			break
+		}
+
+		updatedAttendances = append(updatedAttendances, attendance)
+	}
+
+	// revert if error
+	if updateErr != nil {
+		ss.InvoiceRepo.DeleteOneByID(itemInvoice.ID)
+
+		for _, attendance := range updatedAttendances {
+			ss.AttendanceRepo.UpdateInvoiceIDOnOneAttendance(
+				attendance.ID,
+				createItem.ID,
+				time.Now(),
+			)
+		}
+
+	}
+
+	return itemInvoice, nil
 }
 
 func (ss *invoicesService) DeleteOneByID(uid uuid.UUID) error {
