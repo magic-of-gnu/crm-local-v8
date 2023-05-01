@@ -1,5 +1,8 @@
-
 <template>
+<ToastComponent
+v-if="toasts"
+:toasts="toasts"
+/>
   <CRow>
     <CForm action="some-post-function" method="POST">
       <div class="mb-3">
@@ -129,6 +132,8 @@ const lecture_date = ref("")
 const start_time = ref("")
 const duration = ref("")
 
+const toasts = ref(null)
+
 
 
 function run_this_method(event) {
@@ -145,6 +150,8 @@ function run_this_method(event) {
   })
 
   m.postCreateMany(request_data)
+
+
 }
 
 function getDate(time_string) {
@@ -156,28 +163,25 @@ function getTimeHM(time_string) {
 }
 
 onBeforeMount(async () => {
-  await lecturesCalendarMethods.getOneByID(route.params.id)
-    .then( (d) => {
-      currentLectureCalendar.value = d.data
-      lecture_date.value = getDate(d.data.date)
-      start_time.value = getTimeHM(d.data.date)
-      duration.value = d.data.duration
-      room_name.value = d.data.room.name
-      course_id.value = d.data.course_id
-      employee_name.value = d.data.employee.first_name + " " + d.data.employee.last_name + " (" + d.data.employee.username + ")"
-    })
+  const response_lc = await lecturesCalendarMethods.getOneByID(route.params.id)
 
-  attendanceValuesMethods.getAllList()
-    .then( (d) => {
-      attendanceValues.value = d.data.data
+  currentLectureCalendar.value = response_lc.data.data
+  lecture_date.value = getDate(response_lc.data.data.date)
+  start_time.value = getTimeHM(response_lc.data.data.date)
+  duration.value = response_lc.data.data.duration
+  room_name.value = response_lc.data.data.room.name
+  course_id.value = response_lc.data.data.course_id
+  employee_name.value = response_lc.data.data.employee.first_name + " " + response_lc.data.data.employee.last_name + " (" + response_lc.data.data.employee.username + ")"
+
+  
+  const response_av = await attendanceValuesMethods.getAllList()
+  attendanceValues.value = response_av.data.data.data
+  
+  const response_sc = await studentCoursesMethods.getManyByCustomID({
+    "course_id": course_id.value
   })
   
-  await studentCoursesMethods.getManyByCustomID({
-    "course_id": course_id.value
-  }).then( (d) => {
-    courseStudents.value = d.data
-  })
-
+  courseStudents.value = response_sc.data.data
 
 })
 
