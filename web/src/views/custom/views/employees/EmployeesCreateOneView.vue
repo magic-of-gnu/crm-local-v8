@@ -1,4 +1,8 @@
 <template>
+<ToastComponent
+v-if="toasts"
+:toasts="toasts"
+/>
   <CRow>
     <CForm action="some-post-function" method="POST">
       <div class="mb-3">
@@ -53,23 +57,35 @@
 </template>
 
 <script setup>
-/* eslint-disable */
-
 import m from '@/views/custom/hooks/employees/methods.js'
 import { ref } from 'vue'
+import ToastComponent from '@/components/ToastComponent.vue'
 
-let first_name = ref("")
-let last_name = ref("")
-let username = ref("")
-let info = ref("")
+const first_name = ref(null)
+const last_name = ref(null)
+const username = ref(null)
+const info = ref(null)
+const toasts = ref([])
 
-function run_this_method(event) {
-  m.postEmployeesCreateOne({
+async function run_this_method(event) {
+  const response = await m.postCreateOne({
     first_name: first_name.value,
     last_name: last_name.value,
     username: username.value,
     info: info.value,
   })
+
+  if (response.data.hasOwnProperty("toasts")) {
+    response.data.toasts.forEach((item) => {
+      toasts.value.push(item)
+    });
+  }
+
+  first_name.value = null
+  last_name.value = null
+  username.value = null
+  info.value = null
+
 }
 
 </script>
