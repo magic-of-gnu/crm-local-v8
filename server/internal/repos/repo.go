@@ -25,6 +25,7 @@ type RoomsRepo interface {
 		info string,
 		created_at, updated_at time.Time,
 	) (*models.Room, error)
+	DeleteOneByID(uid uuid.UUID) error
 }
 
 type EmployeesRepo interface {
@@ -99,7 +100,7 @@ type LectureCalendarRepo interface {
 	DeleteOneByID(uid uuid.UUID) error
 	GetManyByCourseID(course_id uuid.UUID) ([]models.LectureCalendar, error)
 	GetOneByID(uid uuid.UUID) (*models.LectureCalendar, error)
-	GetManyFilteredByCourseIDAndDate(course_id uuid.UUID, start_date time.Time) ([]models.LectureCalendar, error)
+	GetManyFilteredByCourseIDAndDate(course_id uuid.UUID, start_date time.Time, n int) ([]models.LectureCalendar, error)
 }
 
 type AttendancesRepo interface {
@@ -117,6 +118,29 @@ type AttendancesRepo interface {
 	UpdateOnePaymentStatuses(attendanceNew *models.Attendance) (*models.Attendance, error)
 	DeleteManyByID(uids []uuid.UUID) (int, error)
 	RevertPaymentStatusesAndNullifyInvoiceID(attendanceNew *models.Attendance) error
+	UpdatePaymentStatusMany(
+		uid,
+		lecture_calendar_id,
+		student_id,
+		attendance_value_id uuid.UUID,
+		description string,
+		created_at, updated_at time.Time,
+	) (*models.Attendance, error)
+	UpdateOneAtendanceWithLecturesCalendarIDAndStudentID(
+		lecturesCalendarID,
+		studentID,
+		invoiceID uuid.UUID,
+		time_now time.Time,
+	) error
+	GetOneAtendanceWithLecturesCalendarIDAndStudentID(
+		lecturesCalendarID,
+		studentID uuid.UUID,
+	) (*models.Attendance, error)
+	UpdateInvoiceIDOnOneAttendance(
+		attendanceID,
+		invoiceID uuid.UUID,
+		updated_at time.Time,
+	) error
 }
 
 type UsersRepo interface {
