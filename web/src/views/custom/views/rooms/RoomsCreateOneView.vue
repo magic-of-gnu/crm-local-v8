@@ -1,10 +1,14 @@
 <template>
+<ToastComponent
+v-if="toasts"
+:toasts="toasts"
+/>
   <CRow>
     <CForm action="some-post-function" method="POST">
       <div class="mb-3">
         <CFormLabel for="centre_id">Centre Name</CFormLabel>
         <CFormSelect
-          v-model="centre_id"
+          v-model="selectedCentreID"
           aria-label="Default select example"
           :options="optionsCentres"
           name="centre_id"
@@ -38,7 +42,7 @@
           v-model.trim="info"
           id="info"
           type="string"
-          name="dinfo"
+          name="info"
           placeholder="Enter Room Information Here"
         ></CFormTextarea>
       </div>
@@ -54,24 +58,28 @@
 </template>
 
 <script setup>
-/* eslint-disable */
-
 import m from '@/views/custom/hooks/rooms/methods.js'
 import centresMethods from '@/views/custom/hooks/centres/methods.js'
-import { ref, onMounted } from 'vue'
+import ToastComponent from '@/components/ToastComponent.vue'
+import { ref, onBeforeMount } from 'vue'
+import centres from '@/router/custom/centres';
 
-const optionsCentres = ref([{}])
-const selectedCentre = ref(null)
+const optionsCentres = ref([{
+  label: "Select Centre",
+  value: "",
+  disabled: true,
+  hidden: true,
+  selected: true
+}])
 
-console.log('running...')
+const selectedCentreID = ref(null)
+const num_seats = ref(null)
+const name = ref("")
+const info = ref("")
 
-let centre_id = null
-let name = ""
-let num_seats = null
-let info = ""
+const toasts = ref([])
 
 function getAllCentresList() {
-  console.log("retrieving centres list")
 
   centresMethods.getCentresList()
     .then((d) => {
@@ -85,30 +93,35 @@ function getAllCentresList() {
       }
     })
 }
-console.log("m: ", m)
 
+async function run_this_method(event) {
 
-function run_this_method(event) {
-  // console.log('running button click')
-  // console.log("event: ", event)
+  const request_data = {
+    centre_id: selectedCentreID.value,
+    name: name.value,
+    num_seats: num_seats.value,
+    info: info.value,
+  }
 
-  // centre_id = event.target.form.elements.centre_id.value
-  // name = event.target.form.elements.name.value
-  // num_seats = event.target.form.elements.num_seats.value
-  // info = event.target.form.elements.info.value
+  const response = await m.postCreateOne(request_data)
+  populateToastsFromResponse(response, toasts)
 
-  // console.log("centre_id: ", centre_id, "name: ", name, "num_seats: ", num_seats, "info: ", info)
-  // console.log("selectedCentre: ", selectedCentre)
+  selectedCentreID.value = null
+  num_seats.value = null
+  name.value = null
+  info.value = null
 
-  m.postRoomsCreateOne({
-    centre_id: centre_id,
-    name: name,
-    num_seats: num_seats,
-    info: info,
-  })
 }
 
-onMounted(() => {
-  getAllCentresList()
+onBeforeMount(async () => {
+  const response_centres = await centresMethods.getAllList()
+
+  for (const item of response_centres.data.data.data) {
+    optionsCentres.value.push({
+      label: item.name,
+      value: item.id
+    })
+  }
+
 })
 </script>
