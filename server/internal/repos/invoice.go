@@ -52,7 +52,7 @@ SELECT a.id, a.course_id, a.student_id, a.start_date, a.price, a.payment_status_
 			&item.StartDate,
 			&item.Price,
 			&item.PaymentStatusID,
-			&item.LectureNumber,
+			&item.LecturesNumber,
 			&item.CreatedAt,
 			&item.UpdatedAt,
 			&item.Course.Name,
@@ -87,7 +87,7 @@ func (rr *InvoicePostgresRepo) CreateOne(createItem *models.Invoice) (*models.In
 	defer cancel()
 
 	query := `INSERT INTO invoices (id, course_id, student_id, start_date, price, payment_status_id,
-	lectures_number, created_at, updated_at,
+	lectures_number, created_at, updated_at)
 	VALUES (
 		$1, $2, $3, $4, $5, $6, $7, $8, $9
 	) RETURNING id`
@@ -101,7 +101,7 @@ func (rr *InvoicePostgresRepo) CreateOne(createItem *models.Invoice) (*models.In
 		&createItem.StartDate,
 		&createItem.Price,
 		&createItem.PaymentStatusID,
-		&createItem.LectureNumber,
+		&createItem.LecturesNumber,
 		&createItem.CreatedAt, &createItem.UpdatedAt,
 	)
 
@@ -156,7 +156,7 @@ func (rr *InvoicePostgresRepo) UpdateOneByID(createItem *models.Invoice) error {
 		&createItem.StartDate,
 		&createItem.Price,
 		&createItem.PaymentStatusID,
-		&createItem.LectureNumber,
+		&createItem.LecturesNumber,
 		&createItem.UpdatedAt,
 	)
 
