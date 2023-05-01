@@ -26,14 +26,14 @@ func (rr *attendancesPostgresRepo) GetAll() ([]models.Attendance, error) {
 	defer cancel()
 
 	query := `SELECT
-	a.id, a.lectures_calendar_id, a.student_id, a.attendance_value_id, a.payment_status_id, a.description, a.created_at, a.updated_at,
+	a.id, a.lectures_calendar_id, a.student_id, a.attendance_value_id, a.description, a.invoice_id, a.created_at, a.updated_at,
 	b.value, b."name", b.description,
 	c.first_name, c.last_name, c.username,
 	d.room_id, d.course_id, d.employee_id, d.date, d.duration,
 	e.name,
 	f.name,
 	g.first_name, g.last_name, g.username,
-	i.name
+	coalesce(j.name, ''), coalesce(j.description, '')
 	from attendances a
 	left join attendance_values b on a.attendance_value_id = b.id
 	left join students c on a.student_id = c.id
@@ -41,7 +41,8 @@ func (rr *attendancesPostgresRepo) GetAll() ([]models.Attendance, error) {
 	left join rooms e on d.room_id = e.id
 	left join courses f on d.course_id = f.id
 	left join employees g on d.employee_id = g.id
-	left join payment_statuses i on a.payment_status_id = i.id;`
+	left join invoices i on a.invoice_id = i.id
+	left join payment_statuses j on i.payment_status_id = j.id;`
 
 	var items []models.Attendance
 
@@ -58,8 +59,8 @@ func (rr *attendancesPostgresRepo) GetAll() ([]models.Attendance, error) {
 			&item.LecturesCalendarID,
 			&item.StudentID,
 			&item.AttendanceValueID,
-			&item.PaymentStatusID,
 			&item.Description,
+			&item.InvoiceID,
 			&item.CreatedAt,
 			&item.UpdatedAt,
 			&item.AttendanceValues.Value,
@@ -79,6 +80,7 @@ func (rr *attendancesPostgresRepo) GetAll() ([]models.Attendance, error) {
 			&item.LectureCalendar.Employee.LastName,
 			&item.LectureCalendar.Employee.Username,
 			&item.PaymentStatus.Name,
+			&item.PaymentStatus.Description,
 		)
 
 		if err != nil {
