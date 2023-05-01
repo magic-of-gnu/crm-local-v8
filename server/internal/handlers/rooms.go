@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 )
 
@@ -86,6 +87,54 @@ func PostRooms(c *gin.Context) {
 		"toasts": []map[string]string{
 			{
 				"content": "Created",
+				"color":   "success",
+			},
+		},
+	})
+}
+
+func DeleteRoomsByID(c *gin.Context) {
+	title := "Room Delete"
+
+	id_str := c.Param("id")
+	uid, err := uuid.Parse(id_str)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"title":   title,
+			"error":   err.Error(),
+			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
+		})
+		return
+	}
+
+	err = App.RoomsService.DeleteOneByID(uid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"message": "error delete in db",
+			"error":   err.Error(),
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"title":   title,
+		"message": "success",
+		"toasts": []map[string]string{
+			{
+				"content": "Deleted",
 				"color":   "success",
 			},
 		},
