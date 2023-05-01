@@ -288,7 +288,7 @@ WHERE a.id = $1`
 
 }
 
-func (rr *lectureCalendarPostgresRepo) GetManyFilteredByCourseIDAndDate(course_id uuid.UUID, start_date time.Time) ([]models.LectureCalendar, error) {
+func (rr *lectureCalendarPostgresRepo) GetManyFilteredByCourseIDAndDate(course_id uuid.UUID, start_date time.Time, n int) ([]models.LectureCalendar, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
@@ -304,9 +304,11 @@ LEFT JOIN rooms b on a.room_id  = b.id
 LEFT JOIN courses c on a.course_id = c.id
 LEFT JOIN employees d on a.employee_id = d.id
 WHERE a.course_id = $1 AND a."date" > $2
-ORDER BY a."date" ASC`
+ORDER BY a."date" ASC
+LIMIT $3;
+`
 
-	rows, err := rr.dbpool.Query(ctx, query, course_id, start_date)
+	rows, err := rr.dbpool.Query(ctx, query, course_id, start_date, n)
 	if err != nil {
 		return items, err
 	}
