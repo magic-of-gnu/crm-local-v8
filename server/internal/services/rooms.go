@@ -51,3 +51,7 @@ func (ss *roomsService) CreateOne(
 
 	return room, nil
 }
+
+func (ss *roomsService) DeleteOneByID(uid uuid.UUID) error {
+	return ss.RoomsRepo.DeleteOneByID(uid)
+}
