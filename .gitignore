@@ -9,3 +9,6 @@
 **/*.scss
 **/node_modules
 **/.vscode
+try
+**/__pycache__
+**/*.pyc
