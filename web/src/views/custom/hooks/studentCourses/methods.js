@@ -7,9 +7,6 @@ function getAllList() {
   return axios({
     method: 'get',
     url: '/student_courses',
-    baseURL: 'http://malcorp.test/api/server',
-    crossOrigin: true,
-    responseType: 'json',
     headers: {
       "Authorization": "Bearer " + token
     }
@@ -22,9 +19,6 @@ function postCreateOne(data) {
   return axios({
     method: 'post',
     url: '/student_courses',
-    baseURL: 'http://malcorp.test/api/server',
-    crossOrigin: true,
-    responseType: 'json',
     data: data,
     headers: {
       "Authorization": "Bearer " + token
@@ -38,9 +32,6 @@ function getManyByCustomID(params) {
   return axios({
     method: 'get',
     url: '/student_courses/custom_id',
-    baseURL: 'http://malcorp.test/api/server',
-    crossOrigin: true,
-    responseType: 'json',
     headers: {
       "Authorization": "Bearer " + token
     },

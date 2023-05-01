@@ -7,6 +7,10 @@ import CoreuiVue from '@coreui/vue'
 import CIcon from '@coreui/icons-vue'
 import { iconsSet as icons } from '@/assets/icons'
 import DocsExample from '@/components/DocsExample'
+import Axios from "axios";
+
+Axios.defaults.baseURL = "http://malcorp.test/api/server";
+Axios.defaults.responseType = "json";
 
 const app = createApp(App)
 app.use(store)

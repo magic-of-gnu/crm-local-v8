@@ -7,9 +7,6 @@ function getAllList() {
   return axios({
     method: 'get',
     url: '/students',
-    baseURL: 'http://malcorp.test/api/server',
-    crossOrigin: true,
-    responseType: 'json',
     headers: {
       "Authorization": "Bearer " + token
     }
@@ -22,9 +19,6 @@ function postStudentsCreateOne(data) {
   return axios({
     method: 'post',
     url: '/students',
-    baseURL: 'http://malcorp.test/api/server',
-    crossOrigin: true,
-    responseType: 'json',
     data: data,
     headers: {
       "Authorization": "Bearer " + token

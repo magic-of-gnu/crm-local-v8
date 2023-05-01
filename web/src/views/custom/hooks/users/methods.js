@@ -7,9 +7,6 @@ function getAllList() {
   return axios({
     method: 'get',
     url: '/users/list',
-    baseURL: 'http://malcorp.test/api/server',
-    crossOrigin: true,
-    responseType: 'json',
     headers: {
       "Authorization": "Bearer " + token
     }
@@ -22,9 +19,6 @@ function postCreateOne(data) {
   return axios({
     method: 'post',
     url: '/users/create_one',
-    baseURL: 'http://malcorp.test/api/server',
-    crossOrigin: true,
-    responseType: 'json',
     data: data,
     headers: {
       "Authorization": "Bearer " + token
@@ -38,9 +32,6 @@ function postDeleteByID(data) {
   return axios({
     method: 'delete',
     url: '/users',
-    baseURL: 'http://malcorp.test/api/server',
-    crossOrigin: true,
-    responseType: 'json',
     data: data,
     headers: {
       "Authorization": "Bearer " + token
