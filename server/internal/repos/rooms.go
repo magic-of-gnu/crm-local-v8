@@ -86,3 +86,24 @@ func (rr *RoomsPostgresRepo) CreateOne(
 	return &room, nil
 
 }
+
+func (rr *RoomsPostgresRepo) DeleteOneByID(uid uuid.UUID) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := "DELETE FROM rooms WHERE id = $1"
+
+	row, err := rr.dbpool.Exec(ctx, query, uid)
+
+	if err != nil {
+		return err
+	}
+
+	if row.RowsAffected() == 0 {
+		return fmt.Errorf("data was not deleted")
+	}
+
+	return nil
+
+}
