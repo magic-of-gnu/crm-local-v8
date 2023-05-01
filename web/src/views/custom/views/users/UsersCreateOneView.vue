@@ -1,4 +1,8 @@
 <template>
+<ToastComponent
+v-if="toasts"
+:toasts="toasts"
+/>
   <CRow>
     <CForm action="some-post-function" method="POST">
       <div class="mb-3">
@@ -80,6 +84,7 @@
 </template>
 
 <script setup>
+import ToastComponent from '@/components/ToastComponent.vue'
 import m from '@/views/custom/hooks/users/methods.js'
 import { CFormSwitch } from '@coreui/vue';
 import { ref } from 'vue'
@@ -93,12 +98,13 @@ const is_admin = ref(false)
 const user_type = ref("")
 let is_admin_int = -1 
 
-function run_this_method(event) {
-  console.log("is_admin: ", is_admin)
+const toasts = ref([])
+
+async function run_this_method(event) {
   if (is_admin.value === true) {
     is_admin_int = 1;
   }
-  m.postCreateOne({
+  const response = await m.postCreateOne({
     first_name: first_name.value,
     last_name: last_name.value,
     username: username.value,
@@ -108,6 +114,13 @@ function run_this_method(event) {
     // is_admin: is_admin.value,
     user_type: user_type.value,
   })
+
+  if (response.data.hasOwnProperty("toasts")) {
+    response.data.toasts.forEach((item) => {
+      toasts.value.push(item)
+    });
+  }
 }
+
 
 </script>
