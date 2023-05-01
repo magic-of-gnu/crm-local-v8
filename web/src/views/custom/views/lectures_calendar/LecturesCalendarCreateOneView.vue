@@ -1,4 +1,8 @@
 <template>
+<ToastComponent
+v-if="toasts"
+:toasts="toasts"
+/>
   <CRow>
     <CForm action="some-post-function" method="POST">
 
@@ -33,6 +37,20 @@
           aria-label="Default select example"
           :options="employeesOptions"
           name="employee_id"
+          aria-placeholder="Select"
+          required
+        >
+        </CFormSelect>
+      </div>
+
+      <div class="mb-3">
+        <CFormLabel for="attendance_value_id">Default Attendance Value</CFormLabel>
+        <CFormSelect
+          id="attendance_value_id"
+          v-model="selected_attendance_value_id"
+          aria-label="Default select example"
+          :options="attendanceValuesOptions"
+          name="attendance_value_id"
           aria-placeholder="Select"
           required
         >
@@ -78,7 +96,7 @@
             component="input"
             type="button"
             color="primary"
-            value="Add New Time"
+            value="Add New Day"
           />
         </div>
 
@@ -171,10 +189,12 @@ import m from '@/views/custom/hooks/lecturesCalendar/methods.js'
 import employeesMethods from '@/views/custom/hooks/employees/methods.js'
 import roomsMethods from '@/views/custom/hooks/rooms/methods.js'
 import coursesMethods from '@/views/custom/hooks/courses/methods.js'
-import { ref, onMounted } from 'vue'
+import attendanceValuesMethods from '@/views/custom/hooks/attendanceValues/methods.js'
+import { ref, onBeforeMount } from 'vue'
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import ToastComponent from '@/components/ToastComponent.vue'
 
 const daysOptions = [
   {
@@ -222,12 +242,40 @@ const end_date = ref(new Date())
 const selected_course_id = ref(null)
 const selected_room_id = ref(null)
 const selected_employee_id = ref(null)
+const selected_attendance_value_id = ref(null)
 
-const employeesOptions = ref([{}])
-const roomsOptions = ref([{}])
-const coursesOptions = ref([{}])
+const employeesOptions = ref([{
+  label: "Select Employee",
+  value: "",
+  disabled: true,
+  hidden: true,
+  selected: true
+}])
+const roomsOptions = ref([{
+  label: "Select Room",
+  value: "",
+  disabled: true,
+  hidden: true,
+  selected: true
+}])
+const coursesOptions = ref([{
+    label: "Select Course",
+    value: "",
+    disabled: true,
+    hidden: true,
+    selected: true
+}])
+const attendanceValuesOptions = ref([
+  {
+    label: "Select Attendance Value",
+    value: "",
+    disabled: true,
+    hidden: true,
+    selected: true
+  }
+])
 
-function run_this_method(event) {
+async function run_this_method(event) {
   const start_date_epoch = Math.round(start_date.value / 1000) // milliseconds -> seconds
   const end_date_epoch = Math.round(end_date.value / 1000) // milliseconds -> seconds
   const times = []
@@ -245,9 +293,17 @@ function run_this_method(event) {
     start_date: start_date_epoch,
     end_date: end_date_epoch,
     dates_and_times: times,
+    default_attendance_value_id: selected_attendance_value_id.value,
   }
-  console.log("data: ", data)
-  m.postCreateOne(data)
+
+  const response = await m.postCreateOne(data)
+
+  if (response.data.hasOwnProperty("toasts")) {
+    response.data.toasts.forEach((item) => {
+      toasts.value.push(item)
+    });
+  }
+
 }
 
 function addNewDateAndTime(event) {
@@ -266,20 +322,30 @@ function deleteThisDateAndTime(ii) {
   dates_and_times.value.splice(ii, 1)
 }
 
-onMounted(() => {
-  roomsMethods.getRoomsList()
-    .then( (d) => {
-      for (const item of d.data.data) {
-        roomsOptions.value.push({
-          label: item.name,
-          value: item.id
-      })
-    }
-  })
+onBeforeMount(async () => {
+  const response_av = await attendanceValuesMethods.getAllList()
+  console.log("response_av: ", response_av.data)
 
-  employeesMethods.getEmployeesList()
+  for (const item of response_av.data.data.data) {
+    attendanceValuesOptions.value.push({
+      label: item.name,
+      value: item.id
+    })
+  }
+
+  const response_rooms = await roomsMethods.getAllList()
+  console.log(response_rooms)
+
+  for (const item of response_rooms.data.data.data) {
+    roomsOptions.value.push({
+      label: item.name,
+      value: item.id
+    })
+  }
+
+  employeesMethods.getAllList()
     .then( (d) => {
-      for (const item of d.data.data) {
+      for (const item of d.data.data.data) {
         employeesOptions.value.push({
           label: item.first_name + " " + item.last_name,
           value: item.id
@@ -289,7 +355,7 @@ onMounted(() => {
 
   coursesMethods.getAllList()
     .then( (d) => {
-      for (const item of d.data.data) {
+      for (const item of d.data.data.data) {
         coursesOptions.value.push({
           label: item.name,
           value: item.id
