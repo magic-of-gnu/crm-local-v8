@@ -34,53 +34,83 @@ func RouteHandlers(router *gin.Engine) {
 	r.PATCH("api/server/centres/:id", PatchCentresByID)
 
 	// rooms handlers
-	r.GET("api/server/rooms/list", GetAllRooms)
-	r.POST("api/server/rooms/create_one", PostRooms)
+	r.GET("api/server/rooms", GetAllRooms)
+	r.POST("api/server/rooms", PostRooms)
+	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	r.DELETE("api/server/rooms/:id", DeleteRoomsByID)
+	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
 
 	// employees handlers
-	r.GET("api/server/employees/list", GetAllEmployees)
-	r.POST("api/server/employees/create_one", PostEmployeeCreateOne)
+	r.GET("api/server/employees", GetAllEmployees)
+	r.POST("api/server/employees", PostEmployeeCreateOne)
+	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
+	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
 
 	// students handlers
-	r.GET("api/server/students/list", GetAllStudents)
-	r.POST("api/server/students/create_one", PostStudentsCreateOne)
+	r.GET("api/server/students", GetAllStudents)
+	r.POST("api/server/students", PostStudentsCreateOne)
+	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
+	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
 
 	// courses handlers
-	r.GET("api/server/courses/list", GetAllCourses)
-	r.POST("api/server/courses/create_one", PostCoursesCreateOne)
+	r.GET("api/server/courses", GetAllCourses)
+	r.POST("api/server/courses", PostCoursesCreateOne)
+	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
+	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
 
 	// attendanceValues handlers
-	r.GET("api/server/attendance_values/list", GetAllAttendanceValues)
-	r.POST("api/server/attendance_values/create_one", PostAttendanceValuesCreateOne)
+	r.GET("api/server/attendance_values", GetAllAttendanceValues)
+	r.POST("api/server/attendance_values", PostAttendanceValuesCreateOne)
+	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
+	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
 
 	// studentCourses handlers
-	r.GET("api/server/student_courses/list", GetAllStudentCourses)
-	r.POST("api/server/student_courses/create_one", PostStudentCoursesCreateOne)
-	r.GET("api/server/student_courses", GetManyStudentCoursesByCustomID)
+	r.GET("api/server/student_courses", GetAllStudentCourses)
+	r.POST("api/server/student_courses", PostStudentCoursesCreateOne)
+	r.GET("api/server/student_courses/custom_id", GetManyStudentCoursesByCustomID)
+	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
+	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
 
 	// lectureCalendar handlers
-	r.GET("api/server/lectures_calendar/list", GetLecturesCalendarAll)
-	r.POST("api/server/lectures_calendar/create_one", PostLecturesCalendarCreateOne)
+	r.GET("api/server/lectures_calendar", GetLecturesCalendarAll)
+	r.POST("api/server/lectures_calendar", PostLecturesCalendarCreateOne)
 	r.DELETE("api/server/lectures_calendar", DeleteLecturesCalendarByID)
 	r.GET("api/server/lectures_calendar/getByCourseID", GetManyLecturesCalendarByCourseID)
 	r.GET("api/server/lectures_calendar/:id", GetOneLecturesCalendarByID)
+	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
+	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
 
 	// attendances handlers
-	r.GET("api/server/attendances/list", GetAttendancesAll)
-	r.POST("api/server/attendances/create_one", PostAttendancesCreateOne)
+	r.GET("api/server/attendances", GetAttendancesAll)
+	r.POST("api/server/attendances", PostAttendancesCreateOne)
 	r.POST("api/server/attendances/create_many", PostAttendancesCreateMany)
-	r.DELETE("api/server/attendances", DeleteAttendancesByID)
+	r.DELETE("api/server/attendances/:id", DeleteAttendancesByID)
+	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
+	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
 
 	// users handlers
-	r.GET("api/server/users/list", GetUsersAll)
-	r.POST("api/server/users/create_one", PostUsersCreateOne)
+	r.GET("api/server/users", GetUsersAll)
+	r.POST("api/server/users", PostUsersCreateOne)
 	r.DELETE("api/server/users", DeleteUsersByID)
+	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
+	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
 
 	// invoices handlers
 	r.GET("api/server/invoices", GetInvoicesAll)
-	r.POST("api/server/invoices/create_one", PostInvoicesCreateOne)
+	r.POST("api/server/invoices", PostInvoicesCreateOne)
 	r.DELETE("api/server/invoices/:id", DeleteInvoicesByID)
 	// r.PATCH("api/server/invoices/:id", DeleteInvoicesByID)
+	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
+	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
 
 	// r.GET("api/server/invoices/filtered", GetInvoicesFilteredAll)
 	// payment statuses
