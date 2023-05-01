@@ -472,3 +472,78 @@ func (rr *attendancesPostgresRepo) UpdateOneAtendanceWithLecturesCalendarIDAndSt
 	return nil
 
 }
+
+func (rr *attendancesPostgresRepo) GetOneAtendanceWithLecturesCalendarIDAndStudentID(
+	lecturesCalendarID,
+	studentID uuid.UUID,
+) (*models.Attendance, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	fmt.Println("running here")
+
+	query := `SELECT
+	a.id, a.lectures_calendar_id, a.student_id, a.attendance_value_id, a.description, a.created_at, a.updated_at,
+	b.value, b."name", b.description,
+	c.first_name, c.last_name, c.username,
+	d.room_id, d.course_id, d.employee_id, d.date, d.duration,
+	e.name,
+	f.name,
+	g.first_name, g.last_name, g.username,
+	i.id,
+	coalesce(j.name, '') as name, coalesce(j.description, '') as description
+	FROM attendances a
+	LEFT JOIN attendance_values b ON a.attendance_value_id = b.id
+	LEFT JOIN students c ON a.student_id = c.id
+	LEFT JOIN lectures_calendar d ON a.lectures_calendar_id = d.id
+	LEFT JOIN rooms e ON d.room_id = e.id
+	LEFT JOIN courses f ON d.course_id = f.id
+	LEFT JOIN employees g ON d.employee_id = g.id
+	LEFT JOIN invoices i ON a.invoice_id = i.id
+	LEFT JOIN payment_statuses j ON i.payment_status_id = j.id
+	WHERE a.lectures_calendar_id = $1 AND a.student_id = $2;`
+
+	var item models.Attendance
+
+	row := rr.dbpool.QueryRow(ctx, query, lecturesCalendarID, studentID)
+
+	err := row.Scan(
+		&item.ID,
+		&item.LecturesCalendarID,
+		&item.StudentID,
+		&item.AttendanceValueID,
+		&item.Description,
+		&item.CreatedAt,
+		&item.UpdatedAt,
+		&item.AttendanceValues.Value,
+		&item.AttendanceValues.Name,
+		&item.AttendanceValues.Description,
+		&item.Student.FirstName,
+		&item.Student.LastName,
+		&item.Student.Username,
+		&item.LectureCalendar.RoomID,
+		&item.LectureCalendar.CourseID,
+		&item.LectureCalendar.EmployeeID,
+		&item.LectureCalendar.Date,
+		&item.LectureCalendar.Duration,
+		&item.LectureCalendar.Room.Name,
+		&item.LectureCalendar.Course.Name,
+		&item.LectureCalendar.Employee.FirstName,
+		&item.LectureCalendar.Employee.LastName,
+		&item.LectureCalendar.Employee.Username,
+		&item.InvoiceID,
+		&item.PaymentStatus.Name,
+		&item.PaymentStatus.Description,
+	)
+
+	fmt.Println("error: ", err)
+
+	if err != nil {
+		fmt.Println("here")
+		fmt.Println("item: ", item)
+		return &item, err
+	}
+
+	return &item, nil
+
+}
