@@ -6,7 +6,7 @@ function getAllList() {
 
   return axios({
     method: 'get',
-    url: '/students/list',
+    url: '/students',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
@@ -21,7 +21,7 @@ function postStudentsCreateOne(data) {
 
   return axios({
     method: 'post',
-    url: '/students/create_one',
+    url: '/students',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',

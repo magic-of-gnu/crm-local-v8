@@ -6,7 +6,7 @@ function getAllList() {
 
   return axios({
     method: 'get',
-    url: '/student_courses/list',
+    url: '/student_courses',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
@@ -21,7 +21,7 @@ function postCreateOne(data) {
 
   return axios({
     method: 'post',
-    url: '/student_courses/create_one',
+    url: '/student_courses',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
@@ -37,7 +37,7 @@ function getManyByCustomID(params) {
 
   return axios({
     method: 'get',
-    url: '/student_courses',
+    url: '/student_courses/custom_id',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',

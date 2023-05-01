@@ -6,7 +6,7 @@ function getAllList() {
 
   return axios({
     method: 'get',
-    url: '/lectures_calendar/list',
+    url: '/lectures_calendar',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
@@ -21,7 +21,7 @@ function postCreateOne(data) {
 
   return axios({
     method: 'post',
-    url: '/lectures_calendar/create_one',
+    url: '/lectures_calendar',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
@@ -32,8 +32,11 @@ function postCreateOne(data) {
   })
 }
 
-function postDeleteByID(data) {
+function postDeleteByID(id) {
   const token = store.getters.token
+
+  const url = `/lectures_calendar/${id}`
+  console.log("delete url: ", url)
 
   return axios({
     method: 'delete',
@@ -41,7 +44,6 @@ function postDeleteByID(data) {
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
-    data: data,
     headers: {
       "Authorization": "Bearer " + token
     }

@@ -2,12 +2,12 @@ import axios from 'axios'
 import store from '@/store/index.js'
 
 
-function getEmployeesList() {
+function getAllList() {
   const token = store.getters.token
 
   return axios({
     method: 'get',
-    url: '/employees/list',
+    url: '/employees',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
@@ -22,7 +22,7 @@ function postCreateOne(data) {
 
   return axios({
     method: 'post',
-    url: '/employees/create_one',
+    url: '/employees',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
@@ -34,6 +34,6 @@ function postCreateOne(data) {
 }
 
 export default {
-  getEmployeesList,
+  getAllList,
   postCreateOne,
 }
