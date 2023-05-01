@@ -404,3 +404,36 @@ func (rr *attendancesPostgresRepo) UpdateOnePaymentStatuses(
 	return &item, nil
 
 }
+
+func (rr *attendancesPostgresRepo) UpdateInvoiceIDOnOneAttendance(
+	attendanceID,
+	invoiceID uuid.UUID,
+	updated_at time.Time,
+) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `UPDATE attendances
+	SET invoice_id = $2, updated_at = $3
+	WHERE id = $1`
+
+	res, err := rr.dbpool.Exec(ctx, query,
+		attendanceID,
+		invoiceID,
+		updated_at,
+	)
+
+	if err != nil {
+		fmt.Println("err: ", err)
+		return err
+	}
+
+	if res.RowsAffected() == 0 {
+		t := "error: db write was not completed"
+		fmt.Println("err: ", t)
+		return fmt.Errorf("err: %s", t)
+	}
+
+	return nil
+
+}
