@@ -9,7 +9,7 @@ import { iconsSet as icons } from '@/assets/icons'
 import DocsExample from '@/components/DocsExample'
 import Axios from "axios";
 
-Axios.defaults.baseURL = "http://malcorp.test/api/server";
+Axios.defaults.baseURL = process.env.VUE_APP_BASE_URL || "http://127.0.0.1"
 Axios.defaults.responseType = "json";
 
 const app = createApp(App)
