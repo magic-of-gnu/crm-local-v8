@@ -3,6 +3,10 @@ function epochToDatetime(epochTime) {
   return new Intl.DateTimeFormat('default', {dateStyle: 'long'}).format(date)
 }
 
+function jsEpochToGoEpoch(jsEpochTime) {
+  return Math.round(jsEpochTime / 1000) // milliseconds -> seconds
+}
+
 function utcTimeToDate(time_string) {
   const date = new Date(time_string);
   return date.toDateString()
@@ -43,14 +47,63 @@ function sortList(data, col, asc) {
 function stringOperators() {return ["in", "=", "!="]}
 function numberOperators() {return ["=", "!=", ">", "<", ">=", "<="]}
 
+function stringOperatorsAsOptions() {
+  return [
+    {
+      label: "in",
+      value: "sin",
+    },
+    {
+      label: "=",
+      value: "s==",
+    },
+    {
+      label: "!=",
+      value: "s!=",
+    }
+  ]
+}
+
+function numberOperatorsAsOptions() {
+  return [
+    {
+      label: "=",
+      value: "neq",
+    },
+    {
+      label: "!=",
+      value: "nneq",
+    },
+    {
+      label: ">",
+      value: "ngt",
+    },
+    {
+      label: "<",
+      value: "nlt",
+    },
+    {
+      label: ">=",
+      value: "nge",
+    },
+    {
+      label: "<=",
+      value: "nle",
+    }
+  ]
+}
+
 export {
   epochToDatetime,
+  jsEpochToGoEpoch,
+  numberOperators,
+  numberOperatorsAsOptions,
+  showUUID,
+  sortList,
+  stringOperators,
+  stringOperatorsAsOptions,
   utcTimeToDate,
   utcTimeToLocaleTime,
   utcTimeToTimeHoursMinutes,
   utcTimeToUpdateTime,
-  sortList,
-  stringOperators,
-  numberOperators,
-  showUUID,
 }
