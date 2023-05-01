@@ -341,6 +341,18 @@ export default [
     to: '/users',
     icon: 'cil-user',
   },
+  {
+    component: 'CNavItem',
+    name: 'Payment Statuses',
+    to: '/payment_statuses',
+    icon: 'cil-user',
+  },
+  {
+    component: 'CNavItem',
+    name: 'Invoices',
+    to: '/invoices',
+    icon: 'cil-bell',
+  },
   // {
   //   component: 'CNavItem',
   //   name: 'Download CoreUI',
