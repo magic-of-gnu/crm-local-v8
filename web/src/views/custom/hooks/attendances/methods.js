@@ -2,12 +2,12 @@ import axios from 'axios'
 import store from '@/store/index.js'
 
 
-async function getAllList() {
+function getAllList() {
   const token = store.getters.token
 
-  return await axios({
+  return axios({
     method: 'get',
-    url: '/attendances/list',
+    url: '/attendances',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
@@ -15,16 +15,6 @@ async function getAllList() {
       "Authorization": "Bearer ${token}"
     }
   })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      }
-    })
-    .catch(function (error) {
-    })
-    .finally(function () {
-      // always executed
-    })
 }
 
 function postCreateOne(data) {
@@ -32,7 +22,7 @@ function postCreateOne(data) {
 
   return axios({
     method: 'post',
-    url: '/attendances/create_one',
+    url: '/attendances',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
