@@ -1,4 +1,8 @@
 <template>
+<ToastComponent
+v-if="toasts"
+:toasts="toasts"
+/>
   <CRow>
     <CForm action="some-post-function" method="POST">
       <div class="mb-3">
@@ -43,21 +47,26 @@
 </template>
 
 <script setup>
-/* eslint-disable */
-
 import m from '@/views/custom/hooks/attendanceValues/methods.js'
 import { ref } from 'vue'
 
 const value = ref("")
 const name = ref("")
 const description = ref("")
+const toasts = ref("")
 
-function run_this_method(event) {
-  m.postCreateOne({
+async function run_this_method(event) {
+  const response = await m.postCreateOne({
     value: value.value,
     name: name.value,
     description: description.value,
   })
+
+  if (response.data.hasOwnProperty("toasts")) {
+    response.data.toasts.forEach((item) => {
+      toasts.value.push(item)
+    });
+  }
 }
 
 </script>
