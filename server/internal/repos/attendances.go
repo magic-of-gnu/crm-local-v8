@@ -437,3 +437,38 @@ func (rr *attendancesPostgresRepo) UpdateInvoiceIDOnOneAttendance(
 	return nil
 
 }
+
+func (rr *attendancesPostgresRepo) UpdateOneAtendanceWithLecturesCalendarIDAndStudentID(
+	lecturesCalendarID,
+	studentID,
+	invoiceID uuid.UUID,
+	time_now time.Time,
+) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `UPDATE attendances
+	SET invoice_id = $3, updated_at = $4
+	WHERE lectures_calendar_id = $1 AND student_id = $2`
+
+	res, err := rr.dbpool.Exec(ctx, query,
+		lecturesCalendarID,
+		studentID,
+		invoiceID,
+		time_now,
+	)
+
+	if err != nil {
+		fmt.Println("err: ", err)
+		return err
+	}
+
+	if res.RowsAffected() == 0 {
+		t := "error: db write was not completed"
+		fmt.Println("err: ", t)
+		return fmt.Errorf("err: %s", t)
+	}
+
+	return nil
+
+}
