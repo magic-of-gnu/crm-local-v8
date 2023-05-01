@@ -1,9 +1,14 @@
 <template>
+<ToastComponent
+v-if="toasts && toasts.length > 0"
+:toasts="toasts"
+/>
   <CRow>
     <CForm action="some-post-function" method="POST">
       <div class="mb-3">
         <CFormLabel for="centre_name">Centre Name</CFormLabel>
         <CFormInput
+          v-model="name"
           type="string"
           id="centre_name"
           name="name"
@@ -13,6 +18,7 @@
       <div class="mb-3">
         <CFormLabel for="centre_description">Description</CFormLabel>
         <CFormTextarea
+          v-model="description"
           id="exampleFcentre_description"
           type="string"
           name="description"
@@ -32,25 +38,28 @@
 </template>
 
 <script setup>
-/* eslint-disable */
-
 import m from '@/views/custom/hooks/centres/methods.js'
-console.log('running...')
-let name = ""
-let description = ""
+import { ref } from 'vue';
+import ToastComponent from '@/components/ToastComponent.vue'
 
-function run_this_method(event) {
-  console.log('running button click')
-  console.log("event: ", event)
+const name = ref(null)
+const description = ref(null)
+const toasts = ref([])
 
-  name = event.target.form.elements.name.value
-  description = event.target.form.elements.description.value
-  
-  console.log("name: ", name, "description: ", description)
+async function run_this_method(event) {
 
-  m.postCentresCreateOne({
-    name: name,
-    description: description,
+  const response = await m.postCreateOne({
+    name: name.value,
+    description: description.value,
   })
+
+  if (response.data.hasOwnProperty("toasts")) {
+    response.data.toasts.forEach((item) => {
+      toasts.value.push(item)
+    });
+  }
+
+  name.value = null
+  description.value = null
 }
 </script>
