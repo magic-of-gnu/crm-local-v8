@@ -1,4 +1,8 @@
 <template>
+<ToastComponent
+v-if="toasts"
+:toasts="toasts"
+/>
   <CRow>
     <CForm action="some-post-function" method="POST">
 
@@ -60,6 +64,7 @@ import m from '@/views/custom/hooks/studentCourses/methods.js'
 import studentsMethods from '@/views/custom/hooks/students/methods.js'
 import coursesMethods from '@/views/custom/hooks/courses/methods.js'
 import { ref, onMounted } from 'vue'
+import ToastComponent from '@/components/ToastComponent.vue'
 
 const payment_amount = ref(null)
 const description = ref("")
@@ -70,13 +75,20 @@ const selected_course_id = ref(null)
 const studentsOptions = ref([{}])
 const coursesOptions = ref([{}])
 
-function run_this_method(event) {
-  m.postCreateOne({
+const toasts = ref([])
+
+async function run_this_method(event) {
+  const response = await m.postCreateOne({
     student_id: selected_student_id.value,
     course_id: selected_course_id.value,
     payment_amount: payment_amount.value,
     description: description.value,
   })
+  if (response.data.hasOwnProperty("toasts")) {
+    response.data.toasts.forEach((item) => {
+      toasts.value.push(item)
+    });
+  }
 }
 
 onMounted(() => {
