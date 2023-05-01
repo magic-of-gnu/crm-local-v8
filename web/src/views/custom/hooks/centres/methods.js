@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store/index.js'
 
-function getCentresList() {
+function getAllList() {
   const token = store.getters.token
 
   return axios({
@@ -32,7 +32,23 @@ function postCreateOne(data) {
   })
 }
 
+function postDeleteOneByID(id) {
+  const token = store.getters.token
+
+  return axios({
+    method: 'delete',
+    url: `/centres/${id}`,
+    baseURL: 'http://malcorp.test/api/server',
+    crossOrigin: true,
+    responseType: 'json',
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  })
+}
+
 export default {
-  getCentresList,
+  getAllList,
   postCreateOne,
+  postDeleteOneByID,
 }
