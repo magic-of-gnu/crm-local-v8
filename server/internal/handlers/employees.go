@@ -3,7 +3,6 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
@@ -24,20 +23,7 @@ func GetAllEmployees(c *gin.Context) {
 	}
 
 	data := make(map[string]interface{})
-	empls_data := make([]map[string]string, len(empls))
-
-	for ii, empl := range empls {
-		empls_data[ii] = map[string]string{
-			"id":         empl.ID.String(),
-			"first_name": empl.FirstName,
-			"last_name":  empl.LastName,
-			"username":   empl.Username,
-			"info":       empl.Info,
-			"created_at": empl.CreatedAt.Format(time.DateTime),
-			"updated_at": empl.UpdatedAt.Format(time.DateTime),
-		}
-	}
-	data["data"] = empls_data
+	data["data"] = empls
 
 	c.JSON(http.StatusOK, gin.H{
 		"title": "Rooms List",
