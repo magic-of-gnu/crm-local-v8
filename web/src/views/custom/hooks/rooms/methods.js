@@ -1,12 +1,12 @@
 import axios from 'axios'
 import store from '@/store/index.js'
 
-function getRoomsList() {
+function getAllList() {
   const token = store.getters.token
 
   return axios({
     method: 'get',
-    url: '/rooms/list',
+    url: '/rooms',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
@@ -16,12 +16,12 @@ function getRoomsList() {
   })
 }
 
-function postRoomsCreateOne(data) {
+function postCreateOne(data) {
   const token = store.getters.token
 
   return axios({
     method: 'post',
-    url: '/rooms/create_one',
+    url: '/rooms',
     baseURL: 'http://malcorp.test/api/server',
     crossOrigin: true,
     responseType: 'json',
@@ -32,7 +32,27 @@ function postRoomsCreateOne(data) {
   })
 }
 
+function postDeleteOneByID(id) {
+  const token = store.getters.token
+
+  const url = `/rooms/${id}`
+
+  return axios({
+    method: 'delete',
+    url: url,
+    baseURL: 'http://malcorp.test/api/server',
+    crossOrigin: true,
+    responseType: 'json',
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  })
+}
+
+
+
 export default {
-  getRoomsList,
-  postRoomsCreateOne,
+  getAllList,
+  postCreateOne,
+  postDeleteOneByID,
 }
