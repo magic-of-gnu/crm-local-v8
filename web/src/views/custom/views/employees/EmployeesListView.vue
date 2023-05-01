@@ -1,4 +1,84 @@
 <template>
+<ToastComponent 
+  v-if="toasts"
+  :toasts="toasts"
+/>
+
+<ConfirmModal 
+  content="Please, Confirm that You Want to Delete"
+  closeBtnText="Cancel"
+  confirmBtnText="Confirm"
+  :showModal="showModal"
+  :confirmDeleteClick="confirmDeleteClick"
+/>
+
+
+  <CRow>
+    <CCol xs="12">
+    <CForm @submit.prevent>
+
+      <StringFilter 
+        inputName="first_name"
+        inputTitle="First Name"
+        v-model:inputModel="searchValues[0]"
+        inputPlaceholder="Enter First Name"
+        opName="first_name_op"
+        opTitle="Operation"
+        v-model:opModel="searchOps[0]"
+        :opOptions="firstNameSearchOpOptions"
+      />
+
+      <StringFilter 
+        inputName="last_name"
+        inputTitle="Last Name"
+        v-model:inputModel="searchValues[1]"
+        inputPlaceholder="Enter Last Name"
+        opName="last_name_op"
+        opTitle="Operation"
+        v-model:opModel="searchOps[1]"
+        :opOptions="lastNameSearchOpOptions"
+      />
+
+      <StringFilter 
+        inputName="username"
+        inputTitle="Username"
+        v-model:inputModel="searchValues[2]"
+        inputPlaceholder="Enter Username"
+        opName="username_op"
+        opTitle="Operation"
+        v-model:opModel="searchOps[2]"
+        :opOptions="usernameSearchOpOptions"
+      />
+
+      <StringFilter 
+        inputName="info"
+        inputTitle="Info"
+        v-model:inputModel="searchValues[3]"
+        inputPlaceholder="Enter Information Filter"
+        opName="information_op"
+        opTitle="Operation"
+        v-model:opModel="searchOps[3]"
+        :opOptions="infoSearchOpOptions"
+      />
+
+      <CRow class="mb-3">
+        <CCol>
+          <CButton
+            @click.prevent="localApplyFilter()"
+            component="button"
+            type="button"
+            color="primary"
+          >Search</CButton>
+        </CCol>
+      </CRow>
+
+    </CForm>
+    </CCol>
+  </CRow>
+
+
+
+
   <CRow>
     <CCol :xs="12">
       <CCard class="mb-4">
@@ -23,24 +103,119 @@
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                <CTableHeaderCell scope="col">First Name</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Last Name</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Username</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Info</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Created At</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Updated At</CTableHeaderCell>
+                <CTableHeaderCell scope="col">
+                  First Name
+                  <CIcon
+                    v-if="sort_asc.first_name"
+                    class="mx-2"
+                    icon="cilSortAlphaDown"
+                    size="sm" 
+                    @click="sortList(itemsList, 'first_name', sort_asc)"
+                  />
+                  <CIcon
+                    v-else
+                    class="mx-2"
+                    icon="cilSortAlphaUp"
+                    size="sm" 
+                    @click="sortList(itemsList, 'first_name', sort_asc)"
+                  />
+                </CTableHeaderCell>
+                <CTableHeaderCell scope="col">
+                  Last Name
+                  <CIcon
+                    v-if="sort_asc.last_name"
+                    class="mx-2"
+                    icon="cilSortAlphaDown"
+                    size="sm" 
+                    @click="sortList(itemsList, 'last_name', sort_asc)"
+                  />
+                  <CIcon
+                    v-else
+                    class="mx-2"
+                    icon="cilSortAlphaUp"
+                    size="sm" 
+                    @click="sortList(itemsList, 'last_name', sort_asc)"
+                  />
+                </CTableHeaderCell>
+                <CTableHeaderCell scope="col">
+                  Username
+                  <CIcon
+                    v-if="sort_asc.username"
+                    class="mx-2"
+                    icon="cilSortAlphaDown"
+                    size="sm" 
+                    @click="sortList(itemsList, 'username', sort_asc)"
+                  />
+                  <CIcon
+                    v-else
+                    class="mx-2"
+                    icon="cilSortAlphaUp"
+                    size="sm" 
+                    @click="sortList(itemsList, 'username', sort_asc)"
+                  />
+                </CTableHeaderCell>
+                <CTableHeaderCell scope="col">Info
+                  <CIcon
+                    v-if="sort_asc.info"
+                    class="mx-2"
+                    icon="cilSortAlphaDown"
+                    size="sm" 
+                    @click="sortList(itemsList, 'info', sort_asc)"
+                  />
+                  <CIcon
+                    v-else
+                    class="mx-2"
+                    icon="cilSortAlphaUp"
+                    size="sm" 
+                    @click="sortList(itemsList, 'info', sort_asc)"
+                  />
+                </CTableHeaderCell>
+                <CTableHeaderCell scope="col">
+                  Created At
+                  <CIcon
+                    v-if="sort_asc.created_at"
+                    class="mx-2"
+                    icon="cilSortNumericDown"
+                    size="sm" 
+                    @click="sortList(itemsList, 'created_at', sort_asc)"
+                  />
+                  <CIcon
+                    v-else
+                    class="mx-2"
+                    icon="cilSortNumericUp"
+                    size="sm" 
+                    @click="sortList(itemsList, 'created_at', sort_asc)"
+                  />
+                </CTableHeaderCell>
+                <CTableHeaderCell scope="col">
+                  Updated At
+                  <CIcon
+                    v-if="sort_asc.updated_at"
+                    class="mx-2"
+                    icon="cilSortNumericDown"
+                    size="sm" 
+                    @click="sortList(itemsList, 'updated_at', sort_asc)"
+                  />
+                  <CIcon
+                    v-else
+                    class="mx-2"
+                    icon="cilSortNumericUp"
+                    size="sm" 
+                    @click="sortList(itemsList, 'updated_at', sort_asc)"
+                  />
+                </CTableHeaderCell>
                 <CTableHeaderCell scope="col">Operations</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              <CTableRow v-for="item in employeesList" :key="item.id">
-                <CTableDataCell>{{ item.id }}</CTableDataCell>
+              <CTableRow v-for="item in itemsList" :key="item.id">
+                <CTableDataCell>{{ showUUID(item.id) }}</CTableDataCell>
                 <CTableDataCell>{{ item.first_name }}</CTableDataCell>
                 <CTableDataCell>{{ item.last_name }}</CTableDataCell>
                 <CTableDataCell>{{ item.username }}</CTableDataCell>
                 <CTableDataCell>{{ item.info }}</CTableDataCell>
-                <CTableDataCell>{{ item.created_at }}</CTableDataCell>
-                <CTableDataCell>{{ item.updated_at }}</CTableDataCell>
+                <CTableDataCell>{{ utcTimeToUpdateTime(item.created_at) }}</CTableDataCell>
+                <CTableDataCell>{{ utcTimeToUpdateTime(item.updated_at) }}</CTableDataCell>
               </CTableRow>
             </CTableBody>
           </CTable>
@@ -52,11 +227,84 @@
 
 <script setup>
 import m from '@/views/custom/hooks/employees/methods.js'
-import { ref } from 'vue'
+import { ref, onBeforeMount, reactive } from 'vue'
+import { sortList, stringOperators, numberOperators, showUUID } from '@/utils/utils.js'
+import { utcTimeToUpdateTime } from '@/utils/utils.js'
+import StringFilter from '@/components/custom_filters/StringFilter.vue'
+import ToastComponent from '@/components/ToastComponent.vue'
+import { populateToastsFromResponse } from '@/utils/toasts';
+import ConfirmModal from '@/components/ModalConfirmComponent.vue'
+import { applyFilter } from '@/utils/filter.js'
 
-const employeesList = ref('')
+const showModal = ref(false)
+const toasts = ref([])
 
-m.getEmployeesList().then((d) => {
-  employeesList.value = d.data.data
+const firstNameSearchOpOptions = stringOperators().map((x) => {
+  return {label: x, value: x}
+})
+const lastNameSearchOpOptions = stringOperators().map((x) => {
+  return {label: x, value: x}
+})
+const usernameSearchOpOptions = stringOperators().map((x) => {
+  return {label: x, value: x}
+})
+const infoSearchOpOptions = stringOperators().map((x) => {
+  return {label: x, value: x}
+})
+
+const originalData = ref(null)
+const columnNames = ["first_name", "last_name", "username", "info", "created_at", "updated_at"]
+const selectedItems = ref({})
+
+const searchValues = ref(new Array(columnNames.length).fill(null))
+const searchOps = ref([
+  firstNameSearchOpOptions[0].value,
+  lastNameSearchOpOptions[0].value,
+  usernameSearchOpOptions[0].value,
+  infoSearchOpOptions[0].value,
+])
+
+
+const itemsList = ref('')
+let sort_asc = reactive({
+  first_name: true,
+  last_name: true,
+  username: true,
+  info: true,
+  created_at: true,
+  updated_at: true,
+  id: true,
+})
+
+function confirmDeleteOneByID(id) {
+  showModal.value = true
+  selectedItems.value[id] = true
+}
+
+async function confirmDeleteClick(btnValue) {
+  if (btnValue === true) {
+    let response = null
+    for (const key in selectedItems.value) {
+        response = await m.postDeleteOneByID(key)
+      }
+    populateToastsFromResponse(response, toasts)
+    await reset()
+  }
+  selectedItems.value = {}
+  showModal.value = false
+}
+
+function localApplyFilter() {
+  applyFilter(originalData.value, columnNames, searchValues.value, searchOps.value, itemsList)
+}
+
+async function reset() {
+  const response = await m.getAllList()
+  originalData.value = response.data.data.data
+  itemsList.value = originalData.value.slice()
+}
+
+onBeforeMount(async () => {
+  await reset()
 })
 </script>
