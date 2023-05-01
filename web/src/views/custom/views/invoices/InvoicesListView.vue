@@ -1,0 +1,270 @@
+<template>
+<ToastComponent 
+  v-if="toasts"
+  :toasts="toasts"
+/>
+
+<ConfirmModal 
+  content="Please, Confirm that You Want to Delete"
+  closeBtnText="Cancel"
+  confirmBtnText="Confirm"
+  :showModal="showModal"
+  :confirmDeleteClick="confirmDeleteClick"
+/>
+
+  <CRow>
+    <CCol :xs="12">
+
+  <CRow>
+    <CCol xs="12">
+    <CForm @submit.prevent>
+
+      <StringFilter 
+        inputName="name"
+        inputTitle="Name"
+        v-model:inputModel="searchValues[0]"
+        inputPlaceholder="Enter Name"
+        opName="name_op"
+        opTitle="Operation"
+        v-model:opModel="searchOps[0]"
+        :opOptions="nameSearchOpOptions"
+      />
+
+      <StringFilter 
+        inputName="description"
+        inputTitle="Description"
+        v-model:inputModel="searchValues[1]"
+        inputPlaceholder="Enter Description Filter"
+        opName="description_op"
+        opTitle="Operation"
+        v-model:opModel="searchOps[1]"
+        :opOptions="descriptionSearchOpOptions"
+      />
+
+      <CRow class="mb-3">
+        <CCol>
+          <CButton
+            @click.prevent="localApplyFilter"
+            component="button"
+            type="button"
+            color="primary"
+          >Search</CButton>
+        </CCol>
+      </CRow>
+
+    </CForm>
+    </CCol>
+  </CRow>
+
+
+
+      <CCard class="mb-4">
+        <CCardHeader>
+          <CRow class="justify-content-between">
+            <CCol>
+              <strong>Vue Progress</strong> <small>Basic example</small>
+            </CCol>
+            <CCol class="align-self-end">
+              <router-link
+                :to="{ name: 'invoices_create_one' }"
+                component="CButton"
+                color="primary"
+                disabled
+                >Create One
+              </router-link>
+            </CCol>
+          </CRow>
+        </CCardHeader>
+        <CCardBody>
+          <CTable hover>
+            <CTableHead>
+              <CTableRow>
+                <CTableHeaderCell scope="col">ID</CTableHeaderCell>
+                <CTableHeaderCell scope="col">
+                  Name
+                  <CIcon
+                    v-if="sort_asc.name"
+                    class="mx-2"
+                    icon="cilSortAlphaDown"
+                    size="sm" 
+                    @click="sortList(itemsList, 'name', sort_asc)"
+                  />
+                  <CIcon
+                    v-else
+                    class="mx-2"
+                    icon="cilSortAlphaUp"
+                    size="sm" 
+                    @click="sortList(itemsList, 'name', sort_asc)"
+                  />
+                </CTableHeaderCell>
+                <CTableHeaderCell scope="col">Description 
+                  <CIcon
+                    v-if="sort_asc.description"
+                    class="mx-2"
+                    icon="cilSortAlphaDown"
+                    size="sm" 
+                    @click="sortList(itemsList, 'description', sort_asc)"
+                  />
+                  <CIcon
+                    v-else
+                    class="mx-2"
+                    :icon="cilSortAlphaUp"
+                    size="sm" 
+                    @click="sortList(itemsList, 'description', sort_asc)"
+                  />
+                </CTableHeaderCell>
+                <CTableHeaderCell scope="col">Created At
+                  <CIcon
+                    v-if="sort_asc.created_at"
+                    class="mx-2"
+                    icon="cilSortNumericUp"
+                    size="sm" 
+                    @click="sortList(itemsList, 'created_at', sort_asc)"
+                  />
+                  <CIcon
+                    v-else
+                    class="mx-2"
+                    icon="cilSortNumericDown"
+                    size="sm" 
+                    @click="sortList(itemsList, 'created_at', sort_asc)"
+                  /></CTableHeaderCell>
+                <CTableHeaderCell scope="col">Updated At
+                  <CIcon
+                    v-if="sort_asc.updated_at"
+                    class="mx-2"
+                    icon="cilSortNumericDown"
+                    size="sm" 
+                    @click="sortList(itemsList, 'updated_at', sort_asc)"
+                  />
+                  <CIcon
+                    v-else
+                    class="mx-2"
+                    icon="cilSortNumericUp"
+                    size="sm" 
+                    @click="sortList(itemsList, 'updated_at', sort_asc)"
+                  /></CTableHeaderCell>
+                <CTableHeaderCell scope="col">Operations</CTableHeaderCell>
+              </CTableRow>
+            </CTableHead>
+            <CTableBody>
+              <CTableRow v-for="item in itemsList" :key="item.id">
+                <CTableDataCell>{{ showUUID(item.id) }}</CTableDataCell>
+                <CTableDataCell>{{ item.name }}</CTableDataCell>
+                <CTableDataCell>{{ item.description }}</CTableDataCell>
+                <CTableDataCell>{{ utcTimeToUpdateTime(item.created_at) }}</CTableDataCell>
+                <CTableDataCell>{{ utcTimeToUpdateTime(item.updated_at) }}</CTableDataCell>
+                <CTableDataCell>
+                  <CIcon 
+                    icon="cilPencil"
+                  /> 
+                  <CIcon 
+                    @click="confirmDeleteOneByID(item.id)" 
+                    icon="cilTrash"
+                  />
+                </CTableDataCell>
+              </CTableRow>
+            </CTableBody>
+          </CTable>
+        </CCardBody>
+      </CCard>
+    </CCol>
+  </CRow>
+</template>
+
+<script setup>
+import m from '@/views/custom/hooks/invoices/methods.js'
+import { ref, onBeforeMount, reactive } from 'vue'
+import { sortList, stringOperators, numberOperators, showUUID } from '@/utils/utils.js'
+import { utcTimeToUpdateTime } from '@/utils/utils.js'
+import StringFilter from '@/components/custom_filters/StringFilter.vue'
+import ToastComponent from '@/components/ToastComponent.vue'
+import { populateToastsFromResponse } from '@/utils/toasts';
+import ConfirmModal from '@/components/ModalConfirmComponent.vue'
+import { applyFilter } from '@/utils/filter.js'
+
+const showModal = ref(false)
+const toasts = ref([])
+
+/*
+  filters
+*/
+const nameSearchOpOptions = stringOperators().map((x) => {
+  return {label: x, value: x}
+})
+const descriptionSearchOpOptions = stringOperators().map((x) => {
+  return {label: x, value: x}
+})
+const createdAtSearchOpOptions = numberOperators().map((x) => {
+  return {label: x, value: x}
+})
+const updatedAtSearchOpOptions = numberOperators().map((x) => {
+  return {label: x, value: x}
+})
+
+/*
+  columns
+*/
+const originalData = ref(null)
+const columnNames = ["name", "description", "created_at", "updated_at"]
+const selectedItems = ref({})
+
+// id
+// course_id
+// student_id
+// start_date
+// price
+// payment_status_id
+// created_at
+// updated_at
+// lectures_number
+
+const searchValues = ref(new Array(columnNames.length).fill(null))
+const searchOps = ref([
+  nameSearchOpOptions[0].value,
+  descriptionSearchOpOptions[0].value,
+  createdAtSearchOpOptions[0].value,
+  updatedAtSearchOpOptions[0].value,
+])
+
+const itemsList = ref('')
+let sort_asc = reactive({
+  name: true,
+  description: true,
+  created_at: true,
+  updated_at: true,
+  id: true,
+})
+
+function confirmDeleteOneByID(id) {
+  showModal.value = true
+  selectedItems.value[id] = true
+}
+
+async function confirmDeleteClick(btnValue) {
+  if (btnValue === true) {
+    let response = null
+    for (const key in selectedItems.value) {
+        response = await m.postDeleteOneByID(key)
+      }
+    populateToastsFromResponse(response, toasts)
+    await reset()
+  }
+  selectedItems.value = {}
+  showModal.value = false
+}
+
+function localApplyFilter() {
+  applyFilter(originalData.value, columnNames, searchValues.value, searchOps.value, itemsList)
+}
+
+async function reset() {
+  const response = await m.getAllList()
+  console.log("response: ", response.data)
+  originalData.value = response.data.data.data
+  itemsList.value = originalData.value.slice()
+}
+
+onBeforeMount(async () => {
+  await reset()
+})
+</script>
