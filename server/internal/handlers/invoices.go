@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -44,10 +43,10 @@ func GetInvoicesAll(c *gin.Context) {
 func PostInvoicesCreateOne(c *gin.Context) {
 	title := "Invoices CreateOne"
 
-	var req *models.Invoice
+	var req *models.InvoiceRequest
 
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"title":   title,
 			"error":   err.Error(),
 			"message": "error during bidning data",
@@ -61,7 +60,17 @@ func PostInvoicesCreateOne(c *gin.Context) {
 		return
 	}
 
-	item, err := App.InvoicesService.CreateOne(req)
+	start_date := time.Unix(req.StartDateRequest, 0)
+	item_invoice := &models.Invoice{
+		CourseID:        req.CourseID,
+		StudentID:       req.StudentID,
+		StartDate:       start_date,
+		Price:           req.Price,
+		PaymentStatusID: req.PaymentStatusID,
+		LecturesNumber:  req.LecturesNumber,
+	}
+
+	item, err := App.InvoicesService.CreateOne(item_invoice)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title":   title,
@@ -157,11 +166,7 @@ func GetInvoicesFilteredAll(c *gin.Context) {
 
 	start_date := time.Unix(1676923230, 0)
 
-	// items, err := App.LectureCalendarRepo.
-	fmt.Println("course_id: ", course_id)
-	fmt.Println("start_date: ", start_date)
-
-	items, err := App.LectureCalendarRepo.GetManyFilteredByCourseIDAndDate(course_id, start_date)
+	items, err := App.LectureCalendarRepo.GetManyFilteredByCourseIDAndDate(course_id, start_date, 100)
 	if err != nil {
 
 		c.JSON(http.StatusOK, gin.H{
