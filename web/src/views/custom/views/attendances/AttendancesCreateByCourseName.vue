@@ -48,10 +48,8 @@ import m from '@/views/custom/hooks/attendances/methods.js'
 import coursesMethods from '@/views/custom/hooks/courses/methods.js'
 import attendanceValuesMethods from '@/views/custom/hooks/attendanceValues/methods.js'
 import lecturesCalendarMethods from '@/views/custom/hooks/lecturesCalendar/methods.js'
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onBeforeMount, computed, watch } from 'vue'
 import { epochToDatetime, utcTimeToDate, utcTimeToLocaleTime } from '@/utils/utils.js'
-
-import VueDatePicker from '@vuepic/vue-datepicker';
 
 const selected_course_id = ref(null)
 const description = ref("")
@@ -95,56 +93,41 @@ function getTime(time_string) {
   return utcTimeToLocaleTime(time_string)
 }
 
-function run_this_method(event) {
-  m.postCreateOne({
-    lectures_calendar_id: selected_lectures_calendar_id.value,
-    student_id: selected_student_id.value,
-    attendance_value_id: selected_attendance_value_id.value,
-    description: description.value,
-  })
-}
-
-watch (selected_course_id, (newValue, oldValue) => {
+watch (selected_course_id, async (newValue, oldValue) => {
   if (!newValue) {
     return
   }
 
   lecturesCalendar.value = []
-  lecturesCalendarMethods.getManyByCourseID({
+  const response_lc = await lecturesCalendarMethods.getManyByCourseID({
     course_id: newValue
-  }).then((d) => {
-    if (!d.data) {
-      return 
-    }
-    return d.data.forEach((item, ii) => {
+  })
+  
+  if (!response_lc.data.data) {
+    return
+  }
+  response_lc.data.data.forEach((item, ii) => {
       lecturesCalendar.value.push(item)
     })
-  })
-  console.log("lectureCalendar: ", lecturesCalendar.value)
 })
 
 
-onMounted(() => {
-  coursesMethods.getAllList()
-    .then( (d) => {
-      console.log("d: ", d)
-      for (const item of d.data.data) {
-        coursesOptions.value.push({
-          label: item.name,
-          value: item.id
-      })
-    }
-  })
+onBeforeMount(async () => {
+  const response_courses = await coursesMethods.getAllList()
+  for (const item of response_courses.data.data.data) {
+    coursesOptions.value.push({
+      label: item.name,
+      value: item.id
+    })
+  }
 
-  attendanceValuesMethods.getAllList()
-    .then( (d) => {
-      for (const item of d.data.data) {
-        attendanceValuesOptions.value.push({
-          label: item.name,
-          value: item.id
-      })
-    }
-  })
+  const response_av = await attendanceValuesMethods.getAllList()
+  for (const item of response_av.data.data.data) {
+    attendanceValuesOptions.value.push({
+      label: item.name,
+      value: item.id
+    })
+  }
 })
 
 </script>
