@@ -2,15 +2,9 @@ import axios from 'axios'
 
 export default {
   async login (context, payload) {
-    const urlLogin = "http://malcorp.test/api/server/login"
-
-    console.log("payload: ", payload)
-
     const responseData = await axios({
       method: 'post',
       url: '/login',
-      baseURL: 'http://malcorp.test/api/server',
-      responseType: 'json',
       data: payload,
     }).then((response) => {
       if (response.status === 200) {
