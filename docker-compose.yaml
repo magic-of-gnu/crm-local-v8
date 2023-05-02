@@ -32,11 +32,11 @@ services:
       - "8081"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.server.rule=Host(`malcorp.test`) && PathPrefix(`/api/server`)"
-      # - "traefik.http.routers.account.rule=Host(`malcorp.test`) && PathPrefix(`/api/account`)"
+      - "traefik.http.routers.server.rule=Host(${baseURL}) && PathPrefix(${baseAPIRoute})"
+      # - "traefik.http.routers.server.rule=Host(`malcorp.test`) && PathPrefix(`/api/server`)"
     environment:
       - ENV=dev
-    env_file: ./server/.env.dev
+    env_file: ./server/.env
     volumes:
       - ./server:/go/src/app
     # have to use $$ (double-dollar) so docker doesn't try to substitute a variable
@@ -54,10 +54,10 @@ services:
       - "3000:3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web.rule=Host(`malcorp.test`) && PathPrefix(`/`)"
+      - "traefik.http.routers.web.rule=Host(${baseURL}) && PathPrefix(`/`)"
     environment:
       - ENV=dev
-    env_file: ./server/.env.dev
+    env_file: ./web/.env
     volumes:
       - ./web:/app
       - /app/node_modules
