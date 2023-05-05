@@ -1,0 +1,4 @@
+drop_index("users", "users_un")
+
+drop_index("student_course", "student_courses_course_id_idx")
+drop_index("student_course", "student_courses_student_id_idx")

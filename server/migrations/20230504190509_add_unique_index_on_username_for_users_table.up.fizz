@@ -1,0 +1,4 @@
+add_index("users", "username", {"unique": true}, {"name": "users_un"})
+
+add_index("student_courses", "course_id", {}, {"name": "student_courses_course_id_idx"})
+add_index("student_courses", "student_id", {}, {"name": "student_courses_student_id_idx"})
