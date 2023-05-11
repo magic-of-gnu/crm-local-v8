@@ -7,6 +7,7 @@ import (
 
 	"github.com/georgysavva/scany/v2/pgxscan"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 )
@@ -54,6 +55,10 @@ func (rr *CentresPostgresRepo) GetOneByID(uid uuid.UUID) (*models.Centre, error)
 		&result.CreatedAt,
 		&result.UpdatedAt,
 	)
+
+	if err == pgx.ErrNoRows {
+		return &result, nil
+	}
 
 	if err != nil {
 		return &result, err
