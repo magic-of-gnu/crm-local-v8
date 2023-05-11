@@ -16,7 +16,7 @@ COPY . .
 # ENV PATH=$PATH:$HOME/go/bin
 RUN go build -o ./run .
 
-FROM alpine:latest
+FROM alpine:latest as prod_stage
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 
