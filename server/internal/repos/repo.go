@@ -158,7 +158,6 @@ type AttendancesRepo interface {
 }
 
 type UsersRepo interface {
-	GetAll() ([]models.User, error)
 	CreateOne(
 		uid uuid.UUID,
 		first_name,
@@ -171,6 +170,8 @@ type UsersRepo interface {
 		created_at, updated_at time.Time,
 	) (*models.User, error)
 	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.User, error)
+	GetOneByID(uid uuid.UUID) (*models.User, error)
 	GetOneByUsername(username string) (*models.User, error)
 }
 

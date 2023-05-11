@@ -161,3 +161,35 @@ func (rr *usersPostgresRepo) GetOneByUsername(username string) (*models.User, er
 
 	return &item, nil
 }
+
+func (rr *usersPostgresRepo) GetOneByID(uid uuid.UUID) (*models.User, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `SELECT id, first_name, last_name, username, password, last_login, is_admin, user_type, created_at, updated_at FROM users
+	WHERE id = $1`
+
+	var item models.User
+
+	row := rr.dbpool.QueryRow(ctx, query, uid)
+
+	err := row.Scan(
+		&item.ID,
+		&item.FirstName,
+		&item.LastName,
+		&item.Username,
+		&item.Password,
+		&item.LastLogin,
+		&item.IsAdmin,
+		&item.UserType,
+		&item.CreatedAt,
+		&item.UpdatedAt,
+	)
+
+	if err != nil {
+		return &item, err
+	}
+
+	return &item, nil
+}
