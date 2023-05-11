@@ -64,9 +64,9 @@ func RouteHandlers(router *gin.Engine) {
 	// attendanceValues handlers
 	r.GET("api/server/attendance_values", GetAllAttendanceValues)
 	r.POST("api/server/attendance_values", PostAttendanceValuesCreateOne)
-	// r.GET("api/server/rooms/:id", GetOneCentresByID)
-	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
-	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
+	r.GET("api/server/attendance_values/:id", GetOneAttendanceValuesByID)
+	r.DELETE("api/server/attendance_values/:id", DeleteAttendanceValuesByID)
+	r.PATCH("api/server/attendance_values/:id", PatchAttendanceValuesByID)
 
 	// studentCourses handlers
 	r.GET("api/server/student_courses", GetAllStudentCourses)
