@@ -19,7 +19,6 @@ type CentresService interface {
 }
 
 type RoomsService interface {
-	GetAll() ([]models.Room, error)
 	CreateOne(
 		centre_uid uuid.UUID,
 		name string,
@@ -27,6 +26,9 @@ type RoomsService interface {
 		info string,
 	) (*models.Room, error)
 	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.Room, error)
+	GetOneByID(uid uuid.UUID) (*models.Room, error)
+	UpdateOneByID(updateItem *models.Room) error
 }
 
 type EmployeesService interface {

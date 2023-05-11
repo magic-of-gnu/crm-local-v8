@@ -55,3 +55,10 @@ func (ss *roomsService) CreateOne(
 func (ss *roomsService) DeleteOneByID(uid uuid.UUID) error {
 	return ss.RoomsRepo.DeleteOneByID(uid)
 }
+
+func (ss *roomsService) GetOneByID(uid uuid.UUID) (*models.Room, error) {
+	return ss.RoomsRepo.GetOneByID(uid)
+}
+func (ss *roomsService) UpdateOneByID(updateItem *models.Room) error {
+	return ss.RoomsRepo.UpdateOneByID(updateItem)
+}
