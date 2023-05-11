@@ -49,3 +49,14 @@ func (ss *attendanceValuesService) CreateOne(
 
 	return item, nil
 }
+
+func (ss *attendanceValuesService) DeleteOneByID(uid uuid.UUID) error {
+	return ss.AttendanceValuesRepo.DeleteOneByID(uid)
+}
+
+func (ss *attendanceValuesService) GetOneByID(uid uuid.UUID) (*models.AttendanceValues, error) {
+	return ss.AttendanceValuesRepo.GetOneByID(uid)
+}
+func (ss *attendanceValuesService) UpdateOneByID(updateItem *models.AttendanceValues) error {
+	return ss.AttendanceValuesRepo.UpdateOneByID(updateItem)
+}

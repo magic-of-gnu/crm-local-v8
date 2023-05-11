@@ -68,12 +68,15 @@ type CoursesService interface {
 }
 
 type AttendanceValuesService interface {
-	GetAll() ([]models.AttendanceValues, error)
 	CreateOne(
 		value int,
 		name,
 		description string,
 	) (*models.AttendanceValues, error)
+	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.AttendanceValues, error)
+	GetOneByID(uid uuid.UUID) (*models.AttendanceValues, error)
+	UpdateOneByID(updateItem *models.AttendanceValues) error
 }
 
 type StudentCoursesService interface {
