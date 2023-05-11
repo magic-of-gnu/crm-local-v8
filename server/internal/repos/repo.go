@@ -39,6 +39,10 @@ type EmployeesRepo interface {
 		info string,
 		created_at, updated_at time.Time,
 	) (*models.Employee, error)
+	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.Employee, error)
+	GetOneByID(uid uuid.UUID) (*models.Employee, error)
+	UpdateOneByID(createItem *models.Employee) error
 }
 
 type StudentsRepo interface {
