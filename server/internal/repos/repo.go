@@ -60,13 +60,16 @@ type StudentsRepo interface {
 }
 
 type CoursesRepo interface {
-	GetAll() ([]models.Course, error)
 	CreateOne(
 		uid uuid.UUID,
 		name,
 		description string,
 		created_at, updated_at time.Time,
 	) (*models.Course, error)
+	GetAll() ([]models.Course, error)
+	GetOneByID(uid uuid.UUID) (*models.Course, error)
+	DeleteOneByID(uid uuid.UUID) error
+	UpdateOneByID(createItem *models.Course) error
 }
 
 type AttendanceValues interface {
