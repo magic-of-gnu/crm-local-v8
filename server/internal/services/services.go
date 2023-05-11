@@ -45,12 +45,15 @@ type EmployeesService interface {
 }
 
 type StudentsService interface {
-	GetAll() ([]models.Student, error)
 	CreateOne(
 		first_name,
 		last_name,
 		username string,
 	) (*models.Student, error)
+	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.Student, error)
+	GetOneByID(uid uuid.UUID) (*models.Student, error)
+	UpdateOneByID(updateItem *models.Student) error
 }
 
 type CoursesService interface {

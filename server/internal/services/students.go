@@ -49,3 +49,14 @@ func (ss *studentsService) CreateOne(
 
 	return student, nil
 }
+
+func (ss *studentsService) DeleteOneByID(uid uuid.UUID) error {
+	return ss.StudentsRepo.DeleteOneByID(uid)
+}
+
+func (ss *studentsService) GetOneByID(uid uuid.UUID) (*models.Student, error) {
+	return ss.StudentsRepo.GetOneByID(uid)
+}
+func (ss *studentsService) UpdateOneByID(updateItem *models.Student) error {
+	return ss.StudentsRepo.UpdateOneByID(updateItem)
+}
