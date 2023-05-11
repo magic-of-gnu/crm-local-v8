@@ -80,7 +80,6 @@ type AttendanceValuesService interface {
 }
 
 type StudentCoursesService interface {
-	GetAll() ([]models.StudentCoursesListResponse, error)
 	CreateOne(
 		student_uid,
 		course_uid uuid.UUID,
@@ -88,7 +87,9 @@ type StudentCoursesService interface {
 		description string,
 	) (*models.StudentCourses, error)
 	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.StudentCoursesListResponse, error)
 	GetManyByCustomID(uid uuid.UUID, column_name string) ([]models.StudentCourses, error)
+	GetOneByID(uid uuid.UUID) (*models.StudentCourses, error)
 }
 
 type LectureCalendarService interface {

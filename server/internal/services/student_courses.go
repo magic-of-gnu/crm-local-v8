@@ -82,13 +82,11 @@ func (ss *studentCoursesService) CreateOne(
 }
 
 func (ss *studentCoursesService) DeleteOneByID(uid uuid.UUID) error {
+	return ss.StudentCoursesRepo.DeleteOneByID(uid)
+}
 
-	err := ss.StudentCoursesRepo.DeleteOneByID(uid)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (ss *studentCoursesService) GetOneByID(uid uuid.UUID) (*models.StudentCourses, error) {
+	return ss.StudentCoursesRepo.GetOneByID(uid)
 }
 
 func (ss *studentCoursesService) GetManyByCustomID(uid uuid.UUID, column_name string) ([]models.StudentCourses, error) {
