@@ -51,3 +51,14 @@ func (ss *employeesService) CreateOne(
 
 	return empl, nil
 }
+
+func (ss *employeesService) GetOneByID(uid uuid.UUID) (*models.Employee, error) {
+	return ss.EmployeesRepo.GetOneByID(uid)
+}
+func (ss *employeesService) UpdateOneByID(updateItem *models.Employee) error {
+	return ss.EmployeesRepo.UpdateOneByID(updateItem)
+}
+
+func (ss *employeesService) DeleteOneByID(uid uuid.UUID) error {
+	return ss.EmployeesRepo.DeleteOneByID(uid)
+}

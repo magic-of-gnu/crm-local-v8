@@ -30,13 +30,16 @@ type RoomsService interface {
 }
 
 type EmployeesService interface {
-	GetAll() ([]models.Employee, error)
 	CreateOne(
 		first_name,
 		last_name,
 		username,
 		info string,
 	) (*models.Employee, error)
+	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.Employee, error)
+	GetOneByID(uid uuid.UUID) (*models.Employee, error)
+	UpdateOneByID(updateItem *models.Employee) error
 }
 
 type StudentsService interface {
