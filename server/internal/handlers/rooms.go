@@ -82,7 +82,7 @@ func PostRooms(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusCreated, gin.H{
 		"title": "Rooms",
 		"toasts": []map[string]string{
 			{
@@ -90,6 +90,7 @@ func PostRooms(c *gin.Context) {
 				"color":   "success",
 			},
 		},
+		"data": room,
 	})
 }
 
