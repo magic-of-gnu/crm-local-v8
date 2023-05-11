@@ -1,14 +1,182 @@
 {
   "baseURL": "http://malcorp.test/api/server/",
   "login_route": "login",
-  "centres_routes": {
-    "base": "centres",
-    "baseID": "centres/{id}"
+  "routes": {
+    "attendance_values_routes": {
+      "base": "attendance_values",
+      "baseID": "attendance_values/{id}"
+    },
+    "centres_routes": {
+      "base": "centres",
+      "baseID": "centres/{id}"
+    },
+    "courses_routes": {
+      "base": "courses",
+      "baseID": "courses/{id}"
+    },
+    "employees_routes": {
+      "base": "employees",
+      "baseID": "employees/{id}"
+    },
+    "payment_statuses_routes": {
+      "base": "payment_statuses",
+      "baseID": "payment_statuses/{id}",
+      "getAll": "payment_statuses",
+      "deleteOneByID": "payment_statuses/{id}"
+    },
+    "rooms_routes": {
+      "base": "rooms",
+      "baseID": "rooms/{id}"
+    },
+    "students_routes": {
+      "base": "students",
+      "baseID": "students/{id}"
+    },
+    "users_routes": {
+      "base": "users",
+      "baseID": "users/{id}"
+    }
   },
-  "payment_statuses_routes": {
-    "base": "payment_statuses",
-    "baseID": "payment_statuses/{id}",
-    "getAll": "payment_statuses",
-    "deleteOneByID": "payment_statuses/{id}"
+  "data": {
+    "attendance_values": {
+      "create_one": {
+        "value": 10,
+        "name": "some name for attendance value",
+        "description": "some description for attendance value"
+      },
+      "patch1": {
+        "value": 20,
+        "name": "some patch1 for attendance value",
+        "description": "some patch1 for attendance value"
+      },
+      "patch2": {
+        "value": 10,
+        "name": "some patch2 for attendance value",
+        "description": "some patch2 for attendance value"
+      }
+    },
+    "centres": {
+      "create_one": {
+        "name": "some centre name",
+        "description": "some centre description too"
+      },
+      "patch1": {
+        "name": "some centre name2",
+        "description": "some centre description too2"
+      },
+      "patch2": {
+        "name": "some centre name2",
+        "description": "some centre description too2"
+      }
+    },
+    "courses": {
+      "create_one": {
+        "name": "some course name",
+        "description": "some course description too"
+      },
+      "patch1": {
+        "name": "course patch1",
+        "description": "some course description too2"
+      },
+      "patch2": {
+        "name": "course patch1",
+        "description": "some course description too2"
+      }
+    },
+    "employees": {
+      "create_one": {
+        "first_name": "name1",
+        "last_name": "lastname1",
+        "username": "username1.qwe@gmail.com",
+        "info": "description here"
+      },
+      "patch1": {
+        "first_name": "patch1",
+        "last_name": "patch1",
+        "username": "patch1.username1.qwe@gmail.com",
+        "info": "description here patch1"
+      },
+      "patch2": {
+        "first_name": "patch2",
+        "last_name": "patch2",
+        "username": "patch2.username1.qwe@gmail.com",
+        "info": "description here patch2"
+      }
+    },
+    "payment_statuses": {
+      "create_one": {
+        "name": "some name",
+        "description": "some description too"
+      },
+      "patch1": {
+        "name": "some centre name2",
+        "description": "some centre description too2"
+      },
+      "patch2": {
+        "name": "some centre name2",
+        "description": "some centre description too2"
+      }
+    },
+    "rooms": {
+      "create_one": {
+        "name": "some name",
+        "num_seats": 5,
+        "info": "some description too"
+      },
+      "patch1": {
+        "name": "patch1",
+        "num_seats": 10,
+        "info": "some description too"
+      },
+      "patch2": {
+        "name": "patch2",
+        "num_seats": 20,
+        "info": "patch2 description too"
+      }
+    },
+    "students": {
+      "create_one": {
+        "first_name": "some name",
+        "last_name": "some name",
+        "username": "some.name@gmail2.com"
+      },
+      "patch1": {
+        "first_name": "patch1 name",
+        "last_name": "patch1 name",
+        "username": "patch1.name@gmail12.com"
+      },
+      "patch2": {
+        "first_name": "patch2 name",
+        "last_name": "patch2 name",
+        "username": "patch2.name@gmail12.com"
+      }
+    },
+    "users": {
+      "create_one": {
+        "first_name": "some name",
+        "last_name": "some name",
+        "username": "some.name@gmail2.com",
+        "password": "someStrongPasswordForPeople)))0",
+        "password2": "someStrongPasswordForPeople)))0",
+        "is_admin": 1,
+        "user_type": 10
+      },
+      "create_one_check": {
+        "first_name": "some name",
+        "last_name": "some name",
+        "username": "some.name@gmail2.com",
+        "is_admin": true,
+        "user_type": 10
+      },
+      "patch1": {
+        "first_name": "patch1 first-name",
+        "last_name": "patch1 last-name",
+        "username": "patch1.name@gmail2.com",
+        "password": "patch1someStrongPasswordForPeople)))0",
+        "password2": "patch1someStrongPasswordForPeople)))0",
+        "is_admin": 1,
+        "user_type": 10
+      }
+    }
   }
 }
