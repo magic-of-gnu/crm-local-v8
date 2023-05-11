@@ -7,15 +7,15 @@ import (
 )
 
 type User struct {
-	ID         uuid.UUID
-	FirstName  string `json:"first_name" validate:"required,min=3,max=50"`
-	LastName   string `json:"last_name" validate:"required,min=3,max=50"`
-	Username   string `json:"username" validate:"required,min=3,max=50"`
-	Password   string
-	LastLogin  time.Time
-	IsAdmin    bool
-	IsAdminInt int
-	UserType   int
+	ID         uuid.UUID `json:"id"`
+	FirstName  string    `json:"first_name" validate:"required,min=3,max=50"`
+	LastName   string    `json:"last_name" validate:"required,min=3,max=50"`
+	Username   string    `json:"username" validate:"required,min=3,max=50"`
+	Password   string    `json:"-"`
+	LastLogin  time.Time `json:"last_login"`
+	IsAdmin    bool      `json:"is_admin"`
+	IsAdminInt int       `json:"-"`
+	UserType   int       `json:"user_type"`
 	UpdatedAt  time.Time `json:"updated_at,omitempty" validate:"omitempty,datetime"`
 	CreatedAt  time.Time `json:"created_at,omitempty" validate:"omitempty,datetime"`
 }
