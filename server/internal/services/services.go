@@ -57,11 +57,14 @@ type StudentsService interface {
 }
 
 type CoursesService interface {
-	GetAll() ([]models.Course, error)
 	CreateOne(
 		name,
 		description string,
 	) (*models.Course, error)
+	GetAll() ([]models.Course, error)
+	GetOneByID(uid uuid.UUID) (*models.Course, error)
+	DeleteOneByID(uid uuid.UUID) error
+	UpdateOneByID(updateItem *models.Course) error
 }
 
 type AttendanceValuesService interface {

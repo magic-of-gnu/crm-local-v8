@@ -47,3 +47,14 @@ func (ss *coursesService) CreateOne(
 
 	return item, nil
 }
+
+func (ss *coursesService) DeleteOneByID(uid uuid.UUID) error {
+	return ss.CoursesRepo.DeleteOneByID(uid)
+}
+
+func (ss *coursesService) GetOneByID(uid uuid.UUID) (*models.Course, error) {
+	return ss.CoursesRepo.GetOneByID(uid)
+}
+func (ss *coursesService) UpdateOneByID(updateItem *models.Course) error {
+	return ss.CoursesRepo.UpdateOneByID(updateItem)
+}
