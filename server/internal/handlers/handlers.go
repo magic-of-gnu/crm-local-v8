@@ -36,9 +36,9 @@ func RouteHandlers(router *gin.Engine) {
 	// rooms handlers
 	r.GET("api/server/rooms", GetAllRooms)
 	r.POST("api/server/rooms", PostRooms)
-	// r.GET("api/server/rooms/:id", GetOneCentresByID)
+	r.GET("api/server/rooms/:id", GetOneRoomsByID)
 	r.DELETE("api/server/rooms/:id", DeleteRoomsByID)
-	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
+	r.PATCH("api/server/rooms/:id", PatchRoomsByID)
 
 	// employees handlers
 	r.GET("api/server/employees", GetAllEmployees)
