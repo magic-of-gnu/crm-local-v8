@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -52,8 +51,6 @@ func PostStudentCoursesCreateOne(c *gin.Context) {
 		})
 		return
 	}
-
-	fmt.Println("req: ", req)
 
 	item, err := App.StudentCoursesService.CreateOne(
 		req.StudentID,
@@ -179,10 +176,13 @@ func GetManyStudentCoursesByCustomID(c *gin.Context) {
 		return
 	}
 
+	data := make(map[string]interface{})
+	data["data"] = items
+
 	c.JSON(http.StatusOK, gin.H{
 		"title":   title,
 		"message": "success",
-		"data":    items,
+		"data":    data,
 	})
 }
 
