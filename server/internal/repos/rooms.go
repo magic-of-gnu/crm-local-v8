@@ -7,6 +7,7 @@ import (
 
 	"github.com/georgysavva/scany/v2/pgxscan"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 )
@@ -102,6 +103,62 @@ func (rr *RoomsPostgresRepo) DeleteOneByID(uid uuid.UUID) error {
 
 	if row.RowsAffected() == 0 {
 		return fmt.Errorf("data was not deleted")
+	}
+
+	return nil
+
+}
+
+func (rr *RoomsPostgresRepo) GetOneByID(uid uuid.UUID) (*models.Room, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `SELECT id, centre_id, name, num_seats, info, created_at, updated_at FROM rooms
+	where id = $1`
+
+	var result []models.Room
+	err := pgxscan.Select(ctx, rr.dbpool, &result, query, uid)
+
+	if err == pgx.ErrNoRows {
+		return &models.Room{}, nil
+	}
+
+	if err != nil {
+		return &result[0], err
+	}
+
+	return &result[0], nil
+}
+
+func (rr *RoomsPostgresRepo) UpdateOneByID(createItem *models.Room) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `UPDATE employees SET
+	centre_id = $2,
+	name = $3,
+	num_seats = $4,
+	info = $5,
+	updated_at = $6
+	WHERE id = $1
+	`
+
+	row, err := rr.dbpool.Exec(ctx, query,
+		&createItem.ID,
+		&createItem.CentreID,
+		&createItem.Name,
+		&createItem.NumSeats,
+		&createItem.Info,
+		&createItem.UpdatedAt,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	if row.RowsAffected() == 0 {
+		return fmt.Errorf("data was not updated")
 	}
 
 	return nil

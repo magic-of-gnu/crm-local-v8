@@ -26,10 +26,12 @@ type RoomsRepo interface {
 		created_at, updated_at time.Time,
 	) (*models.Room, error)
 	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.Room, error)
+	GetOneByID(uid uuid.UUID) (*models.Room, error)
+	UpdateOneByID(createItem *models.Room) error
 }
 
 type EmployeesRepo interface {
-	GetAll() ([]models.Employee, error)
 	CreateOne(
 		uid uuid.UUID,
 		first_name,
