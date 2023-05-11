@@ -57,9 +57,9 @@ func RouteHandlers(router *gin.Engine) {
 	// courses handlers
 	r.GET("api/server/courses", GetAllCourses)
 	r.POST("api/server/courses", PostCoursesCreateOne)
-	// r.GET("api/server/rooms/:id", GetOneCentresByID)
-	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
-	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
+	r.GET("api/server/courses/:id", GetOneCoursesByID)
+	r.DELETE("api/server/courses/:id", DeleteCoursesByID)
+	r.PATCH("api/server/courses/:id", PatchCoursesByID)
 
 	// attendanceValues handlers
 	r.GET("api/server/attendance_values", GetAllAttendanceValues)
