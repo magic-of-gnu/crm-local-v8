@@ -63,7 +63,7 @@ v-if="toasts"
 import m from '@/views/custom/hooks/studentCourses/methods.js'
 import studentsMethods from '@/views/custom/hooks/students/methods.js'
 import coursesMethods from '@/views/custom/hooks/courses/methods.js'
-import { ref, onMounted } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
 import ToastComponent from '@/components/ToastComponent.vue'
 
 const payment_amount = ref(null)
@@ -91,26 +91,28 @@ async function run_this_method(event) {
   }
 }
 
-onMounted(() => {
-  studentsMethods.getAllList()
-    .then( (d) => {
-      for (const item of d.data.data) {
-        studentsOptions.value.push({
-          label: item.first_name + " " + item.last_name,
-          value: item.id
-      })
-    }
-  })
+watch(selected_student_id, async (newValue, oldValue) => {
 
-  coursesMethods.getAllList()
-    .then( (d) => {
-      for (const item of d.data.data) {
-        coursesOptions.value.push({
-          label: item.name,
-          value: item.id
-      })
-    }
-  })
+  const response_courses = await m.getManyByCustomID({ student_id: newValue })
+
+  for (const item of response_courses.data.data.data) {
+    coursesOptions.value.push({
+      label: item.course.name,
+      value: item.id
+    })
+  }
+
+})
+
+onBeforeMount(async () => {
+  const response_students = await studentsMethods.getAllList()
+
+  for (const item of response_students.data.data.data) {
+    studentsOptions.value.push({
+      label: `${item.first_name} ${item.last_name}`,
+      value: item.id
+    })
+  }
 
 })
 
