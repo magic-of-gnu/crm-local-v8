@@ -7,6 +7,7 @@ import (
 
 	"github.com/georgysavva/scany/v2/pgxscan"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 )
@@ -83,5 +84,80 @@ func (rr *StudentsPostgresRepo) CreateOne(
 	}
 
 	return &student, nil
+
+}
+
+func (rr *StudentsPostgresRepo) DeleteOneByID(uid uuid.UUID) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := "DELETE FROM students WHERE id = $1"
+
+	row, err := rr.dbpool.Exec(ctx, query, uid)
+
+	if err != nil {
+		return err
+	}
+
+	if row.RowsAffected() == 0 {
+		return fmt.Errorf("data was not deleted")
+	}
+
+	return nil
+
+}
+
+func (rr *StudentsPostgresRepo) GetOneByID(uid uuid.UUID) (*models.Student, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `SELECT id, first_name, last_name, username, created_at, updated_at FROM students
+	where id = $1`
+
+	var result []models.Student
+	err := pgxscan.Select(ctx, rr.dbpool, &result, query, uid)
+
+	if err == pgx.ErrNoRows {
+		return &models.Student{}, nil
+	}
+
+	if err != nil {
+		return &result[0], err
+	}
+
+	return &result[0], nil
+}
+
+func (rr *StudentsPostgresRepo) UpdateOneByID(createItem *models.Student) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `UPDATE students SET
+	first_name = $2,
+	last_name = $3,
+	username = $4,
+	updated_at = $5
+	WHERE id = $1
+	`
+
+	row, err := rr.dbpool.Exec(ctx, query,
+		&createItem.ID,
+		&createItem.FirstName,
+		&createItem.LastName,
+		&createItem.Username,
+		&createItem.UpdatedAt,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	if row.RowsAffected() == 0 {
+		return fmt.Errorf("data was not updated")
+	}
+
+	return nil
 
 }

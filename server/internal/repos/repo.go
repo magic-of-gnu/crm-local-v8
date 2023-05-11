@@ -46,7 +46,6 @@ type EmployeesRepo interface {
 }
 
 type StudentsRepo interface {
-	GetAll() ([]models.Student, error)
 	CreateOne(
 		uid uuid.UUID,
 		first_name,
@@ -54,6 +53,10 @@ type StudentsRepo interface {
 		username string,
 		created_at, updated_at time.Time,
 	) (*models.Student, error)
+	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.Student, error)
+	GetOneByID(uid uuid.UUID) (*models.Student, error)
+	UpdateOneByID(createItem *models.Student) error
 }
 
 type CoursesRepo interface {
