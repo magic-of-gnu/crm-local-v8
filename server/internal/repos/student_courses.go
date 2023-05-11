@@ -202,3 +202,45 @@ func (rr *studentCoursesPostgresRepo) GetManyByCustomID(custom_id uuid.UUID, col
 
 	return items, nil
 }
+
+func (rr *studentCoursesPostgresRepo) GetOneByID(uid uuid.UUID) (*models.StudentCourses, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	query := `SELECT a.id, a.student_id, a.course_id, a.payment_amount, a.description, a.created_at, a.updated_at, b.first_name, b.last_name, b.username, b.created_at, b.updated_at, c.name, c.description, c.created_at, c.updated_at from student_courses a
+	LEFT JOIN students b ON a.student_id  = b.id
+	LEFT JOIN courses c ON a.course_id = c.id
+	WHERE a.id = $1`
+
+	var item models.StudentCourses
+
+	row := rr.dbpool.QueryRow(ctx, query, uid)
+
+	err := row.Scan(
+		&item.ID,
+		&item.StudentID,
+		&item.CourseID,
+		&item.PaymentAmount,
+		&item.Description,
+		&item.CreatedAt,
+		&item.UpdatedAt,
+		&item.Student.FirstName,
+		&item.Student.LastName,
+		&item.Student.Username,
+		&item.Student.UpdatedAt,
+		&item.Student.CreatedAt,
+		&item.Course.Name,
+		&item.Course.Description,
+		&item.Course.CreatedAt,
+		&item.Course.UpdatedAt,
+	)
+	if err != nil {
+		return &item, err
+	}
+
+	item.Student.ID = item.StudentID
+	item.Course.ID = item.CourseID
+
+	return &item, nil
+
+}

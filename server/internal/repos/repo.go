@@ -87,7 +87,6 @@ type AttendanceValues interface {
 }
 
 type StudentCoursesRepo interface {
-	GetAll() ([]models.StudentCourses, error)
 	CreateOne(
 		uid,
 		student_uid,
@@ -97,7 +96,9 @@ type StudentCoursesRepo interface {
 		created_at, updated_at time.Time,
 	) (*models.StudentCourses, error)
 	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.StudentCourses, error)
 	GetManyByCustomID(custom_id uuid.UUID, column_name string) ([]models.StudentCourses, error)
+	GetOneByID(uid uuid.UUID) (*models.StudentCourses, error)
 }
 
 type LectureCalendarRepo interface {
