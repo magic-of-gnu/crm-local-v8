@@ -16,7 +16,6 @@ type CentresRepo interface {
 }
 
 type RoomsRepo interface {
-	GetAll() ([]models.Room, error)
 	CreateOne(
 		uid,
 		centre_uid uuid.UUID,
