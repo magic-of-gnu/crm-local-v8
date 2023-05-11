@@ -176,11 +176,11 @@ left join employees d on a.employee_id = d.id
 WHERE course_id = $1`
 
 	rows, err := rr.dbpool.Query(ctx, query, course_id)
-	defer rows.Close()
-
 	if err != nil {
 		return items, err
 	}
+
+	defer rows.Close()
 
 	for rows.Next() {
 		var item models.LectureCalendar
