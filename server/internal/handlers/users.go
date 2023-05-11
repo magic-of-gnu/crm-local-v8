@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/magic-of-gnu/crm-local-v8/server/internal/models"
 )
 
@@ -96,9 +97,9 @@ func PostUsersCreateOne(c *gin.Context) {
 func DeleteUsersByID(c *gin.Context) {
 	title := "Users Delete"
 
-	var req *models.UsersDeleteByIDRequest
-
-	if err := c.ShouldBind(&req); err != nil {
+	id_str := c.Param("id")
+	uid, err := uuid.Parse(id_str)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"title":   title,
 			"error":   err.Error(),
@@ -113,7 +114,7 @@ func DeleteUsersByID(c *gin.Context) {
 		return
 	}
 
-	err := App.UsersService.DeleteOneByID(req.ID)
+	err = App.UsersService.DeleteOneByID(uid)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title":   title,
@@ -132,5 +133,63 @@ func DeleteUsersByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"title":   title,
 		"message": "success",
+		"toasts": []map[string]string{
+			{
+				"content": "Deleted",
+				"color":   "success",
+			},
+		},
+	})
+}
+
+func GetOneUsersByID(c *gin.Context) {
+	title := "User GetOne"
+
+	id_str := c.Param("id")
+	uid, err := uuid.Parse(id_str)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"title":   title,
+			"error":   err.Error(),
+			"message": "error during bidning data",
+			"toasts": []map[string]string{
+				{
+					"content": "Error: incorrect request",
+					"color":   "warning",
+				},
+			},
+		})
+		return
+	}
+
+	item, err := App.UsersService.GetOneByID(uid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title":   title,
+			"message": "error delete in db",
+			"error":   err.Error(),
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
+		})
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["data"] = item
+
+	c.JSON(http.StatusOK, gin.H{
+		"title":   title,
+		"message": "success",
+		"toasts": []map[string]string{
+			{
+				"content": "Created",
+				"color":   "success",
+			},
+		},
+		"data": data,
 	})
 }

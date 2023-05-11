@@ -99,9 +99,9 @@ func RouteHandlers(router *gin.Engine) {
 	r.GET("api/server/users", GetUsersAll)
 	r.POST("api/server/users", PostUsersCreateOne)
 	r.DELETE("api/server/users", DeleteUsersByID)
-	// r.GET("api/server/rooms/:id", GetOneCentresByID)
-	// r.DELETE("api/server/rooms/:id", DeleteCentresByID)
-	// r.PATCH("api/server/rooms/:id", PatchCentresByID)
+	r.GET("api/server/users/:id", GetOneUsersByID)
+	r.DELETE("api/server/users/:id", DeleteUsersByID)
+	// r.PATCH("api/server/users/:id", PatchCentresByID)
 
 	// invoices handlers
 	r.GET("api/server/invoices", GetInvoicesAll)
