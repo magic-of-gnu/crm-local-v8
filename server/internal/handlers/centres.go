@@ -164,7 +164,7 @@ func PostCentres(c *gin.Context) {
 }
 
 func DeleteCentresByID(c *gin.Context) {
-	title := "Lectures Calendar Delete"
+	title := "Centres Delete"
 
 	id_str := c.Param("id")
 	uid, err := uuid.Parse(id_str)
