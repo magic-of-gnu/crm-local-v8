@@ -85,21 +85,13 @@ func (ss *usersService) CreateOne(
 }
 
 func (ss *usersService) DeleteOneByID(uid uuid.UUID) error {
+	return ss.UsersRepo.DeleteOneByID(uid)
+}
 
-	err := ss.UsersRepo.DeleteOneByID(uid)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (ss *usersService) GetOneByID(uid uuid.UUID) (*models.User, error) {
+	return ss.UsersRepo.GetOneByID(uid)
 }
 
 func (ss *usersService) GetOneByUsername(username string) (*models.User, error) {
-
-	item, err := ss.UsersRepo.GetOneByUsername(username)
-	if err != nil {
-		return item, err
-	}
-
-	return item, nil
+	return ss.UsersRepo.GetOneByUsername(username)
 }

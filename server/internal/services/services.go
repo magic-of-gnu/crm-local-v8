@@ -130,7 +130,6 @@ type AttendancesService interface {
 }
 
 type UsersService interface {
-	GetAll() ([]models.UserGetAllResponse, error)
 	CreateOne(
 		first_name,
 		last_name,
@@ -141,6 +140,8 @@ type UsersService interface {
 		hash_cost int,
 	) (*models.User, error)
 	DeleteOneByID(uid uuid.UUID) error
+	GetAll() ([]models.UserGetAllResponse, error)
+	GetOneByID(uid uuid.UUID) (*models.User, error)
 	GetOneByUsername(username string) (*models.User, error)
 }
 
