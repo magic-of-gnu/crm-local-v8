@@ -18,6 +18,10 @@
       "base": "employees",
       "baseID": "employees/{id}"
     },
+    "lectures_calendars_routes": {
+      "base": "lectures_calendar",
+      "baseID": "lectures_calendar/{id}"
+    },
     "payment_statuses_routes": {
       "base": "payment_statuses",
       "baseID": "payment_statuses/{id}",
@@ -31,6 +35,10 @@
     "students_routes": {
       "base": "students",
       "baseID": "students/{id}"
+    },
+    "student_courses_routes": {
+      "base": "student_courses",
+      "baseID": "student_courses/{id}"
     },
     "users_routes": {
       "base": "users",
@@ -103,6 +111,34 @@
         "info": "description here patch2"
       }
     },
+    "lectures_calendars": {
+      "create_many": {
+        "start_date": 1680797395,
+        "end_date": 1683389395,
+        "dates_and_times": [
+          {
+            "day": 1,
+            "start_time": "1330",
+            "duration": 60
+          },
+          {
+            "day": 2,
+            "start_time": "1530",
+            "duration": 60
+          },
+          {
+            "day": 3,
+            "start_time": "1000",
+            "duration": 60
+          },
+          {
+            "day": 6,
+            "start_time": "0900",
+            "duration": 90
+          }
+        ]
+      }
+    },
     "payment_statuses": {
       "create_one": {
         "name": "some name",
@@ -149,6 +185,20 @@
         "first_name": "patch2 name",
         "last_name": "patch2 name",
         "username": "patch2.name@gmail12.com"
+      }
+    },
+    "student_courses": {
+      "create_one": {
+        "payment_amount": 25000,
+        "description": "some description"
+      },
+      "patch1": {
+        "payment_amount": 35000,
+        "description": "some patch1"
+      },
+      "patch2": {
+        "payment_amount": 45000,
+        "description": "some patch2"
       }
     },
     "users": {
