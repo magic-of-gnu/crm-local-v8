@@ -57,7 +57,7 @@ func PostLecturesCalendarCreateOne(c *gin.Context) {
 	req.StartDate = time.Date(start_date.Year(), start_date.Month(), start_date.Day(), 0, 0, 0, 0, time.UTC)
 	req.EndDate = time.Date(end_date.Year(), end_date.Month(), end_date.Day(), 0, 0, 0, 0, time.UTC)
 
-	items, _ := App.LectureCalendarService.CreateMany(
+	items, err := App.LectureCalendarService.CreateMany(
 		req.RoomID,
 		req.CourseID,
 		req.EmployeeID,
@@ -66,6 +66,18 @@ func PostLecturesCalendarCreateOne(c *gin.Context) {
 		req.DayAndTimeList,
 		req.DefaultAttendanceValueID,
 	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"title": title,
+			"toasts": []map[string]string{
+				{
+					"content": "Error: internal error",
+					"color":   "warning",
+				},
+			},
+		})
+		return
+	}
 
 	c.JSON(http.StatusCreated, gin.H{
 		"title": title,
