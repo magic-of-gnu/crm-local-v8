@@ -8,8 +8,8 @@ class TestLecturesCalendar:
   def test_create_one_response_status(self, lectures_calendars_create_many):
     assert lectures_calendars_create_many.status_code == HTTPStatus.CREATED
 
-  # def test_get_one_by_id_response_status(self, lectures_calendars_get_one_by_id):
-  #   assert lectures_calendars_get_one_by_id.status_code == HTTPStatus.OK
+  def test_get_one_by_id_response_status(self, lectures_calendars_get_one_by_id):
+    assert lectures_calendars_get_one_by_id.status_code == HTTPStatus.OK
 
   # def test_create_one_data_correctness(self, lectures_calendars_create_one_get_data, lectures_calendars_payload_create_one):
   #   for key, value in lectures_calendars_payload_create_one.items():

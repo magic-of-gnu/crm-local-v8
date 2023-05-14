@@ -88,10 +88,14 @@ def lectures_calendars_create_many_get_id(lectures_calendars_create_many_get_dat
   lectures_calendars_id = [item["id"] for item in lectures_calendars_create_many_get_data]
   return lectures_calendars_id
 
+@pytest.fixture(scope="module")
+def lectures_calendars_create_many_get_one_id(lectures_calendars_create_many_get_id):
+  return lectures_calendars_create_many_get_id[0]
+
 # GET one lectures_calendar by id
 @pytest.fixture(scope="module")
-def lectures_calendars_get_one_by_id(url_lectures_calendars_get_one_by_id, lectures_calendars_create_one_get_id):
-  lectures_calendar_id = lectures_calendars_create_one_get_id
+def lectures_calendars_get_one_by_id(url_lectures_calendars_get_one_by_id, lectures_calendars_create_many_get_one_id):
+  lectures_calendar_id = lectures_calendars_create_many_get_one_id
   with requests.Session() as sess:
     response = sess.get(url_lectures_calendars_get_one_by_id.format(id=lectures_calendar_id))
 
