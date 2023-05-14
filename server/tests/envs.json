@@ -1,6 +1,7 @@
 {
   "baseURL": "http://malcorp.test/api/server/",
   "login_route": "login",
+  "attendance_value_id_class_did_not_start": "8e0334c3-b2a8-464f-aaf4-27b06cbbdc32",
   "routes": {
     "attendance_values_routes": {
       "base": "attendance_values",
