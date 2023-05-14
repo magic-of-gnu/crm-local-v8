@@ -44,18 +44,21 @@ def lectures_calendars_payload_create_many(
   lectures_calendars_payloads,
   rooms_create_one_get_id,
   courses_create_one_get_id,
-  employees_create_one_get_id
+  employees_create_one_get_id,
+  attendance_value_id_class_did_not_start
   ):
 
   room_id = rooms_create_one_get_id
   course_id = courses_create_one_get_id
   employee_id = employees_create_one_get_id
+  attendance_value_id = attendance_value_id_class_did_not_start
 
   # retrieve centre id and add it to the payload
   payload = lectures_calendars_payloads["create_many"]
   payload["room_id"] = room_id
   payload["course_id"] = course_id
   payload["employee_id"] = employee_id
+  payload["default_attendance_value_id"] = attendance_value_id_class_did_not_start
 
   return  payload
 
@@ -64,7 +67,6 @@ def lectures_calendars_payload_create_many(
 def lectures_calendars_get_all(url_lectures_calendars_get_all):
   with requests.Session() as sess:
     response = sess.get(url_lectures_calendars_get_all)
-    print(response.json())
 
   return response
 
@@ -98,10 +100,9 @@ def lectures_calendars_get_one_by_id(url_lectures_calendars_get_one_by_id, lectu
 # DELETE lectures_calendars delete_one_by_id 
 @pytest.fixture
 def lectures_calendars_delete_many_one_by_one_by_id(lectures_calendars_create_many_get_id, url_lectures_calendars_delete_one_by_id):
-  item_id = lectures_calendars_create_one_get_id
   responses = []
   with requests.Session() as sess:
     for item in lectures_calendars_create_many_get_id:
       responses.append(sess.delete(url_lectures_calendars_delete_one_by_id.format(id=item)))
 
-  return response
+  return responses
