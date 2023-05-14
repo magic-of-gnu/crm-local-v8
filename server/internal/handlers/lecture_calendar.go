@@ -94,9 +94,9 @@ func PostLecturesCalendarCreateOne(c *gin.Context) {
 func DeleteLecturesCalendarByID(c *gin.Context) {
 	title := "Lectures Calendar Delete"
 
-	var req *models.LectureCalendarDeleteByIDRequest
-
-	if err := c.ShouldBind(&req); err != nil {
+	id_str := c.Param("id")
+	uid, err := uuid.Parse(id_str)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"title":   title,
 			"error":   err.Error(),
@@ -111,7 +111,7 @@ func DeleteLecturesCalendarByID(c *gin.Context) {
 		return
 	}
 
-	err := App.LectureCalendarService.DeleteOneByID(req.ID)
+	err = App.LectureCalendarService.DeleteOneByID(uid)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"title":   title,
