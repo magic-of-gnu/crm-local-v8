@@ -28,3 +28,7 @@ def login_route(env_config):
 @pytest.fixture(scope="package")
 def login_url(env_config):
   return env_config["login_url"]
+
+@pytest.fixture(scope="package")
+def attendance_value_id_class_did_not_start(env_config):
+  return env_config["attendance_value_id_class_did_not_start"]
